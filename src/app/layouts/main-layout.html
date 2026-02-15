@@ -1,0 +1,64 @@
+<div class="app-container" [class.sidebar-collapsed]="sidebarCollapsed">
+
+  <!-- ══════ SIDEBAR ══════ -->
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+
+    <!-- Header -->
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🎓</span>
+        <span class="logo-text">Sistema Matrículas</span>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        {{ sidebarCollapsed ? '▶' : '◀' }}
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of menuItems"
+        class="nav-item"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+      >
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <!-- Footer / User -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">👤</div>
+        <div class="user-info">
+          <div class="user-name">Admin</div>
+          <div class="user-role">Administrador</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══════ MAIN CONTENT ══════ -->
+  <div class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="breadcrumb">
+        <span>🏠</span>
+        <span>/ {{ currentPageTitle }}</span>
+      </div>
+      <div class="header-right">
+        <span class="header-date">{{ today | date:'d \'de\' MMMM, yyyy' }}</span>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>
