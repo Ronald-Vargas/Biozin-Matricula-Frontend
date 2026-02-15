@@ -1,1 +1,64 @@
-<p>cursos-list works!</p>
+
+<div class="container">
+  <div class="header-section">
+    <h1 class="page-title">Gestión de Cursos</h1>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      <span *ngIf="!mostrarFormulario">➕ Nuevo Curso</span>
+      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+    </button>
+  </div>
+
+  <!-- Formulario de creación -->
+  <app-curso-form 
+    *ngIf="mostrarFormulario"
+    (cursoCreado)="onCursoCreado()">
+  </app-curso-form>
+
+  <!-- Lista de cursos -->
+  <div class="cursos-grid">
+    <div class="curso-card" *ngFor="let curso of cursos$ | async">
+      <div class="card-header">
+        <div>
+          <span class="card-code">{{ curso.codigo }}</span>
+          <h3 class="card-title">{{ curso.nombre }}</h3>
+        </div>
+        <span 
+          class="status-badge"
+          [class.active]="curso.estado === 'activo'"
+          [class.inactive]="curso.estado === 'inactivo'">
+          {{ curso.estado }}
+        </span>
+      </div>
+
+      <p class="card-description">{{ curso.descripcion }}</p>
+
+      <div class="card-info">
+        <span class="info-item">
+          ⭐ {{ curso.creditos }} créditos
+        </span>
+      </div>
+
+      <div class="card-actions">
+        <button 
+          class="btn btn-secondary btn-sm" 
+          (click)="verDetalles(curso.id)">
+          👁️ Ver Detalles
+        </button>
+        <button 
+          class="btn btn-danger btn-sm" 
+          (click)="eliminarCurso(curso.id)">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="(cursos$ | async)?.length === 0">
+    <div class="no-data-icon">📖</div>
+    <p>No hay cursos registrados</p>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      Crear Primer Curso
+    </button>
+  </div>
+</div>
+

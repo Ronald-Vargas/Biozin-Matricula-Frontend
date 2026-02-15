@@ -1,1 +1,80 @@
-<p>carreras-form works!</p>
+<!-- src/app/modules/carreras/components/carrera-form/carrera-form.component.html -->
+
+<div class="form-container">
+  <h2 class="form-title">Crear Nueva Carrera</h2>
+
+  <div class="success-message" *ngIf="mensajeExito">
+    ✓ Carrera creada exitosamente
+  </div>
+
+  <form [formGroup]="carreraForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="codigo">Código de Carrera *</label>
+        <input 
+          type="text" 
+          id="codigo"
+          formControlName="codigo"
+          placeholder="Ej: ING-SIS"
+          [class.invalid]="codigo?.invalid && codigo?.touched">
+        <div class="error-message" *ngIf="codigo?.invalid && codigo?.touched">
+          <span *ngIf="codigo?.errors?.['required']">El código es requerido</span>
+          <span *ngIf="codigo?.errors?.['minlength']">Mínimo 3 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="duracionSemestres">Duración (semestres) *</label>
+        <input 
+          type="number" 
+          id="duracionSemestres"
+          formControlName="duracionSemestres"
+          placeholder="Ej: 10"
+          min="1"
+          max="15"
+          [class.invalid]="duracionSemestres?.invalid && duracionSemestres?.touched">
+        <div class="error-message" *ngIf="duracionSemestres?.invalid && duracionSemestres?.touched">
+          <span *ngIf="duracionSemestres?.errors?.['required']">La duración es requerida</span>
+          <span *ngIf="duracionSemestres?.errors?.['min'] || duracionSemestres?.errors?.['max']">
+            Entre 1 y 15 semestres
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nombre">Nombre de la Carrera *</label>
+      <input 
+        type="text" 
+        id="nombre"
+        formControlName="nombre"
+        placeholder="Ej: Ingeniería en Sistemas"
+        [class.invalid]="nombre?.invalid && nombre?.touched">
+      <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+        <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+        <span *ngIf="nombre?.errors?.['minlength']">Mínimo 5 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción *</label>
+      <textarea 
+        id="descripcion"
+        formControlName="descripcion"
+        rows="4"
+        placeholder="Descripción de la carrera, objetivos, perfil del egresado..."
+        [class.invalid]="descripcion?.invalid && descripcion?.touched">
+      </textarea>
+      <div class="error-message" *ngIf="descripcion?.invalid && descripcion?.touched">
+        <span *ngIf="descripcion?.errors?.['required']">La descripción es requerida</span>
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-primary"
+      [disabled]="carreraForm.invalid">
+      ➕ Crear Carrera
+    </button>
+  </form>
+</div>

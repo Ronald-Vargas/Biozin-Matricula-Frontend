@@ -1,1 +1,43 @@
-<p>cursos-detail works!</p>
+
+<div class="container" *ngIf="curso">
+  <div class="header-section">
+    <h1 class="page-title">{{ curso?.nombre }}</h1>
+    <button class="btn btn-secondary" (click)="volver()">
+      ← Volver
+    </button>
+  </div>
+
+  <div class="section">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">Código:</span>
+        <span class="value">{{ curso?.codigo }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Créditos:</span>
+        <span class="value">{{ curso?.creditos }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Estado:</span>
+        <span class="status-badge" [class.active]="curso?.estado === 'activo'">
+          {{ curso?.estado }}
+        </span>
+      </div>
+    </div>
+
+    <div class="description-section">
+      <h3>Descripción</h3>
+      <p>{{ curso?.descripcion }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="!curso">
+  <div class="no-data">
+    <div class="no-data-icon">⚠️</div>
+    <p>Curso no encontrado</p>
+    <button class="btn btn-primary" (click)="volver()">
+      Volver a Cursos
+    </button>
+  </div>
+</div>

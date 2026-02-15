@@ -1,1 +1,44 @@
-<p>carreras-detail works!</p>
+<!-- src/app/modules/carreras/components/carrera-detail/carrera-detail.component.html -->
+
+<div class="container" *ngIf="carrera">
+  <div class="header-section">
+    <h1 class="page-title">{{ carrera?.nombre }}</h1>
+    <button class="btn btn-secondary" (click)="volver()">
+      ← Volver
+    </button>
+  </div>
+
+  <div class="section">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">Código:</span>
+        <span class="value">{{ carrera?.codigo }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Duración:</span>
+        <span class="value">{{ carrera?.duracionSemestres }} semestres</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Estado:</span>
+        <span class="status-badge" [class.active]="carrera?.estado === 'activa'">
+          {{ carrera?.estado }}
+        </span>
+      </div>
+    </div>
+
+    <div class="description-section">
+      <h3>Descripción</h3>
+      <p>{{ carrera?.descripcion }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="!carrera">
+  <div class="no-data">
+    <div class="no-data-icon">⚠️</div>
+    <p>Carrera no encontrada</p>
+    <button class="btn btn-primary" (click)="volver()">
+      Volver a Carreras
+    </button>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+
+<div class="container">
+  <div class="header-section">
+    <h1 class="page-title">🔗 Asignar Cursos a Carreras</h1>
+  </div>
+
+  <div class="section">
+    <div class="success-message" *ngIf="mensajeExito">
+      ✓ Asignaciones guardadas exitosamente
+    </div>
+
+    <div class="form-group">
+      <label for="carrera">Seleccionar Carrera *</label>
+      <select id="carrera" (change)="onCarreraSeleccionada($event)">
+        <option value="">-- Selecciona una carrera --</option>
+        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.id">
+          {{ carrera?.codigo }} - {{ carrera?.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="carreraSeleccionada" class="cursos-container">
+      <p class="info-text">
+        Selecciona los cursos que pertenecen a <strong>{{ carreraSeleccionada?.nombre }}</strong>
+        e indica en qué semestre se cursan.
+      </p>
+
+      <div class="cursos-list">
+        <div class="curso-item" *ngFor="let curso of cursos$ | async">
+          <div class="curso-checkbox">
+            <input 
+              type="checkbox" 
+              [id]="'curso-' + curso.id"
+              [checked]="estaSeleccionado(curso.id)"
+              (change)="toggleCurso(curso.id)">
+            <label [for]="'curso-' + curso.id" class="curso-info">
+              <div class="curso-nombre">{{ curso?.codigo }} - {{ curso?.nombre }}</div>
+              <div class="curso-creditos">{{ curso.creditos }} créditos</div>
+            </label>
+          </div>
+
+          <div class="curso-config" *ngIf="estaSeleccionado(curso.id)">
+            <div class="config-item">
+              <label>Semestre:</label>
+              <input 
+                type="number" 
+                [value]="getSemestre(curso.id)"
+                (input)="actualizarSemestre(curso.id, +$any($event.target).value)"
+                min="1"
+                [max]="carreraSeleccionada?.duracionSemestres">
+            </div>
+            <div class="config-item">
+              <label>
+                <input 
+                  type="checkbox"
+                  [checked]="getObligatorio(curso.id)"
+                  (change)="actualizarObligatorio(curso.id, $any($event.target).checked)">
+                Obligatorio
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button 
+        class="btn btn-success" 
+        (click)="guardarAsignaciones()"
+        style="margin-top: 2rem;">
+        💾 Guardar Asignaciones
+      </button>
+    </div>
+  </div>
+</div>

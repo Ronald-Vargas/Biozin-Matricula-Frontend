@@ -1,1 +1,78 @@
-<p>carreras-list works!</p>
+<!-- src/app/modules/carreras/components/carrera-list/carrera-list.component.html -->
+
+<div class="container">
+  <div class="header-section">
+    <h1 class="page-title">Gestión de Carreras</h1>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      <span *ngIf="!mostrarFormulario">➕ Nueva Carrera</span>
+      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+    </button>
+  </div>
+
+  <!-- Formulario de creación -->
+  <app-carreras-form 
+    *ngIf="mostrarFormulario"
+    (carreraCreada)="onCarreraCreada()">
+  </app-carreras-form>
+
+  <!-- Lista de carreras -->
+  <div class="carreras-grid">
+    <div class="carrera-card" *ngFor="let carrera of carreras$ | async">
+      <div class="card-header">
+        <div>
+          <span class="card-code">{{ carrera.codigo }}</span>
+          <h3 class="card-title">{{ carrera.nombre }}</h3>
+        </div>
+        <span 
+          class="status-badge"
+          [class.active]="carrera.estado === 'activa'"
+          [class.inactive]="carrera.estado === 'inactiva'">
+          {{ carrera.estado }}
+        </span>
+      </div>
+
+      <p class="card-description">{{ carrera.descripcion }}</p>
+
+      <div class="card-info">
+        <span class="info-item">
+          📅 {{ carrera.duracionSemestres }} semestres
+        </span>
+        <span class="info-item">
+          ⭐ {{ carrera.creditosTotales || 0 }} créditos
+        </span>
+      </div>
+
+      <div class="card-actions">
+        <button 
+          class="btn btn-secondary btn-sm" 
+          (click)="verDetalles(carrera.id)">
+          👁️ Ver Detalles
+        </button>
+        <button 
+          class="btn btn-success btn-sm" 
+          (click)="generarPlanEstudios(carrera)"
+          title="Generar Plan de Estudios PDF">
+          📄 Plan de Estudios
+        </button>
+        <button 
+          class="btn btn-warning btn-sm" 
+          (click)="toggleEstado(carrera.id)">
+          🔄
+        </button>
+        <button 
+          class="btn btn-danger btn-sm" 
+          (click)="eliminarCarrera(carrera.id)">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="(carreras$ | async)?.length === 0">
+    <div class="no-data-icon">📚</div>
+    <p>No hay carreras registradas</p>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      Crear Primera Carrera
+    </button>
+  </div>
+</div>

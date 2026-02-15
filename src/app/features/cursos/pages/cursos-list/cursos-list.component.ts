@@ -1,29 +1,49 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Curso } from '../../models/curso.model';
+import { Router } from '@angular/router';
+import { AsignacionService } from '../../../asignaciones/services/asignacion.service';
+import { CursoService } from '../../services/curso.service';
+import { CursoFormComponent } from '../curso-form/curso-form.component';
 
 @Component({
-  selector: 'app-cursos-page',
+  selector: 'aapp-cursos-list',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="section">
-      <div class="section-header">
-        <h1 class="page-title">Gestión de Cursos</h1>
-        <button class="btn btn-primary">+ Nuevo Curso</button>
-      </div>
-      <p class="placeholder-text">Módulo de cursos — próximamente</p>
-    </div>
-  `,
-  styles: [`
-    .section { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .page-title { font-size: 2rem; font-weight: 800; color: #0f172a; }
-    .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
-    .btn-primary { background: #06b6d4; color: white; }
-    .btn-primary:hover { background: #0891b2; }
-    .placeholder-text { color: #64748b; font-size: 1rem; }
-  `],
+  imports: [CursoFormComponent, CommonModule],
+  templateUrl: './cursos-list.html',
+  styleUrls: ['./cursos-list.scss']
 })
-export class CursosListComponent {
 
+export class CursosListComponent implements OnInit {
+  cursos$!: Observable<Curso[]>;
+  mostrarFormulario = false;
+
+  constructor(
+    private cursoService: CursoService,
+    private asignacionService: AsignacionService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.cursos$ = this.cursoService.getCursos();
+  }
+
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
+  }
+
+  verDetalles(id: number): void {
+    this.router.navigate(['/cursos', id]);
+  }
+
+  eliminarCurso(id: number): void {
+    if (confirm('¿Está seguro de eliminar este curso? También se eliminarán sus asignaciones.')) {
+      this.cursoService.deleteCurso(id);
+    }
+  }
+
+  onCursoCreado(): void {
+    this.mostrarFormulario = false;
+  }
 }

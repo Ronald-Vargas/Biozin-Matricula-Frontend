@@ -1,29 +1,66 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AsignacionService } from '../../../asignaciones/services/asignacion.service';
+import { PdfGeneratorService } from '../../../cursos/services/pdf-generator.service';
+import { Carrera } from '../../models/carrera.model';
+import { CarreraService } from '../../services/carrera.service';
+import { CarreraFormComponent } from '../carrera-form/carreras-form.component';
+
 
 @Component({
-  selector: 'app-carreras-page',
+  selector: 'app-carreras-list',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="section">
-      <div class="section-header">
-        <h1 class="page-title">Gestión de Carreras</h1>
-        <button class="btn btn-primary">+ Nueva Carrera</button>
-      </div>
-      <p class="placeholder-text">Módulo de carreras — próximamente</p>
-    </div>
-  `,
-  styles: [`
-    .section { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .page-title { font-size: 2rem; font-weight: 800; color: #0f172a; }
-    .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
-    .btn-primary { background: #06b6d4; color: white; }
-    .btn-primary:hover { background: #0891b2; }
-    .placeholder-text { color: #64748b; font-size: 1rem; }
-  `],
+  imports: [CarreraFormComponent, CommonModule],
+  templateUrl: './carreras-list.html',
+  styleUrls: ['./carreras-list.scss']
 })
-export class CarrerasListComponent {
 
+export class CarrerasListComponent implements OnInit {
+  carreras$!: Observable<Carrera[]>;
+  mostrarFormulario = false;
+
+  constructor(
+    private carreraService: CarreraService,
+    private asignacionService: AsignacionService,
+    private pdfService: PdfGeneratorService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.carreras$ = this.carreraService.getCarreras();
+  }
+
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
+  }
+
+  verDetalles(id: number): void {
+    this.router.navigate(['/carreras', id]);
+  }
+
+  eliminarCarrera(id: number): void {
+    if (confirm('¿Está seguro de eliminar esta carrera? También se eliminarán sus asignaciones.')) {
+      this.carreraService.deleteCarrera(id);
+      this.asignacionService.deleteAsignacionesByCarrera(id);
+    }
+  }
+
+  toggleEstado(id: number): void {
+    this.carreraService.toggleEstado(id);
+  }
+
+  generarPlanEstudios(carrera: Carrera): void {
+    const malla = this.asignacionService.getMallaCurricular(carrera.id);
+    if (malla) {
+      this.pdfService.generarPlanEstudios(carrera, malla);
+    } else {
+      alert('No hay cursos asignados a esta carrera para generar el plan de estudios.');
+    }
+  }
+
+  onCarreraCreada(): void {
+    this.mostrarFormulario = false;
+  }
 }

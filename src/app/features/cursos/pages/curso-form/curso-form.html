@@ -1,1 +1,79 @@
-<p>cursos-form works!</p>
+
+<div class="form-container">
+  <h2 class="form-title">Crear Nuevo Curso</h2>
+
+  <div class="success-message" *ngIf="mensajeExito">
+    ✓ Curso creado exitosamente
+  </div>
+
+  <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="codigo">Código del Curso *</label>
+        <input 
+          type="text" 
+          id="codigo"
+          formControlName="codigo"
+          placeholder="Ej: MAT-101"
+          [class.invalid]="codigo?.invalid && codigo?.touched">
+        <div class="error-message" *ngIf="codigo?.invalid && codigo?.touched">
+          <span *ngIf="codigo?.errors?.['required']">El código es requerido</span>
+          <span *ngIf="codigo?.errors?.['minlength']">Mínimo 3 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="creditos">Créditos *</label>
+        <input 
+          type="number" 
+          id="creditos"
+          formControlName="creditos"
+          placeholder="Ej: 4"
+          min="1"
+          max="10"
+          [class.invalid]="creditos?.invalid && creditos?.touched">
+        <div class="error-message" *ngIf="creditos?.invalid && creditos?.touched">
+          <span *ngIf="creditos?.errors?.['required']">Los créditos son requeridos</span>
+          <span *ngIf="creditos?.errors?.['min'] || creditos?.errors?.['max']">
+            Entre 1 y 10 créditos
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nombre">Nombre del Curso *</label>
+      <input 
+        type="text" 
+        id="nombre"
+        formControlName="nombre"
+        placeholder="Ej: Cálculo I"
+        [class.invalid]="nombre?.invalid && nombre?.touched">
+      <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+        <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+        <span *ngIf="nombre?.errors?.['minlength']">Mínimo 5 caracteres</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción *</label>
+      <textarea 
+        id="descripcion"
+        formControlName="descripcion"
+        rows="4"
+        placeholder="Contenido del curso, objetivos, requisitos..."
+        [class.invalid]="descripcion?.invalid && descripcion?.touched">
+      </textarea>
+      <div class="error-message" *ngIf="descripcion?.invalid && descripcion?.touched">
+        <span *ngIf="descripcion?.errors?.['required']">La descripción es requerida</span>
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-primary"
+      [disabled]="cursoForm.invalid">
+      ➕ Crear Curso
+    </button>
+  </form>
+</div>
