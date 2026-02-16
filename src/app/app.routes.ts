@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
    // ── Login (sin layout) ──
   {
-    path: 'auth/login',
+     path: '',
     loadComponent: () =>
       import('./auth/login/login.component').then((m) => m.LoginComponent),
   },
@@ -15,14 +15,9 @@ export const routes: Routes = [
       import('./layouts/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
         path: 'dashboard',
-        loadChildren: () =>
-          import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+        loadComponent: () => import('./features/dashboard/pages/dashboard.component')
+          .then(m => m.DashboardComponent)
       },
       {
         path: 'estudiantes',

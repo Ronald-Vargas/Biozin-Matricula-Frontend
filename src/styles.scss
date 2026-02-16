@@ -247,6 +247,14 @@ textarea {
   gap: 1.5rem;
 }
 
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .carrera-card,
 .curso-card {
   background: var(--bg);

@@ -1,0 +1,173 @@
+<!-- ============================================ -->
+<!--         BANNER DE BIENVENIDA                -->
+<!-- ============================================ -->
+<div class="dashboard-container">
+
+  <div class="welcome-banner">
+    <div class="welcome-content">
+      <h1 class="welcome-title">¡Bienvenido al Sistema de Matrículas! 👋</h1>
+      <p class="welcome-subtitle">Gestiona estudiantes, carreras, cursos y matrículas desde un solo lugar</p>
+      <p class="welcome-date">{{ currentDate }}</p>
+    </div>
+    <div class="welcome-decoration">
+      <div class="decoration-circle circle-1"></div>
+      <div class="decoration-circle circle-2"></div>
+      <div class="decoration-circle circle-3"></div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!--         TARJETAS DE ESTADÍSTICAS             -->
+  <!-- ============================================ -->
+  <div class="stats-grid">
+    <div
+      class="stat-card"
+      *ngFor="let stat of stats; let i = index"
+      [style.--accent-color]="stat.color"
+      [style.animation-delay]="(i * 0.1) + 's'"
+    >
+      <div class="stat-header">
+        <div class="stat-info">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+          <span class="stat-change">{{ stat.change }}</span>
+        </div>
+        <div class="stat-icon-wrapper">
+          <span class="stat-icon">{{ stat.icon }}</span>
+        </div>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!--         CONTENIDO PRINCIPAL                  -->
+  <!-- ============================================ -->
+  <div class="main-grid">
+
+    <!-- Acciones Rápidas -->
+    <div class="section quick-actions-section">
+      <h2 class="section-title">
+        <span class="section-icon">⚡</span>
+        Acciones Rápidas
+      </h2>
+      <div class="quick-actions-grid">
+        <a
+          class="action-card"
+          *ngFor="let action of quickActions; let i = index"
+          [routerLink]="action.route"
+          [style.animation-delay]="(i * 0.08) + 's'"
+        >
+          <div class="action-icon">{{ action.icon }}</div>
+          <div class="action-info">
+            <span class="action-title">{{ action.title }}</span>
+            <span class="action-desc">{{ action.description }}</span>
+          </div>
+          <span class="action-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Actividad Reciente -->
+    <div class="section activity-section">
+      <h2 class="section-title">
+        <span class="section-icon">🕐</span>
+        Actividad Reciente
+      </h2>
+      <div class="activity-list">
+        <div
+          class="activity-item"
+          *ngFor="let activity of recentActivities; let i = index"
+          [ngClass]="'activity-' + activity.type"
+          [style.animation-delay]="(i * 0.08) + 's'"
+        >
+          <div class="activity-indicator"></div>
+          <div class="activity-icon">{{ activity.icon }}</div>
+          <div class="activity-content">
+            <span class="activity-description">{{ activity.description }}</span>
+            <span class="activity-time">{{ activity.time }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mejores Estudiantes -->
+    <div class="section top-students-section">
+      <h2 class="section-title">
+        <span class="section-icon">🏆</span>
+        Mejores Promedios
+      </h2>
+      <div class="students-ranking">
+        <div
+          class="ranking-item"
+          *ngFor="let student of topStudents; let i = index"
+          [style.animation-delay]="(i * 0.1) + 's'"
+        >
+          <div class="ranking-position" [ngClass]="'rank-' + (i + 1)">
+            {{ i + 1 }}
+          </div>
+          <div class="ranking-info">
+            <span class="ranking-name">{{ student.name }}</span>
+            <span class="ranking-career">{{ student.career }} · Sem. {{ student.semester }}</span>
+          </div>
+          <div class="ranking-average">
+            <span class="average-value">{{ student.average }}</span>
+            <div class="average-bar">
+              <div class="average-bar-fill" [style.width.%]="student.average"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Distribución por Carrera (mini chart visual) -->
+    <div class="section distribution-section">
+      <h2 class="section-title">
+        <span class="section-icon">📊</span>
+        Distribución por Carrera
+      </h2>
+      <div class="distribution-chart">
+        <div class="chart-bar-container">
+          <div class="chart-item">
+            <div class="chart-label">Ing. Sistemas</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar" style="--bar-width: 75%; --bar-color: #06b6d4;"></div>
+            </div>
+            <div class="chart-value">450</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Ing. Industrial</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar" style="--bar-width: 55%; --bar-color: #10b981;"></div>
+            </div>
+            <div class="chart-value">330</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Administración</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar" style="--bar-width: 45%; --bar-color: #f59e0b;"></div>
+            </div>
+            <div class="chart-value">270</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Contaduría</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar" style="--bar-width: 25%; --bar-color: #8b5cf6;"></div>
+            </div>
+            <div class="chart-value">120</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Derecho</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar" style="--bar-width: 15%; --bar-color: #ef4444;"></div>
+            </div>
+            <div class="chart-value">64</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

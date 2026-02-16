@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Curso } from '../../models/curso.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CursoService } from '../../services/curso.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-curso-detail',
+  imports: [CommonModule],
   templateUrl: './curso-detail.html',
   styleUrl: './curso-detail.scss',
 })

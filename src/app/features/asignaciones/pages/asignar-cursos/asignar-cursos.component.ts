@@ -7,14 +7,19 @@ import { Curso } from '../../../cursos/models/curso.model';
 import { CursoService } from '../../../cursos/services/curso.service';
 import { CreateAsignacionDto } from '../../models/asignacion.model';
 import { AsignacionService } from '../../services/asignacion.service';
+import { AsyncPipe, CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-asignar-cursos',
+  imports: [AsyncPipe, CommonModule],
   templateUrl: './asignar-cursos.component.html',
   styleUrls: ['./asignar-cursos.component.scss']
 })
+
+
 export class AsignarCursosComponent implements OnInit {
+
   carreras$!: Observable<Carrera[]>;
   cursos$!: Observable<Curso[]>;
   carreraSeleccionada?: Carrera;

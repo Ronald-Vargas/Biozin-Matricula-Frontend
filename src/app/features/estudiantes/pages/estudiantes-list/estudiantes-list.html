@@ -1,1 +1,120 @@
-<p>estudiantes-list works!</p>
+<div class="estudiantes-container">
+  <div class="section">
+
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="page-title">👨‍🎓 Gestión de Estudiantes</h1>
+      <button class="btn btn-primary" (click)="nuevoEstudiante()">
+        ➕ Nuevo Estudiante
+      </button>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar por nombre, código o correo..."
+        [(ngModel)]="terminoBusqueda"
+        (input)="buscar()"
+      />
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filtroActivo === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'activo'" (click)="filtrar('activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'graduado'" (click)="filtrar('graduado')">Graduados</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'retirado'" (click)="filtrar('retirado')">Retirados</button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-container">
+      <table class="students-table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Estudiante</th>
+            <th>Carrera</th>
+            <th>Semestre</th>
+            <th>Progreso</th>
+            <th>Promedio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="estudiantesFiltrados.length === 0">
+            <td colspan="8" class="empty-state">
+              <div class="empty-icon">📭</div>
+              <p>No se encontraron estudiantes</p>
+            </td>
+          </tr>
+
+          <tr *ngFor="let est of estudiantesFiltrados; let i = index"
+              class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
+
+            <td><strong class="student-code">{{ est.codigo }}</strong></td>
+
+            <td>
+              <div class="student-info">
+                <div class="student-avatar">{{ getIniciales(est) }}</div>
+                <div>
+                  <div class="student-name">{{ est.nombres }} {{ est.apellidos }}</div>
+                  <div class="student-email">{{ est.email }}</div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="career-badge">
+                <span class="career-code">{{ est.carreraCodigo }}</span>
+                <span class="career-name">{{ est.carreraNombre }}</span>
+              </div>
+            </td>
+
+            <td class="text-center">
+              <span class="semester-badge">Sem. {{ est.semestre }}</span>
+            </td>
+
+            <td>
+              <div class="progress-container">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getProgreso(est)"></div>
+                </div>
+                <span class="progress-text">{{ getProgreso(est) }}%</span>
+              </div>
+              <div class="credits-info">{{ est.creditosAprobados }}/{{ est.creditosTotales }} créditos</div>
+            </td>
+
+            <td class="text-center">
+              <span class="grade-badge" [class.high-grade]="est.promedio >= 90">
+                {{ est.promedio.toFixed(1) }}
+              </span>
+            </td>
+
+            <td>
+              <span class="status-badge" [ngClass]="getEstadoClass(est.estado)">{{ est.estado }}</span>
+            </td>
+
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon btn-view" (click)="verDetalle(est)" title="Ver detalles">👁️</button>
+                <button class="btn-icon btn-edit" (click)="editarEstudiante(est)" title="Editar">✏️</button>
+                <button class="btn-icon btn-delete" (click)="eliminarEstudiante(est)" title="Eliminar">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="table-footer">
+      <span class="results-count">
+        Mostrando {{ estudiantesFiltrados.length }} de {{ estudiantes.length }} estudiantes
+      </span>
+    </div>
+  </div>
+</div>

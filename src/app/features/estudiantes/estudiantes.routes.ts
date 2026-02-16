@@ -18,5 +18,10 @@ export const ESTUDIANTES_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/estudiante-detail/estudiante-detail.component')
         .then(m => m.EstudianteDetailComponent)
+  },
+  {
+    path: 'editar/:id',
+    loadComponent: () =>
+      import('./pages/estudiante-form/estudiante-form.component').then(m => m.EstudianteFormComponent),
   }
 ];

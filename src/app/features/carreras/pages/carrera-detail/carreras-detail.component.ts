@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AsignacionService } from '../../../asignaciones/services/asignacion.service';
 import { Carrera } from '../../models/carrera.model';
 import { CarreraService } from '../../services/carrera.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-carreras-detail',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './carreras-detail.html',
   styleUrl: './carreras-detail.scss',
 })

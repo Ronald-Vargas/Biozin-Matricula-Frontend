@@ -1,116 +1,147 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+
+interface StatCard {
+  icon: string;
+  value: string;
+  label: string;
+  change: string;
+  color: string;
+}
+
+interface QuickAction {
+  icon: string;
+  title: string;
+  description: string;
+  route: string;
+}
+
+interface RecentActivity {
+  icon: string;
+  description: string;
+  time: string;
+  type: 'success' | 'info' | 'warning';
+}
 
 @Component({
-  selector: 'app-dashboard-page',
+  selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <!-- Welcome Banner -->
-    <div class="welcome-banner">
-      <h1>¡Bienvenido al Sistema de Matrículas! 👋</h1>
-      <p>Gestiona estudiantes, carreras, cursos y matrículas desde un solo lugar</p>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card" *ngFor="let stat of stats">
-        <div class="stat-header">
-          <div>
-            <div class="stat-value">{{ stat.value }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
-          </div>
-          <span class="stat-icon">{{ stat.icon }}</span>
-        </div>
-        <div class="stat-change">{{ stat.change }}</div>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-      <div class="action-card" *ngFor="let action of quickActions">
-        <div class="action-icon">{{ action.icon }}</div>
-        <div class="action-title">{{ action.title }}</div>
-        <div class="action-desc">{{ action.desc }}</div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    :host { display: block; }
-
-    .welcome-banner {
-      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-      color: white;
-      padding: 3rem;
-      border-radius: 16px;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 40px rgba(6, 182, 212, 0.3);
-    }
-    .welcome-banner h1 { font-size: 2.2rem; margin-bottom: 0.5rem; font-weight: 800; }
-    .welcome-banner p { font-size: 1.1rem; opacity: 0.9; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .stat-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      border: 2px solid #e2e8f0;
-      transition: all 0.3s ease;
-    }
-    .stat-card:hover { border-color: #06b6d4; transform: translateY(-4px); }
-    .stat-header { display: flex; justify-content: space-between; align-items: start; }
-    .stat-icon { font-size: 2.5rem; }
-    .stat-value { font-size: 2.5rem; font-weight: 800; color: #06b6d4; }
-    .stat-label { color: #64748b; font-size: 0.9rem; margin-top: 0.25rem; }
-    .stat-change { font-size: 0.85rem; color: #10b981; margin-top: 0.75rem; }
-
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
-    }
-    .action-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      border: 2px solid #e2e8f0;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .action-card:hover {
-      border-color: #06b6d4;
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15);
-    }
-    .action-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .action-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: #0f172a; }
-    .action-desc { font-size: 0.85rem; color: #64748b; }
-
-    @media (max-width: 768px) {
-      .welcome-banner { padding: 2rem; }
-      .welcome-banner h1 { font-size: 1.6rem; }
-    }
-  `],
+  imports: [CommonModule, RouterModule],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardPageComponent {
-  stats = [
-    { value: '1,247', label: 'Estudiantes Activos', icon: '👨‍🎓', change: '↑ 12% vs semestre anterior' },
-    { value: '24', label: 'Carreras Disponibles', icon: '📚', change: '↑ 2 nuevas carreras' },
-    { value: '186', label: 'Cursos Activos', icon: '📖', change: '↑ 8% más cursos' },
-    { value: '3,891', label: 'Matrículas Registradas', icon: '📝', change: '↑ 15% este período' },
+
+
+export class DashboardComponent implements OnInit {
+
+  currentDate: string = '';
+
+  stats: StatCard[] = [
+    {
+      icon: '👨‍🎓',
+      value: '1,234',
+      label: 'Estudiantes Activos',
+      change: '↑ 12% vs mes anterior',
+      color: '#06b6d4'
+    },
+    {
+      icon: '📚',
+      value: '15',
+      label: 'Carreras Disponibles',
+      change: '3 nuevas este año',
+      color: '#10b981'
+    },
+    {
+      icon: '📖',
+      value: '342',
+      label: 'Cursos Activos',
+      change: '↑ 8% vs semestre anterior',
+      color: '#f59e0b'
+    },
+    {
+      icon: '📝',
+      value: '856',
+      label: 'Matrículas Activas',
+      change: 'Período 2026-1',
+      color: '#8b5cf6'
+    }
   ];
 
-  quickActions = [
-    { icon: '👨‍🎓', title: 'Nuevo Estudiante', desc: 'Registrar un nuevo estudiante' },
-    { icon: '📚', title: 'Nueva Carrera', desc: 'Crear una nueva carrera' },
-    { icon: '📖', title: 'Nuevo Curso', desc: 'Agregar un curso al catálogo' },
-    { icon: '📝', title: 'Nueva Matrícula', desc: 'Matricular a un estudiante' },
+  quickActions: QuickAction[] = [
+    {
+      icon: '➕',
+      title: 'Nuevo Estudiante',
+      description: 'Registrar un nuevo estudiante en el sistema',
+      route: '/estudiantes/nuevo'
+    },
+    {
+      icon: '📋',
+      title: 'Nueva Matrícula',
+      description: 'Matricular estudiante en cursos del período',
+      route: '/matriculas/nueva'
+    },
+    {
+      icon: '📊',
+      title: 'Ver Reportes',
+      description: 'Estadísticas y análisis del sistema',
+      route: '/reportes'
+    },
+    {
+      icon: '🔗',
+      title: 'Gestionar Malla',
+      description: 'Asignar cursos a carreras universitarias',
+      route: '/asignaciones'
+    }
   ];
+
+  recentActivities: RecentActivity[] = [
+    {
+      icon: '✅',
+      description: 'Juan Pérez se matriculó en Programación II',
+      time: 'Hace 5 min',
+      type: 'success'
+    },
+    {
+      icon: '📝',
+      description: 'Nueva carrera "Ciencia de Datos" creada',
+      time: 'Hace 30 min',
+      type: 'info'
+    },
+    {
+      icon: '⚠️',
+      description: 'María González tiene créditos pendientes',
+      time: 'Hace 1 hora',
+      type: 'warning'
+    },
+    {
+      icon: '✅',
+      description: 'Carlos Ramírez completó el semestre 7',
+      time: 'Hace 2 horas',
+      type: 'success'
+    },
+    {
+      icon: '📝',
+      description: 'Se asignó "Cálculo III" a Ing. en Sistemas',
+      time: 'Hace 3 horas',
+      type: 'info'
+    }
+  ];
+
+  topStudents = [
+    { name: 'María F. González', career: 'ING-SIS', average: 92.3, semester: 3 },
+    { name: 'Ana P. Vargas', career: 'ADM-EMP', average: 88.7, semester: 8 },
+    { name: 'Juan C. Pérez', career: 'ING-SIS', average: 87.5, semester: 5 },
+    { name: 'Carlos A. Ramírez', career: 'ING-IND', average: 85.0, semester: 7 },
+  ];
+
+  ngOnInit(): void {
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    this.currentDate = new Date().toLocaleDateString('es-CR', options);
+  }
 }

@@ -82,7 +82,9 @@
     #8b6914 100%
   );
   padding: 40px 40px 34px;
-  text-align: center;
+  display: flex;                    /* agregar */
+  flex-direction: column;           /* agregar */
+  align-items: center;              /* agregar */
   position: relative;
   overflow: hidden;
 
@@ -119,14 +121,15 @@
   position: relative;
   z-index: 1;
   letter-spacing: 0.3px;
+  text-align: center;          /* agregar */
 }
 
 .header-accent {
-  width: 60px;
+  width: 80px;
   height: 3px;
   background: linear-gradient(90deg, #daa520, #e8c547);
   border-radius: 2px;
-  margin: 16px auto 0;
+  margin: 12px auto 0;    /* de 40px a 12px */
   position: relative;
   z-index: 1;
 }

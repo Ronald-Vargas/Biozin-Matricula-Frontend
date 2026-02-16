@@ -1,1 +1,124 @@
-<p>estudiante-detail works!</p>
+<div class="detail-container" *ngIf="estudiante as est">
+
+  <!-- Header con botón volver -->
+  <div class="detail-header">
+    <button class="btn-back" (click)="volver()">← Volver a la lista</button>
+    <h1 class="page-title">👤 Detalles del Estudiante</h1>
+  </div>
+
+  <div class="detail-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA ═══ -->
+    <div class="detail-left">
+
+      <!-- Perfil -->
+      <div class="profile-card">
+        <div class="profile-avatar">{{ getIniciales() }}</div>
+        <h3 class="profile-name">{{ est.nombres }} {{ est.apellidos }}</h3>
+        <p class="profile-code">{{ est.codigo }}</p>
+        <span class="status-badge" [ngClass]="getEstadoClass()">{{ est.estado }}</span>
+      </div>
+
+      <!-- Rendimiento -->
+      <div class="stats-card">
+        <h4 class="card-title">📊 Rendimiento Académico</h4>
+
+        <div class="stat-row">
+          <div class="stat-label-row">
+            <span>Promedio General:</span>
+            <span class="stat-value accent">{{ est.promedio.toFixed(1) }}</span>
+          </div>
+          <div class="stat-progress">
+            <div class="stat-progress-fill accent-bg" [style.width.%]="est.promedio"></div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-label-row">
+            <span>Progreso:</span>
+            <span class="stat-value success">{{ getProgreso() }}%</span>
+          </div>
+          <div class="stat-progress">
+            <div class="stat-progress-fill success-bg" [style.width.%]="getProgreso()"></div>
+          </div>
+        </div>
+
+        <div class="stat-details">
+          <div>✅ Créditos aprobados: <strong>{{ est.creditosAprobados }}</strong></div>
+          <div>📚 Créditos totales: <strong>{{ est.creditosTotales }}</strong></div>
+          <div>🎯 Semestre actual: <strong>{{ est.semestre }}</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA ═══ -->
+    <div class="detail-right">
+
+      <!-- Info Personal -->
+      <div class="info-section">
+        <h4 class="section-title">👤 Información Personal</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ est.email }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Cédula:</span>
+            <span class="info-value">Confidencial</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Fecha de Ingreso:</span>
+            <span class="info-value">01/02/2024</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Modalidad:</span>
+            <span class="info-value">Presencial</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Académica -->
+      <div class="info-section">
+        <h4 class="section-title">🎓 Información Académica</h4>
+        <div class="career-card">
+          <div>
+            <span class="career-label">Carrera</span>
+            <span class="career-name">{{ est.carreraNombre }}</span>
+            <span class="career-code">{{ est.carreraCodigo }}</span>
+          </div>
+          <div class="career-semester">
+            <span class="career-label">Semestre</span>
+            <span class="career-semester-value">{{ est.semestre }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historial -->
+      <div class="info-section">
+        <h4 class="section-title">📋 Últimas Matrículas</h4>
+        <div class="history-list">
+          <div class="history-item">
+            <span>Período 2026-1</span>
+            <span class="history-value">6 cursos - 18 créditos</span>
+          </div>
+          <div class="history-item">
+            <span>Período 2025-2</span>
+            <span class="history-value">5 cursos - 16 créditos</span>
+          </div>
+          <div class="history-item">
+            <span>Período 2025-1</span>
+            <span class="history-value">6 cursos - 20 créditos</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Si no se encontró -->
+<div class="not-found" *ngIf="!estudiante">
+  <div class="not-found-icon">🔍</div>
+  <h2>Estudiante no encontrado</h2>
+  <button class="btn btn-primary" (click)="volver()">← Volver a la lista</button>
+</div>
