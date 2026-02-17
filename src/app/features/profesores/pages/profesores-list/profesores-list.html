@@ -1,0 +1,105 @@
+<div class="estudiantes-container">
+  <div class="section">
+
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="page-title">👨‍🏫 Gestión de Profesores</h1>
+      <button class="btn btn-primary" (click)="nuevoProfesor()">
+        ➕ Nuevo Profesor
+      </button>
+    </div>
+
+    <!-- Buscador -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar por nombre, código, cédula o especialidad..."
+        [(ngModel)]="terminoBusqueda"
+        (input)="buscar()"
+      />
+    </div>
+
+    <!-- Filtros -->
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filtroActivo === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'activo'" (click)="filtrar('activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-container">
+      <table class="teachers-table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Profesor</th>
+            <th>Especialidad</th>
+            <th>Título</th>
+            <th class="text-center">Cursos</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="profesoresFiltrados.length === 0">
+            <td colspan="7" class="empty-state">
+              <div class="empty-icon">📭</div>
+              <p>No se encontraron profesores</p>
+            </td>
+          </tr>
+
+          <tr *ngFor="let prof of profesoresFiltrados; let i = index"
+              class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
+
+            <td><strong class="teacher-code">{{ prof.codigoProfesor }}</strong></td>
+
+            <td>
+              <div class="teacher-info">
+                <div class="teacher-avatar">{{ getIniciales(prof) }}</div>
+                <div>
+                  <div class="teacher-name">{{ getNombreCompleto(prof) }}</div>
+                  <div class="teacher-email">{{ prof.emailInstitucional }}</div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="especility-badge">
+                <span class="especility-name">{{ prof.especialidad }}</span>
+              </div>
+            </td>
+
+            <td>
+              <span class="title-name">{{ prof.titulo }}</span>
+            </td>
+
+            <td class="text-center">
+              <span class="course-badge">{{ prof.cursosAsignados }}</span>
+            </td>
+
+            <td>
+              <span class="status-badge" [ngClass]="getEstadoClass(prof.estadoProfesor)">{{ prof.estadoProfesor }}</span>
+            </td>
+
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon btn-view" (click)="verDetalle(prof)" title="Ver detalles">👁️</button>
+                <button class="btn-icon btn-edit" (click)="editarProfesor(prof)" title="Editar">✏️</button>
+                <button class="btn-icon btn-delete" (click)="eliminarProfesor(prof)" title="Eliminar">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="table-footer">
+      <span class="results-count">
+        Mostrando {{ profesoresFiltrados.length }} de {{ profesores.length }} profesores
+      </span>
+    </div>
+  </div>
+</div>

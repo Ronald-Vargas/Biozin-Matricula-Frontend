@@ -39,6 +39,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/asignaciones/asignaciones.routes').then((m) => m.ASIGNACIONES_ROUTES),
       },
+      {
+        path: 'profesores',
+        loadChildren: () =>
+          import('./features/profesores/profesores.routes').then((m) => m.PROFESORES_ROUTES),
+      },
     ],
   },
 

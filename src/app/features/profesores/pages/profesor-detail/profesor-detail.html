@@ -1,0 +1,135 @@
+<div class="detail-container" *ngIf="profesor as prof">
+
+  <!-- Header -->
+  <div class="detail-header">
+    <button class="btn-back" (click)="volver()">← Volver a la lista</button>
+    <div class="header-row">
+      <h1 class="page-title">👨‍🏫 Detalles del Profesor</h1>
+      <button class="btn btn-primary" (click)="editarProfesor()">✏️ Editar</button>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+
+    <!-- ═══ COLUMNA IZQUIERDA ═══ -->
+    <div class="detail-left">
+
+      <!-- Perfil -->
+      <div class="profile-card">
+        <div class="profile-avatar">{{ getIniciales() }}</div>
+        <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
+        <p class="profile-code">{{ prof.codigoProfesor }}</p>
+        <span class="status-badge" [ngClass]="getEstadoClass()">{{ prof.estadoProfesor }}</span>
+
+        <div class="profile-meta">
+          <div class="meta-item">
+            <span class="meta-icon">📧</span>
+            <span class="meta-text">{{ prof.emailInstitucional }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">📱</span>
+            <span class="meta-text">{{ prof.telefono }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen -->
+      <div class="stats-card">
+        <h4 class="card-title">📊 Resumen</h4>
+        <div class="stat-details">
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Cursos asignados</span>
+            <span class="stat-detail-value">{{ prof.cursosAsignados }}</span>
+          </div>
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Fecha de ingreso</span>
+            <span class="stat-detail-value">{{ prof.fechaIngreso }}</span>
+          </div>
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Estado</span>
+            <span class="stat-detail-value">{{ prof.estadoProfesor }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COLUMNA DERECHA ═══ -->
+    <div class="detail-right">
+
+      <!-- Info Académica -->
+      <div class="info-section">
+        <h4 class="section-title">🎓 Información Académica</h4>
+        <div class="career-card">
+          <div>
+            <span class="career-label">Título</span>
+            <span class="career-name">{{ prof.titulo }}</span>
+          </div>
+        </div>
+        <div class="career-card" style="margin-top: 0.75rem;">
+          <div>
+            <span class="career-label">Especialidad</span>
+            <span class="career-name">{{ prof.especialidad }}</span>
+          </div>
+          <div class="career-semester">
+            <span class="career-label">Cursos</span>
+            <span class="career-semester-value">{{ prof.cursosAsignados }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Personal -->
+      <div class="info-section">
+        <h4 class="section-title">👤 Información Personal</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Cédula</span>
+            <span class="info-value">{{ prof.cedula }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Género</span>
+            <span class="info-value">{{ prof.genero === 'M' ? 'Masculino' : prof.genero === 'F' ? 'Femenino' : prof.genero }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Nacionalidad</span>
+            <span class="info-value">{{ prof.nacionalidad || 'No especificada' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email personal</span>
+            <span class="info-value">{{ prof.emailPersonal }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="info-section" *ngIf="prof.provincia || prof.direccionExacta">
+        <h4 class="section-title">🏠 Dirección</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Provincia</span>
+            <span class="info-value">{{ prof.provincia || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Cantón</span>
+            <span class="info-value">{{ prof.canton || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Distrito</span>
+            <span class="info-value">{{ prof.distrito || '-' }}</span>
+          </div>
+          <div class="info-item" *ngIf="prof.direccionExacta">
+            <span class="info-label">Dirección exacta</span>
+            <span class="info-value">{{ prof.direccionExacta }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Si no se encontró -->
+<div class="not-found" *ngIf="!profesor">
+  <div class="not-found-icon">🔍</div>
+  <h2>Profesor no encontrado</h2>
+  <button class="btn btn-primary" (click)="volver()">← Volver a la lista</button>
+</div>

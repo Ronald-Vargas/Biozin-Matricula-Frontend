@@ -1,0 +1,133 @@
+<div class="form-container">
+
+  <!-- Header -->
+  <div class="form-page-header">
+    <button class="btn-back" (click)="cancelar()">← Volver a la lista</button>
+    <h1 class="page-title">{{ titulo }}</h1>
+  </div>
+
+  <div class="form-panel">
+    <form (ngSubmit)="guardar()" #profesorForm="ngForm">
+
+      <!-- ═══ Información Personal ═══ -->
+      <h3 class="form-section-title">👤 Información Personal</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Cédula *</label>
+          <input type="text" [(ngModel)]="form.cedula" name="cedula" required placeholder="1-0123-0456" />
+        </div>
+        <div class="form-group">
+          <label>Nombres *</label>
+          <input type="text" [(ngModel)]="form.nombre" name="nombre" required placeholder="Carlos" />
+        </div>
+        <div class="form-group">
+          <label>Primer Apellido *</label>
+          <input type="text" [(ngModel)]="form.apellidoPaterno" name="apellidoPaterno" required placeholder="Ramírez" />
+        </div>
+        <div class="form-group">
+          <label>Segundo Apellido</label>
+          <input type="text" [(ngModel)]="form.apellidoMaterno" name="apellidoMaterno" placeholder="López" />
+        </div>
+        <div class="form-group">
+          <label>Fecha de Nacimiento *</label>
+          <input type="date" [(ngModel)]="form.fechaNacimiento" name="fechaNacimiento" required />
+        </div>
+        <div class="form-group">
+          <label>Género *</label>
+          <select [(ngModel)]="form.genero" name="genero" required>
+            <option value="">Seleccionar...</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nacionalidad</label>
+          <input type="text" [(ngModel)]="form.nacionalidad" name="nacionalidad" placeholder="Costarricense" />
+        </div>
+      </div>
+
+      <!-- ═══ Información de Contacto ═══ -->
+      <h3 class="form-section-title">📱 Información de Contacto</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Email Personal *</label>
+          <input type="email" [(ngModel)]="form.emailPersonal" name="emailPersonal" required placeholder="carlos&#64;gmail.com" />
+        </div>
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="tel" [(ngModel)]="form.telefono" name="telefono" required placeholder="8812-3456" />
+        </div>
+      </div>
+
+      <!-- ═══ Información Académica ═══ -->
+      <h3 class="form-section-title">🎓 Información Académica</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título Académico *</label>
+          <input type="text" [(ngModel)]="form.titulo" name="titulo" required placeholder="Máster en Ciencias de la Computación" />
+        </div>
+        <div class="form-group">
+          <label>Especialidad *</label>
+          <input type="text" [(ngModel)]="form.especialidad" name="especialidad" required placeholder="Ingeniería de Software" />
+        </div>
+      </div>
+
+      <!-- ═══ Dirección ═══ -->
+      <h3 class="form-section-title">🏠 Dirección</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Provincia</label>
+          <input type="text" [(ngModel)]="form.provincia" name="provincia" placeholder="San José" />
+        </div>
+        <div class="form-group">
+          <label>Cantón</label>
+          <input type="text" [(ngModel)]="form.canton" name="canton" placeholder="Central" />
+        </div>
+        <div class="form-group">
+          <label>Distrito</label>
+          <input type="text" [(ngModel)]="form.distrito" name="distrito" placeholder="Catedral" />
+        </div>
+        <div class="form-group form-group-full">
+          <label>Dirección Exacta</label>
+          <textarea [(ngModel)]="form.direccionExacta" name="direccionExacta" rows="2" placeholder="Barrio Escalante, 100m sur de la iglesia..."></textarea>
+        </div>
+      </div>
+
+      <!-- ═══ Campos automáticos (solo en edición) ═══ -->
+      <div *ngIf="esEdicion" class="auto-fields-info">
+        <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
+        <div class="auto-fields-grid">
+          <div class="auto-field">
+            <span class="auto-label">Código:</span>
+            <span class="auto-value">{{ form.codigoProfesor }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Email Institucional:</span>
+            <span class="auto-value">{{ form.emailInstitucional }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Fecha Ingreso:</span>
+            <span class="auto-value">{{ form.fechaIngreso }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Estado:</span>
+            <span class="auto-value">{{ form.estadoProfesor }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Cursos Asignados:</span>
+            <span class="auto-value">{{ form.cursosAsignados }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ Acciones ═══ -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          💾 {{ esEdicion ? 'Actualizar' : 'Guardar' }} Profesor
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

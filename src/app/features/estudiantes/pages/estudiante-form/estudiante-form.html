@@ -6,6 +6,7 @@
     <h1 class="page-title">{{ titulo }}</h1>
   </div>
 
+
   <div class="form-panel">
     <form (ngSubmit)="guardar()" #estudianteForm="ngForm">
 
@@ -18,7 +19,7 @@
         </div>
         <div class="form-group">
           <label>Nombres *</label>
-          <input type="text" [(ngModel)]="form.nombres" name="nombres" required placeholder="Juan Carlos" />
+          <input type="text" [(ngModel)]="form.nombre" name="nombre" required placeholder="Juan Carlos" />
         </div>
         <div class="form-group">
           <label>Primer Apellido *</label>
@@ -41,6 +42,28 @@
             <option value="Otro">Otro</option>
           </select>
         </div>
+        <div class="form-group">
+          <label>Nacionalidad</label>
+          <input type="text" [(ngModel)]="form.nacionalidad" name="nacionalidad" placeholder="Costarricense" />
+        </div>
+        <div class="form-group">
+          <label>Discapacidad</label>
+          <select [(ngModel)]="form.discapacidad" name="discapacidad">
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="form.discapacidad">
+          <label>Tipo de Discapacidad</label>
+          <input type="text" [(ngModel)]="form.tipoDiscapacidad" name="tipoDiscapacidad" placeholder="Describir..." />
+        </div>
+        <div class="form-group" *ngIf="form.discapacidad">
+          <label>¿Necesita Asistencia?</label>
+          <select [(ngModel)]="form.necesitaAsistencia" name="necesitaAsistencia">
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
       </div>
 
       <!-- ═══ Información de Contacto ═══ -->
@@ -52,15 +75,15 @@
         </div>
         <div class="form-group">
           <label>Teléfono Móvil *</label>
-          <input type="tel" [(ngModel)]="form.telefono" name="telefono" required placeholder="8888-8888" />
+          <input type="tel" [(ngModel)]="form.telefonoMovil" name="telefonoMovil" required placeholder="8888-8888" />
         </div>
         <div class="form-group">
-          <label>Teléfono Emergencia</label>
+          <label>Teléfono de Emergencia</label>
           <input type="tel" [(ngModel)]="form.telefonoEmergencia" name="telefonoEmergencia" placeholder="7777-7777" />
         </div>
         <div class="form-group">
           <label>Contacto de Emergencia</label>
-          <input type="text" [(ngModel)]="form.nombreEmergencia" name="nombreEmergencia" placeholder="María Pérez (Madre)" />
+          <input type="text" [(ngModel)]="form.nombreContactoEmergencia" name="nombreContactoEmergencia" placeholder="María Pérez (Madre)" />
         </div>
       </div>
 
@@ -69,7 +92,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Carrera *</label>
-          <select [(ngModel)]="form.carreraId" name="carreraId" required>
+          <select [(ngModel)]="form.idCarrera" name="idCarrera" required>
             <option value="">Seleccionar carrera...</option>
             <option *ngFor="let c of carreras" [value]="c.id">
               {{ c.codigo }} - {{ c.nombre }}
@@ -77,20 +100,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Modalidad *</label>
-          <select [(ngModel)]="form.modalidad" name="modalidad">
-            <option value="Presencial">Presencial</option>
-            <option value="Virtual">Virtual</option>
-            <option value="Hibrido">Híbrido</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Jornada *</label>
-          <select [(ngModel)]="form.jornada" name="jornada">
-            <option value="Diurna">Diurna</option>
-            <option value="Nocturna">Nocturna</option>
-            <option value="Sabatina">Sabatina</option>
-          </select>
+          <label>Condición Socioeconómica</label>
+          <input type="text" [(ngModel)]="form.condicionSocioeconomica" name="condicionSocioeconomica" placeholder="Ej: Media" />
         </div>
         <div class="form-group">
           <label>Tipo de Beca</label>
@@ -101,6 +112,35 @@
             <option value="75%">75%</option>
             <option value="100%">100%</option>
           </select>
+        </div>
+        <div class="form-group">
+          <label>¿Trabaja?</label>
+          <select [(ngModel)]="form.trabaja" name="trabaja">
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ═══ Colegio de Procedencia ═══ -->
+      <h3 class="form-section-title">🏫 Colegio de Procedencia</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre del Colegio</label>
+          <input type="text" [(ngModel)]="form.colegioProcedencia" name="colegioProcedencia" placeholder="Liceo de Costa Rica" />
+        </div>
+        <div class="form-group">
+          <label>Tipo de Colegio</label>
+          <select [(ngModel)]="form.tipoColegio" name="tipoColegio">
+            <option value="">Seleccionar...</option>
+            <option value="Publico">Público</option>
+            <option value="Privado">Privado</option>
+            <option value="Subvencionado">Subvencionado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Año de Graduación</label>
+          <input type="number" [(ngModel)]="form.anioGraduacionColegio" name="anioGraduacionColegio" placeholder="2025" min="2000" max="2030" />
         </div>
       </div>
 
@@ -115,9 +155,48 @@
           <label>Cantón</label>
           <input type="text" [(ngModel)]="form.canton" name="canton" placeholder="Central" />
         </div>
+        <div class="form-group">
+          <label>Distrito</label>
+          <input type="text" [(ngModel)]="form.distrito" name="distrito" placeholder="Catedral" />
+        </div>
         <div class="form-group form-group-full">
           <label>Dirección Exacta</label>
-          <textarea [(ngModel)]="form.direccion" name="direccion" rows="2" placeholder="Del parque central 200m norte..."></textarea>
+          <textarea [(ngModel)]="form.direccionExacta" name="direccionExacta" rows="2" placeholder="Del parque central 200m norte..."></textarea>
+        </div>
+      </div>
+
+      <!-- ═══ Observaciones ═══ -->
+      <h3 class="form-section-title">📝 Observaciones</h3>
+      <div class="form-grid">
+        <div class="form-group form-group-full">
+          <textarea [(ngModel)]="form.observaciones" name="observaciones" rows="3" placeholder="Notas adicionales sobre el estudiante..."></textarea>
+        </div>
+      </div>
+
+      <!-- ═══ Campos automáticos (solo en edición) ═══ -->
+      <div *ngIf="esEdicion" class="auto-fields-info">
+        <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
+        <div class="auto-fields-grid">
+          <div class="auto-field">
+            <span class="auto-label">Código:</span>
+            <span class="auto-value">{{ form.codigoEstudiante }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Email Institucional:</span>
+            <span class="auto-value">{{ form.emailInstitucional }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Semestre Actual:</span>
+            <span class="auto-value">{{ form.semestreActual }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Fecha Ingreso:</span>
+            <span class="auto-value">{{ form.fechaIngreso }}</span>
+          </div>
+          <div class="auto-field">
+            <span class="auto-label">Estado:</span>
+            <span class="auto-value">{{ form.estadoEstudiante }}</span>
+          </div>
         </div>
       </div>
 

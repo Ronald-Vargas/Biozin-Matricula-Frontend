@@ -1,9 +1,12 @@
 <div class="detail-container" *ngIf="estudiante as est">
 
-  <!-- Header con botón volver -->
+  <!-- Header -->
   <div class="detail-header">
     <button class="btn-back" (click)="volver()">← Volver a la lista</button>
-    <h1 class="page-title">👤 Detalles del Estudiante</h1>
+    <div class="header-row">
+      <h1 class="page-title">👤 Detalles del Estudiante</h1>
+      <button class="btn btn-primary" (click)="editarEstudiante()">✏️ Editar</button>
+    </div>
   </div>
 
   <div class="detail-grid">
@@ -14,9 +17,24 @@
       <!-- Perfil -->
       <div class="profile-card">
         <div class="profile-avatar">{{ getIniciales() }}</div>
-        <h3 class="profile-name">{{ est.nombres }} {{ est.apellidos }}</h3>
-        <p class="profile-code">{{ est.codigo }}</p>
-        <span class="status-badge" [ngClass]="getEstadoClass()">{{ est.estado }}</span>
+        <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
+        <p class="profile-code">{{ est.codigoEstudiante }}</p>
+        <span class="status-badge" [ngClass]="getEstadoClass()">{{ est.estadoEstudiante }}</span>
+
+        <div class="profile-meta">
+          <div class="meta-item">
+            <span class="meta-icon">📧</span>
+            <span class="meta-text">{{ est.emailInstitucional }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">📱</span>
+            <span class="meta-text">{{ est.telefonoMovil }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🎂</span>
+            <span class="meta-text">{{ getEdad() }} años</span>
+          </div>
+        </div>
       </div>
 
       <!-- Rendimiento -->
@@ -25,17 +43,7 @@
 
         <div class="stat-row">
           <div class="stat-label-row">
-            <span>Promedio General:</span>
-            <span class="stat-value accent">{{ est.promedio.toFixed(1) }}</span>
-          </div>
-          <div class="stat-progress">
-            <div class="stat-progress-fill accent-bg" [style.width.%]="est.promedio"></div>
-          </div>
-        </div>
-
-        <div class="stat-row">
-          <div class="stat-label-row">
-            <span>Progreso:</span>
+            <span>Progreso de Carrera</span>
             <span class="stat-value success">{{ getProgreso() }}%</span>
           </div>
           <div class="stat-progress">
@@ -44,38 +52,24 @@
         </div>
 
         <div class="stat-details">
-          <div>✅ Créditos aprobados: <strong>{{ est.creditosAprobados }}</strong></div>
-          <div>📚 Créditos totales: <strong>{{ est.creditosTotales }}</strong></div>
-          <div>🎯 Semestre actual: <strong>{{ est.semestre }}</strong></div>
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Créditos aprobados</span>
+            <span class="stat-detail-value">{{ est.creditosAprobados }} / {{ est.creditosTotales }}</span>
+          </div>
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Semestre actual</span>
+            <span class="stat-detail-value">{{ est.semestreActual }}</span>
+          </div>
+          <div class="stat-detail-item">
+            <span class="stat-detail-label">Tipo de beca</span>
+            <span class="stat-detail-value">{{ est.tipoBeca }}</span>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ═══ COLUMNA DERECHA ═══ -->
     <div class="detail-right">
-
-      <!-- Info Personal -->
-      <div class="info-section">
-        <h4 class="section-title">👤 Información Personal</h4>
-        <div class="info-grid">
-          <div class="info-item">
-            <span class="info-label">Email:</span>
-            <span class="info-value">{{ est.email }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Cédula:</span>
-            <span class="info-value">Confidencial</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Fecha de Ingreso:</span>
-            <span class="info-value">01/02/2024</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Modalidad:</span>
-            <span class="info-value">Presencial</span>
-          </div>
-        </div>
-      </div>
 
       <!-- Info Académica -->
       <div class="info-section">
@@ -88,9 +82,117 @@
           </div>
           <div class="career-semester">
             <span class="career-label">Semestre</span>
-            <span class="career-semester-value">{{ est.semestre }}</span>
+            <span class="career-semester-value">{{ est.semestreActual }}</span>
           </div>
         </div>
+        <div class="info-grid" style="margin-top: 1rem;">
+          <div class="info-item">
+            <span class="info-label">Fecha de ingreso</span>
+            <span class="info-value">{{ est.fechaIngreso }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Condición socioeconómica</span>
+            <span class="info-value">{{ est.condicionSocioeconomica || 'No especificada' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">¿Trabaja?</span>
+            <span class="info-value">{{ est.trabaja ? 'Sí' : 'No' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tipo de beca</span>
+            <span class="info-value">{{ est.tipoBeca }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Personal -->
+      <div class="info-section">
+        <h4 class="section-title">👤 Información Personal</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Cédula</span>
+            <span class="info-value">{{ est.cedula }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Género</span>
+            <span class="info-value">{{ est.genero === 'M' ? 'Masculino' : est.genero === 'F' ? 'Femenino' : est.genero }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Nacionalidad</span>
+            <span class="info-value">{{ est.nacionalidad || 'No especificada' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email personal</span>
+            <span class="info-value">{{ est.emailPersonal }}</span>
+          </div>
+          <div class="info-item" *ngIf="est.discapacidad">
+            <span class="info-label">Discapacidad</span>
+            <span class="info-value">{{ est.tipoDiscapacidad }} {{ est.necesitaAsistencia ? '(Requiere asistencia)' : '' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto de Emergencia -->
+      <div class="info-section" *ngIf="est.telefonoEmergencia || est.nombreContactoEmergencia">
+        <h4 class="section-title">🚨 Contacto de Emergencia</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Contacto</span>
+            <span class="info-value">{{ est.nombreContactoEmergencia || 'No especificado' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Teléfono</span>
+            <span class="info-value">{{ est.telefonoEmergencia || 'No especificado' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colegio de Procedencia -->
+      <div class="info-section" *ngIf="est.colegioProcedencia">
+        <h4 class="section-title">🏫 Colegio de Procedencia</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Colegio</span>
+            <span class="info-value">{{ est.colegioProcedencia }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tipo</span>
+            <span class="info-value">{{ est.tipoColegio }}</span>
+          </div>
+          <div class="info-item" *ngIf="est.anioGraduacionColegio">
+            <span class="info-label">Año de graduación</span>
+            <span class="info-value">{{ est.anioGraduacionColegio }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="info-section" *ngIf="est.provincia || est.direccionExacta">
+        <h4 class="section-title">🏠 Dirección</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Provincia</span>
+            <span class="info-value">{{ est.provincia || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Cantón</span>
+            <span class="info-value">{{ est.canton || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Distrito</span>
+            <span class="info-value">{{ est.distrito || '-' }}</span>
+          </div>
+          <div class="info-item" *ngIf="est.direccionExacta">
+            <span class="info-label">Dirección exacta</span>
+            <span class="info-value">{{ est.direccionExacta }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Observaciones -->
+      <div class="info-section" *ngIf="est.observaciones">
+        <h4 class="section-title">📝 Observaciones</h4>
+        <p class="observaciones-text">{{ est.observaciones }}</p>
       </div>
 
       <!-- Historial -->
@@ -99,15 +201,15 @@
         <div class="history-list">
           <div class="history-item">
             <span>Período 2026-1</span>
-            <span class="history-value">6 cursos - 18 créditos</span>
+            <span class="history-value">6 cursos · 18 créditos</span>
           </div>
           <div class="history-item">
             <span>Período 2025-2</span>
-            <span class="history-value">5 cursos - 16 créditos</span>
+            <span class="history-value">5 cursos · 16 créditos</span>
           </div>
           <div class="history-item">
             <span>Período 2025-1</span>
-            <span class="history-value">6 cursos - 20 créditos</span>
+            <span class="history-value">6 cursos · 20 créditos</span>
           </div>
         </div>
       </div>

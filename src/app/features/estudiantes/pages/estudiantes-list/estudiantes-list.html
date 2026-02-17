@@ -15,7 +15,7 @@
       <input
         type="text"
         class="search-input"
-        placeholder="Buscar por nombre, código o correo..."
+        placeholder="Buscar por nombre, código, cédula o correo..."
         [(ngModel)]="terminoBusqueda"
         (input)="buscar()"
       />
@@ -39,7 +39,6 @@
             <th>Carrera</th>
             <th>Semestre</th>
             <th>Progreso</th>
-            <th>Promedio</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
@@ -55,14 +54,14 @@
           <tr *ngFor="let est of estudiantesFiltrados; let i = index"
               class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="student-code">{{ est.codigo }}</strong></td>
+            <td><strong class="student-code">{{ est.codigoEstudiante }}</strong></td>
 
             <td>
               <div class="student-info">
                 <div class="student-avatar">{{ getIniciales(est) }}</div>
                 <div>
-                  <div class="student-name">{{ est.nombres }} {{ est.apellidos }}</div>
-                  <div class="student-email">{{ est.email }}</div>
+                  <div class="student-name">{{ getNombreCompleto(est) }}</div>
+                  <div class="student-email">{{ est.emailInstitucional }}</div>
                 </div>
               </div>
             </td>
@@ -75,7 +74,7 @@
             </td>
 
             <td class="text-center">
-              <span class="semester-badge">Sem. {{ est.semestre }}</span>
+              <span class="semester-badge">Sem. {{ est.semestreActual }}</span>
             </td>
 
             <td>
@@ -88,14 +87,8 @@
               <div class="credits-info">{{ est.creditosAprobados }}/{{ est.creditosTotales }} créditos</div>
             </td>
 
-            <td class="text-center">
-              <span class="grade-badge" [class.high-grade]="est.promedio >= 90">
-                {{ est.promedio.toFixed(1) }}
-              </span>
-            </td>
-
             <td>
-              <span class="status-badge" [ngClass]="getEstadoClass(est.estado)">{{ est.estado }}</span>
+              <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">{{ est.estadoEstudiante }}</span>
             </td>
 
             <td>
