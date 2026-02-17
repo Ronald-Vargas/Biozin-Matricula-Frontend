@@ -40,6 +40,8 @@
 
     .logo-text,
     .nav-label,
+    .nav-section-title,
+    .view-label,
     .user-info {
       display: none;
     }
@@ -62,6 +64,15 @@
       margin: 0;
     }
 
+    .view-switch {
+      padding: 0.5rem;
+    }
+
+    .view-btn {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+
     .sidebar-footer {
       .user-profile {
         justify-content: center;
@@ -72,7 +83,7 @@
 
 /* ── Sidebar Header ── */
 .sidebar-header {
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
@@ -112,18 +123,74 @@
   }
 }
 
+/* ── View Switch ── */
+.view-switch {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.view-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+
+  &.active {
+    background: #06b6d4;
+    color: white;
+  }
+
+  &:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+  }
+}
+
+.view-label {
+  white-space: nowrap;
+}
+
 /* ── Sidebar Nav ── */
 .sidebar-nav {
   flex: 1;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   overflow-y: auto;
+}
+
+/* ── Nav Sections ── */
+.nav-section {
+  margin-bottom: 0.25rem;
+}
+
+.nav-section-title {
+  display: block;
+  padding: 0.6rem 1.5rem 0.25rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: all 0.3s ease;
@@ -143,20 +210,20 @@
 }
 
 .nav-icon {
-  font-size: 1.5rem;
-  min-width: 24px;
+  font-size: 1.15rem;
+  min-width: 22px;
   text-align: center;
 }
 
 .nav-label {
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   white-space: nowrap;
 }
 
 /* ── Sidebar Footer ── */
 .sidebar-footer {
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -269,6 +336,8 @@
 
       .logo-text,
       .nav-label,
+      .nav-section-title,
+      .view-label,
       .user-info {
         display: block;
       }

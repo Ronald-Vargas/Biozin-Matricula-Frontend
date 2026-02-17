@@ -7,33 +7,59 @@
     <div class="sidebar-header">
       <div class="logo">
         <span class="logo-icon">🎓</span>
-        <span class="logo-text">Sistema Matrículas</span>
+        <span class="logo-text">Matrículas</span>
       </div>
       <button class="toggle-btn" (click)="toggleSidebar()">
         {{ sidebarCollapsed ? '▶' : '◀' }}
       </button>
     </div>
 
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <a
-        *ngFor="let item of menuItems"
-        class="nav-item"
-        [routerLink]="item.path"
-        routerLinkActive="active"
+    <!-- View Switch -->
+    <div class="view-switch">
+      <button
+        class="view-btn"
+        [class.active]="currentView === 'admin'"
+        (click)="switchView('admin')"
       >
-        <span class="nav-icon">{{ item.icon }}</span>
-        <span class="nav-label">{{ item.label }}</span>
-      </a>
+        🔧 <span class="view-label">Admin</span>
+      </button>
+      <button
+        class="view-btn"
+        [class.active]="currentView === 'student'"
+        (click)="switchView('student')"
+      >
+        🎓 <span class="view-label">Estudiante</span>
+      </button>
+    </div>
+
+    <!-- Navigation con secciones -->
+    <nav class="sidebar-nav">
+      <div class="nav-section" *ngFor="let section of menuSections">
+        <span class="nav-section-title">{{ section.title }}</span>
+        <a
+          *ngFor="let item of section.items"
+          class="nav-item"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </div>
     </nav>
 
+
+
+
+
+    
     <!-- Footer / User -->
     <div class="sidebar-footer">
       <div class="user-profile">
         <div class="user-avatar">👤</div>
         <div class="user-info">
-          <div class="user-name">Admin</div>
-          <div class="user-role">Administrador</div>
+          <div class="user-name">{{ userName }}</div>
+          <div class="user-role">{{ userRole }}</div>
         </div>
       </div>
     </div>
