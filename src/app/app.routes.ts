@@ -44,6 +44,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/profesores/profesores.routes').then((m) => m.PROFESORES_ROUTES),
       },
+       {
+        path: 'periodos',
+        loadChildren: () =>
+          import('./features/periodos/periodos.routes').then((m) => m.PERIODOS_ROUTES),
+      },
     ],
   },
 

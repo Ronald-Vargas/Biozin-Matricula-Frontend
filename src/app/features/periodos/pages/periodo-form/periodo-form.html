@@ -1,0 +1,58 @@
+<div class="form-container">
+  <h2 class="form-title">Crear Nuevo Periodo</h2>
+
+  <div class="success-message" *ngIf="mostrarMensaje">
+    ✓ Periodo creado exitosamente
+  </div>
+
+
+  <form (ngSubmit)="guardar()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="periodo">Periodo *</label>
+        <input 
+          type="text" 
+          id="periodo"
+          [(ngModel)]="form.periodo"
+          name="periodo"
+          required
+          placeholder="Ej: I Semestre 2026">
+      </div>
+
+
+      <div class="form-group">
+          <label>Fecha de Inicio *</label>
+          <input type="date" [(ngModel)]="form.fechaInicio" name="fechaInicio" required />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="form-group">
+          <label>Fecha de Fin *</label>
+          <input type="date" [(ngModel)]="form.fechaFin" name="fechaFin" required />
+        </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-group">
+          <label>Inicio de Matricula *</label>
+          <input type="date" [(ngModel)]="form.fechaMatricula" name="fechaInicioMatricula" required />
+        </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-group">
+          <label>Cierre de Matricula *</label>
+          <input type="date" [(ngModel)]="form.MatriculaCierre" name="fechaCierreMatricula" required />
+        </div>
+    </div>
+
+
+    <button 
+      type="submit" 
+      class="btn btn-primary">
+      ➕ Crear Periodo
+    </button>
+  </form>
+</div>

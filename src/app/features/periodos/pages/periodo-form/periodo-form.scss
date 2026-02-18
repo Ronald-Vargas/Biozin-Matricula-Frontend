@@ -1,0 +1,35 @@
+/* ── Campos automáticos (solo edición) ── */
+.auto-fields-info {
+  margin-top: 1.5rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+}
+
+.auto-fields-info .form-section-title {
+  margin-top: 0;
+}
+
+.auto-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.auto-field {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.auto-label {
+  font-weight: 600;
+  color: #0891b2;
+}
+
+.auto-value {
+  color: #0f172a;
+}
+
+

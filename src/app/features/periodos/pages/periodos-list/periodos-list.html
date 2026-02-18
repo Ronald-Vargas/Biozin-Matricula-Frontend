@@ -1,0 +1,76 @@
+<div class="estudiantes-container">
+  <div class="section">
+
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="page-title">📅 Períodos Academicos</h1>
+      <button class="btn btn-primary" (click)="nuevoPeriodo()">
+        ➕ Nuevo Período
+      </button>
+    </div>
+
+
+    <!-- Tabla -->
+    <div class="table-container">
+      <table class="periodos-table">
+        <thead>
+          <tr>
+            <th>Perido</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Matricula Inicio</th>
+            <th>Matricula Cierre</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngIf="periodos.length === 0">
+            <td colspan="7" class="empty-state">
+              <div class="empty-icon">📭 No se encontraron períodos</div>
+            </td>
+          </tr>
+
+          <tr *ngFor="let per of periodos; let i = index"
+              class="table-row"
+              [style.animation-delay]="(i * 0.05) + 's'">
+
+            <td><strong class="periodo-name">{{ per.periodo }}</strong></td>
+
+            <td>{{ per.fechaInicio }}</td>
+            <td>{{ per.fechaFin }}</td>
+            <td>{{ per.fechaMatricula }}</td>
+            <td>{{ per.MatriculaCierre }}</td>
+            <td>
+              <span class="status-badge"
+                    [ngClass]="getEstadoClass(per.estado)">
+                {{ per.estado }}
+              </span>
+            </td>
+
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon btn-view"
+                        (click)="verDetalle(per)"
+                        title="Ver detalles">👁️</button>
+
+                <button class="btn-icon btn-edit"
+                        (click)="editarPeriodo(per)"
+                        title="Editar">✏️</button>
+
+                <button class="btn-icon btn-delete"
+                        (click)="eliminarPeriodo(per)"
+                        title="Eliminar">🗑️</button>
+              </div>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
