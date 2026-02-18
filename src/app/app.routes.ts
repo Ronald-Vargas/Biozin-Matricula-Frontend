@@ -49,6 +49,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/periodos/periodos.routes').then((m) => m.PERIODOS_ROUTES),
       },
+       {
+        path: 'oferta-academica',
+        loadChildren: () =>
+          import('./features/OfertaAcademica/ofertas.routes').then((m) => m.OFERTA_ACADEMICA_ROUTES),
+      },
     ],
   },
 

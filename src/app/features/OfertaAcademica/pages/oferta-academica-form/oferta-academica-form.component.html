@@ -1,0 +1,123 @@
+
+<div class="modal-overlay" *ngIf="visible" (click)="cerrar()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">📋 Habilitar Curso para Matrícula</h2>
+      <button class="modal-close" (click)="cerrar()">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <div class="form-grid">
+
+        <!-- Período -->
+        <div class="form-group full">
+          <label class="form-label">Período Académico</label>
+          <select
+            class="form-select"
+            [(ngModel)]="oferta.periodoId"
+            (ngModelChange)="onPeriodoChange()"
+          >
+            <option value="">Seleccionar período...</option>
+            <option *ngFor="let p of periodos" [value]="p.id">{{ p.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Curso -->
+        <div class="form-group full">
+          <label class="form-label">Curso</label>
+          <select
+            class="form-select"
+            [(ngModel)]="oferta.cursoId"
+            (ngModelChange)="onCursoChange()"
+          >
+            <option value="">Seleccionar curso...</option>
+            <option *ngFor="let c of cursos" [value]="c.id">
+              {{ c.codigo }} — {{ c.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Profesor -->
+        <div class="form-group full">
+          <label class="form-label">Profesor</label>
+          <select
+            class="form-select"
+            [(ngModel)]="oferta.profesorId"
+            (ngModelChange)="onProfesorChange()"
+          >
+            <option value="">Seleccionar profesor...</option>
+            <option *ngFor="let pr of profesores" [value]="pr.id">
+              {{ pr.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Días -->
+        <div class="form-group">
+          <label class="form-label">Días</label>
+          <select class="form-select" [(ngModel)]="oferta.dias">
+            <option value="">Seleccionar días...</option>
+            <option *ngFor="let d of diasOptions" [value]="d">{{ d }}</option>
+          </select>
+        </div>
+
+        <!-- Horario -->
+        <div class="form-group">
+          <label class="form-label">Horario</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Ej: 8:00 - 9:40 am"
+            [(ngModel)]="oferta.horario"
+          />
+        </div>
+
+        <!-- Aula -->
+        <div class="form-group">
+          <label class="form-label">Aula</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Ej: A-201"
+            [(ngModel)]="oferta.aula"
+          />
+        </div>
+
+        <!-- Cupo -->
+        <div class="form-group">
+          <label class="form-label">Cupo Máximo</label>
+          <input
+            class="form-input"
+            type="number"
+            [(ngModel)]="oferta.cupoMaximo"
+            min="1"
+            max="100"
+          />
+        </div>
+
+        <!-- Precio -->
+        <div class="form-group">
+          <label class="form-label">Precio (₡)</label>
+          <input
+            class="form-input"
+            type="number"
+            [(ngModel)]="oferta.precio"
+            min="0"
+            step="5000"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cerrar()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()">Habilitar Curso</button>
+    </div>
+
+  </div>
+</div>
