@@ -90,21 +90,11 @@
   justify-content: space-between;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.logo-icon {
-  font-size: 2rem;
-}
-
-.logo-text {
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
+.sidebar-logo {
+  height: 65px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.3s ease;
 }
 
 .toggle-btn {

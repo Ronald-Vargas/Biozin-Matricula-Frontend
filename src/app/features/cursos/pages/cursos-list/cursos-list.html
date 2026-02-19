@@ -1,12 +1,24 @@
 
 <div class="container">
-  <div class="header-section">
-    <h1 class="page-title">Gestión de Cursos</h1>
-    <button class="btn btn-primary" (click)="toggleFormulario()">
+
+
+  <div class="module-banner">
+  <div class="module-banner-content">
+    <div>
+      <h1 class="module-title">📚 Gestión de Cursos</h1>
+      <p class="module-subtitle">
+        Administra los cursos académicos y sus créditos
+      </p>
+    </div>
+
+    <button 
+      class="btn btn-primary banner-btn"
+      (click)="toggleFormulario()">
       <span *ngIf="!mostrarFormulario">➕ Nuevo Curso</span>
       <span *ngIf="mostrarFormulario">❌ Cancelar</span>
     </button>
   </div>
+</div>
 
   <!-- Formulario de creación -->
   <app-curso-form 

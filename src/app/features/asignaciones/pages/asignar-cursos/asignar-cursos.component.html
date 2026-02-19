@@ -1,13 +1,27 @@
 
 <div class="container">
-  <div class="header-section">
-    <h1 class="page-title">🔗 Asignar Cursos a Carreras</h1>
+
+
+  
+  <div class="module-banner">
+    <div class="module-banner-content">
+      <div>
+        <h1 class="module-title">🔗 Asignar Cursos a Carreras</h1>
+        <p class="module-subtitle">
+          Configura la estructura académica y organiza los cursos por semestre
+        </p>
+      </div>
+    </div>
   </div>
+
+
 
   <div class="section">
     <div class="success-message" *ngIf="mensajeExito">
       ✓ Asignaciones guardadas exitosamente
     </div>
+
+
 
     <div class="form-group">
       <label for="carrera">Seleccionar Carrera *</label>
@@ -19,12 +33,16 @@
       </select>
     </div>
 
+
+
     <div *ngIf="carreraSeleccionada" class="cursos-container">
       <p class="info-text">
         Selecciona los cursos que pertenecen a <strong>{{ carreraSeleccionada?.nombre }}</strong>
         e indica en qué semestre se cursan.
       </p>
 
+
+      
       <div class="cursos-list">
         <div class="curso-item" *ngFor="let curso of cursos$ | async">
           <div class="curso-checkbox">

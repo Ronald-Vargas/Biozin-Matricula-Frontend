@@ -3,16 +3,21 @@
   <!-- ══════ SIDEBAR ══════ -->
   <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
 
+
     <!-- Header -->
     <div class="sidebar-header">
-      <div class="logo">
-        <span class="logo-icon">🎓</span>
-        <span class="logo-text">Matrículas</span>
-      </div>
+        <img 
+          src="./BiozinMatricula-logo.png" 
+          alt="Biozin Matrícula"
+          class="sidebar-logo"
+        />
       <button class="toggle-btn" (click)="toggleSidebar()">
         {{ sidebarCollapsed ? '▶' : '◀' }}
       </button>
     </div>
+
+
+
 
     <!-- View Switch -->
     <div class="view-switch">

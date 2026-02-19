@@ -1,13 +1,23 @@
 <!-- src/app/modules/carreras/components/carrera-list/carrera-list.component.html -->
 
 <div class="container">
-  <div class="header-section">
-    <h1 class="page-title">Gestión de Carreras</h1>
-    <button class="btn btn-primary" (click)="toggleFormulario()">
+
+
+  <div class="module-banner">
+  <div class="module-banner-content">
+    <div>
+      <h1 class="module-title">🎓 Gestión de Carreras</h1>
+      <p class="module-subtitle">
+        Administra y organiza las carreras académicas del sistema
+      </p>
+    </div>
+
+    <button class="btn btn-primary banner-btn" (click)="toggleFormulario()">
       <span *ngIf="!mostrarFormulario">➕ Nueva Carrera</span>
       <span *ngIf="mostrarFormulario">❌ Cancelar</span>
     </button>
   </div>
+</div>
 
   <!-- Formulario de creación -->
   <app-carreras-form 
