@@ -43,7 +43,8 @@ export class MainLayoutComponent {
         { path: '/carreras', label: 'Carreras', icon: '📚' },
         { path: '/cursos', label: 'Cursos', icon: '📖' },
         { path: '/profesores', label: 'Profesores', icon: '👨‍🏫' },
-        { path: '/asignaciones', label: 'Malla Curricular', icon: '🔗' },
+        { path: '/asignaciones', label: 'Asignar Cursos', icon: '🔗' },
+        { path: '/malla-curricular', label: 'Malla Curricular', icon: '🗂️' },
       ],
     },
     {
