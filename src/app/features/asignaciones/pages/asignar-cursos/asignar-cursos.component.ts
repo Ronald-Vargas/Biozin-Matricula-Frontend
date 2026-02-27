@@ -38,15 +38,19 @@ export class AsignarCursosComponent implements OnInit {
   }
 
   onCarreraSeleccionada(event: any): void {
-    const id = Number(event.target.value);
-    if (id) {
-      this.carreraSeleccionada = this.carreraService.getCarreraById(id);
-      this.cargarAsignacionesExistentes(id);
-    } else {
-      this.carreraSeleccionada = undefined;
-      this.cursosConfig.clear();
-    }
+  const id = Number(event.target.value);
+  if (id) {
+    this.carreraService.getCarreraById(id).subscribe(carrera => {
+      this.carreraSeleccionada = carrera;
+      if (carrera) {
+        this.cargarAsignacionesExistentes(id);
+      }
+    });
+  } else {
+    this.carreraSeleccionada = undefined;
+    this.cursosConfig.clear();
   }
+}
 
   cargarAsignacionesExistentes(carreraId: number): void {
     const asignaciones = this.asignacionService.getAsignacionesByCarrera(carreraId);
@@ -106,14 +110,14 @@ export class AsignarCursosComponent implements OnInit {
     const asignaciones: CreateAsignacionDto[] = [];
     this.cursosConfig.forEach((config, cursoId) => {
       asignaciones.push({
-        idCarrera: this.carreraSeleccionada!.id,
+        idCarrera: this.carreraSeleccionada!.idCarrera,
         idCurso: cursoId,
         semestre: config.semestre,
         esObligatorio: config.obligatorio
       });
     });
 
-    this.asignacionService.createMultipleAsignaciones(this.carreraSeleccionada.id, asignaciones);
+    this.asignacionService.createMultipleAsignaciones(this.carreraSeleccionada.idCarrera, asignaciones);
     
     this.mensajeExito = true;
     setTimeout(() => {

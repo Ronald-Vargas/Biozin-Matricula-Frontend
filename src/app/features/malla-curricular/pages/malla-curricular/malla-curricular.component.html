@@ -9,7 +9,7 @@
       <label for="carrera">Ver Malla de:</label>
       <select id="carrera" (change)="onCarreraSeleccionada($event)">
         <option value="">-- Selecciona una carrera --</option>
-        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.id">
+        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.idCarrera">
           {{ carrera?.codigo }} - {{ carrera?.nombre }}
         </option>
       </select>

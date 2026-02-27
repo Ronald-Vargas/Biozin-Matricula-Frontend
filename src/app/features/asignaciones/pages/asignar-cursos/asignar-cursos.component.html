@@ -27,7 +27,7 @@
       <label for="carrera">Seleccionar Carrera *</label>
       <select id="carrera" (change)="onCarreraSeleccionada($event)">
         <option value="">-- Selecciona una carrera --</option>
-        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.id">
+        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.idCarrera">
           {{ carrera?.codigo }} - {{ carrera?.nombre }}
         </option>
       </select>
@@ -65,7 +65,7 @@
                 [value]="getSemestre(curso.id)"
                 (input)="actualizarSemestre(curso.id, +$any($event.target).value)"
                 min="1"
-                [max]="carreraSeleccionada?.duracionSemestres">
+                [max]="carreraSeleccionada?.duracion">
             </div>
             <div class="config-item">
               <label>

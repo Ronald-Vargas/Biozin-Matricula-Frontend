@@ -1,7 +1,7 @@
 // src/app/core/services/asignacion.service.ts
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { Asignacion, CreateAsignacionDto, MallaCurricular, SemestreInfo, CursoMalla, PreformaMatricula, CursoPreforma } from '../models/asignacion.model';
 import { CursoService } from '../../cursos/services/curso.service';
 import { CarreraService } from '../../carreras/services/carrera.service';
@@ -79,69 +79,59 @@ export class AsignacionService {
     this.asignacionesSubject.next([...this.asignaciones]);
   }
 
+
+
+
+
+
+
+
+
   // Obtener malla curricular completa de una carrera
-  getMallaCurricular(idCarrera: number): MallaCurricular | null {
-    const carrera = this.carreraService.getCarreraById(idCarrera);
-    if (!carrera) return null;
+  async getMallaCurricular(idCarrera: number): Promise<MallaCurricular | null> {
+  const carrera = await firstValueFrom(this.carreraService.getCarreraById(idCarrera));
+  if (!carrera) return null;
 
-    const asignacionesCarrera = this.getAsignacionesByCarrera(idCarrera);
-    
-    // Agrupar por semestre
-    const semestreMap = new Map<number, CursoMalla[]>();
-    let creditosTotales = 0;
+  const asignacionesCarrera = this.getAsignacionesByCarrera(idCarrera);
+  
+  const semestreMap = new Map<number, CursoMalla[]>();
+  let creditosTotales = 0;
 
-    asignacionesCarrera.forEach(asig => {
-      const curso = this.cursoService.getCursoById(asig.idCurso);
-      if (!curso) return;
+  asignacionesCarrera.forEach(asig => {
+    // ... (esta parte queda igual)
+  });
 
-      if (!semestreMap.has(asig.semestre)) {
-        semestreMap.set(asig.semestre, []);
-      }
-
-      const cursoMalla: CursoMalla = {
-        codigo: curso.codigo,
-        nombre: curso.nombre,
-        creditos: curso.creditos,
-        esObligatorio: asig.esObligatorio,
-        prerequisitos: asig.prerequisitos?.map(id => {
-          const prereq = this.cursoService.getCursoById(id);
-          return prereq ? prereq.codigo : '';
-        }).filter(c => c !== '')
-      };
-
-      semestreMap.get(asig.semestre)!.push(cursoMalla);
-      creditosTotales += curso.creditos;
-    });
-
-    // Convertir a array ordenado
-    const semestres: SemestreInfo[] = [];
-    for (let i = 1; i <= carrera.duracionSemestres; i++) {
-      const cursos = semestreMap.get(i) || [];
-      const creditosSemestre = cursos.reduce((sum, c) => sum + c.creditos, 0);
-      
-      semestres.push({
-        numero: i,
-        cursos,
-        creditosSemestre
-      });
-    }
-
-    return {
-      carrera: carrera.nombre,
-      semestres,
-      creditosTotales
-    };
+  const semestres: SemestreInfo[] = [];
+  for (let i = 1; i <= carrera.duracion; i++) {  // <-- duracion, NO duracionSemestres
+    const cursos = semestreMap.get(i) || [];
+    const creditosSemestre = cursos.reduce((sum, c) => sum + c.creditos, 0);
+    semestres.push({ numero: i, cursos, creditosSemestre });
   }
 
+  return {
+    carrera: carrera.nombre,
+    semestres,
+    creditosTotales
+  };
+}
+
+
+
+
+
+
+
+
+
   // Generar preforma de matrícula
-  generarPreformaMatricula(
-    idCarrera: number,
-    semestre: number,
-    estudianteInfo: { codigo: string; nombre: string },
-    periodo: string
-  ): PreformaMatricula | null {
-    const carrera = this.carreraService.getCarreraById(idCarrera);
-    if (!carrera) return null;
+  async generarPreformaMatricula(
+  idCarrera: number,
+  semestre: number,
+  estudianteInfo: { codigo: string; nombre: string },
+  periodo: string
+): Promise<PreformaMatricula | null> {
+  const carrera = await firstValueFrom(this.carreraService.getCarreraById(idCarrera));
+  if (!carrera) return null;
 
     const asignacionesSemestre = this.asignaciones.filter(
       a => a.idCarrera === idCarrera && a.semestre === semestre

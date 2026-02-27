@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 @Injectable({
   providedIn: 'root'
 })
+
 export class PdfGeneratorService {
 
   constructor() { }
@@ -48,7 +49,7 @@ export class PdfGeneratorService {
     doc.text(`Código: ${carrera.codigo}`, 20, yPos);
     
     yPos += 6;
-    doc.text(`Duración: ${carrera.duracionSemestres} semestres`, 20, yPos);
+    doc.text(`Duración: ${carrera.duracion} semestres`, 20, yPos);
     
     yPos += 6;
     doc.text(`Créditos Totales: ${malla.creditosTotales}`, 20, yPos);

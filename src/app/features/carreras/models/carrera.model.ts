@@ -1,17 +1,22 @@
 export interface Carrera {
-  id: number;
+  idCarrera: number;
   codigo: string;
   nombre: string;
   descripcion: string;
-  duracionSemestres: number;
-  creditosTotales?: number;
-  estado: 'activa' | 'inactiva';
-  fechaCreacion: Date;
+  duracion: number;
+  estado: boolean;
 }
 
 export interface CreateCarreraDto {
   codigo: string;
   nombre: string;
   descripcion: string;
-  duracionSemestres: number;
+  duracion: number;
+}
+
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }

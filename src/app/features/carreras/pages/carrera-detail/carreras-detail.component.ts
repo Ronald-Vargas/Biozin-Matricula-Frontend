@@ -13,23 +13,28 @@ import { CommonModule } from '@angular/common';
 })
 export class CarrerasDetailComponent implements OnInit {
   carrera?: Carrera;
-  cursosAsignados: any[] = [];
+  cargando = true;
+  error = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private carreraService: CarreraService,
-    private asignacionService: AsignacionService
+    private carreraService: CarreraService
   ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.carrera = this.carreraService.getCarreraById(id);
-    
-    if (this.carrera) {
-      const asignaciones = this.asignacionService.getAsignacionesByCarrera(id);
-      // Aquí podrías cargar los detalles de los cursos asignados
-    }
+    this.carreraService.getCarreraById(id).subscribe({
+      next: (carrera) => {
+        this.carrera = carrera;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al obtener carrera:', err);
+        this.cargando = false;
+        this.error = true;
+      }
+    });
   }
 
   volver(): void {

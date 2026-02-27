@@ -41,9 +41,8 @@ export class CarrerasListComponent implements OnInit {
   }
 
   eliminarCarrera(id: number): void {
-    if (confirm('¿Está seguro de eliminar esta carrera? También se eliminarán sus asignaciones.')) {
-      this.carreraService.deleteCarrera(id);
-      this.asignacionService.deleteAsignacionesByCarrera(id);
+    if (confirm('¿Está seguro de eliminar esta carrera?')) {
+      this.carreraService.deleteCarrera(id).subscribe();
     }
   }
 
@@ -51,16 +50,16 @@ export class CarrerasListComponent implements OnInit {
     this.carreraService.toggleEstado(id);
   }
 
-  generarPlanEstudios(carrera: Carrera): void {
-    const malla = this.asignacionService.getMallaCurricular(carrera.id);
-    if (malla) {
-      this.pdfService.generarPlanEstudios(carrera, malla);
+  onCarreraCreada(): void {
+    this.mostrarFormulario = false;
+  }
+
+  async generarPlanEstudios(carrera: Carrera): Promise<void> {
+    const malla = await this.asignacionService.getMallaCurricular(carrera.idCarrera);
+  if (malla) {
+    this.pdfService.generarPlanEstudios(carrera, malla);
     } else {
       alert('No hay cursos asignados a esta carrera para generar el plan de estudios.');
     }
-  }
-
-  onCarreraCreada(): void {
-    this.mostrarFormulario = false;
   }
 }

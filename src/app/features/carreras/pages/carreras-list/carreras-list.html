@@ -35,8 +35,8 @@
         </div>
         <span 
           class="status-badge"
-          [class.active]="carrera.estado === 'activa'"
-          [class.inactive]="carrera.estado === 'inactiva'">
+          [class.active]="carrera.estado === true"
+          [class.inactive]="carrera.estado === false">
           {{ carrera.estado }}
         </span>
       </div>
@@ -45,17 +45,14 @@
 
       <div class="card-info">
         <span class="info-item">
-          📅 {{ carrera.duracionSemestres }} semestres
-        </span>
-        <span class="info-item">
-          ⭐ {{ carrera.creditosTotales || 0 }} créditos
+          📅 {{ carrera.duracion  }} semestres
         </span>
       </div>
 
       <div class="card-actions">
         <button 
           class="btn btn-secondary btn-sm" 
-          (click)="verDetalles(carrera.id)">
+          (click)="verDetalles(carrera.idCarrera)">
           👁️ Ver Detalles
         </button>
         <button 
@@ -66,12 +63,12 @@
         </button>
         <button 
           class="btn btn-warning btn-sm" 
-          (click)="toggleEstado(carrera.id)">
+          (click)="toggleEstado(carrera.idCarrera)">
           🔄
         </button>
         <button 
           class="btn btn-danger btn-sm" 
-          (click)="eliminarCarrera(carrera.id)">
+          (click)="eliminarCarrera(carrera.idCarrera)">
           🗑️
         </button>
       </div>
