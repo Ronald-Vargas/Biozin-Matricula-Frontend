@@ -36,8 +36,8 @@
         </div>
         <span 
           class="status-badge"
-          [class.active]="curso.estado === 'activo'"
-          [class.inactive]="curso.estado === 'inactivo'">
+          [class.active]="curso.estado === true"
+          [class.inactive]="curso.estado === false">
           {{ curso.estado }}
         </span>
       </div>
@@ -53,12 +53,12 @@
       <div class="card-actions">
         <button 
           class="btn btn-secondary btn-sm" 
-          (click)="verDetalles(curso.id)">
+          (click)="verDetalles(curso.idCurso)">
           👁️ Ver Detalles
         </button>
         <button 
           class="btn btn-danger btn-sm" 
-          (click)="eliminarCurso(curso.id)">
+          (click)="eliminarCurso(curso.idCurso)">
           🗑️
         </button>
       </div>

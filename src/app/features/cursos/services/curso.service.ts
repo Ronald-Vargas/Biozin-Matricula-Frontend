@@ -1,159 +1,70 @@
-// src/app/core/services/curso.service.ts
-
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Curso, CreateCursoDto } from '../models/curso.model';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { Curso, CreateCursoDto, Respuesta } from '../models/curso.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CursoService {
-  private cursos: Curso[] = [];
+
+export class CursoService { 
+  
+  private apiUrl = `${environment.apiUrl}/Curso`;
   private cursosSubject = new BehaviorSubject<Curso[]>([]);
   public cursos$ = this.cursosSubject.asObservable();
 
-  constructor() {
-    this.cargarDatosEjemplo();
+  constructor(private http: HttpClient) {
+    this.cargarCursos();
   }
+
+
+
+  private cargarCursos(): void {
+  this.http.get<Respuesta<Curso[]>>(`${this.apiUrl}/Listar`)  
+    .subscribe(res => {
+      if (!res.blnError) {
+        this.cursosSubject.next(res.valorRetorno || []);
+      }
+    });
+}
+
 
   getCursos(): Observable<Curso[]> {
     return this.cursos$;
   }
 
-  getCursoById(id: number): Curso | undefined {
-    return this.cursos.find(c => c.id === id);
+
+  getCursoById(id: number): Observable<Curso | undefined> {
+    return this.http.post<Respuesta<Curso[]>>(`${this.apiUrl}/Obtener`, { idCurso: id })
+      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
   }
 
-  createCurso(dto: CreateCursoDto): Curso {
-    const nuevoCurso: Curso = {
-      id: Date.now(),
-      ...dto,
-      estado: 'activo',
-      fechaCreacion: new Date()
-    };
-
-    this.cursos.push(nuevoCurso);
-    this.cursosSubject.next([...this.cursos]);
-    return nuevoCurso;
+  createCurso(dto: CreateCursoDto): Observable<Respuesta<number>> {
+    return this.http.post<Respuesta<number>>(`${this.apiUrl}/Insertar`, dto)
+      .pipe(tap(() => this.cargarCursos()));
   }
 
-  updateCurso(id: number, dto: Partial<Curso>): Curso | undefined {
-    const index = this.cursos.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.cursos[index] = { ...this.cursos[index], ...dto };
-      this.cursosSubject.next([...this.cursos]);
-      return this.cursos[index];
+  updateCurso(curso: Curso): Observable<Respuesta<number>> {
+    return this.http.put<Respuesta<number>>(`${this.apiUrl}/Modificar`, curso)
+      .pipe(tap(() => this.cargarCursos()));
+  }
+
+  deleteCurso(id: number): Observable<Respuesta<boolean>> {
+    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idCurso: id })
+      .pipe(tap(() => this.cargarCursos()));
+  }
+
+  toggleEstado(id: number): void {
+    const cursos = this.cursosSubject.getValue();
+    const curso = cursos.find(c => c.idCurso === id);
+    if (curso) {
+      const updated = { ...curso, estado: !curso.estado };
+      this.updateCurso(updated).subscribe();
     }
-    return undefined;
-  }
-
-  deleteCurso(id: number): boolean {
-    const index = this.cursos.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.cursos.splice(index, 1);
-      this.cursosSubject.next([...this.cursos]);
-      return true;
-    }
-    return false;
   }
 
   getCursosActivos(): Curso[] {
-    return this.cursos.filter(c => c.estado === 'activo');
-  }
-
-  private cargarDatosEjemplo(): void {
-    this.cursos = [
-      {
-        id: 101,
-        codigo: 'MAT-101',
-        nombre: 'Cálculo I',
-        descripcion: 'Fundamentos de cálculo diferencial e integral, límites y continuidad.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 102,
-        codigo: 'PRG-101',
-        nombre: 'Programación I',
-        descripcion: 'Introducción a la programación con Python, estructuras de datos básicas.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 103,
-        codigo: 'FIS-101',
-        nombre: 'Física I',
-        descripcion: 'Mecánica clásica, cinemática y dinámica.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 104,
-        codigo: 'MAT-102',
-        nombre: 'Cálculo II',
-        descripcion: 'Cálculo integral, series y sucesiones.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 105,
-        codigo: 'PRG-102',
-        nombre: 'Programación II',
-        descripcion: 'Programación orientada a objetos, estructuras de datos avanzadas.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 106,
-        codigo: 'BD-201',
-        nombre: 'Bases de Datos',
-        descripcion: 'Diseño y administración de bases de datos relacionales, SQL.',
-        creditos: 3,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 107,
-        codigo: 'WEB-201',
-        nombre: 'Desarrollo Web',
-        descripcion: 'HTML, CSS, JavaScript, frameworks modernos.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 108,
-        codigo: 'ALG-201',
-        nombre: 'Algoritmos y Complejidad',
-        descripcion: 'Análisis de algoritmos, estructuras de datos, complejidad computacional.',
-        creditos: 4,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 109,
-        codigo: 'ING-301',
-        nombre: 'Ingeniería de Software',
-        descripcion: 'Metodologías de desarrollo, patrones de diseño, testing.',
-        creditos: 3,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      },
-      {
-        id: 110,
-        codigo: 'RED-301',
-        nombre: 'Redes de Computadoras',
-        descripcion: 'Protocolos de red, TCP/IP, seguridad en redes.',
-        creditos: 3,
-        estado: 'activo',
-        fechaCreacion: new Date('2024-01-10')
-      }
-    ];
-    this.cursosSubject.next([...this.cursos]);
+    return this.cursosSubject.getValue().filter(c => c.estado === true);
   }
 }

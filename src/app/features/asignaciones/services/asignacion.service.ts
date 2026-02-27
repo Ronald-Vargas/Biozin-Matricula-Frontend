@@ -98,11 +98,10 @@ export class AsignacionService {
   let creditosTotales = 0;
 
   asignacionesCarrera.forEach(asig => {
-    // ... (esta parte queda igual)
   });
 
   const semestres: SemestreInfo[] = [];
-  for (let i = 1; i <= carrera.duracion; i++) {  // <-- duracion, NO duracionSemestres
+  for (let i = 1; i <= carrera.duracion; i++) {  
     const cursos = semestreMap.get(i) || [];
     const creditosSemestre = cursos.reduce((sum, c) => sum + c.creditos, 0);
     semestres.push({ numero: i, cursos, creditosSemestre });
@@ -140,9 +139,14 @@ export class AsignacionService {
     const cursosPreforma: CursoPreforma[] = [];
     let subtotal = 0;
 
-    asignacionesSemestre.forEach(asig => {
-      const curso = this.cursoService.getCursoById(asig.idCurso);
-      if (!curso) return;
+    const cursos = await Promise.all(
+      asignacionesSemestre.map(asig =>
+        firstValueFrom(this.cursoService.getCursoById(asig.idCurso))
+      )
+    );
+
+    for (const curso of cursos) {
+      if (!curso) continue;
 
       const costo = curso.creditos * this.COSTO_POR_CREDITO;
       cursosPreforma.push({
@@ -153,7 +157,7 @@ export class AsignacionService {
         costo
       });
       subtotal += costo;
-    });
+    }
 
     // Calcular descuentos (ejemplo: 10% si tiene más de 5 cursos)
     const descuentos = cursosPreforma.length > 5 ? subtotal * 0.1 : 0;

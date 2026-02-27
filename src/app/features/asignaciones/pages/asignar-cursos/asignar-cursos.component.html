@@ -48,22 +48,22 @@
           <div class="curso-checkbox">
             <input 
               type="checkbox" 
-              [id]="'curso-' + curso.id"
-              [checked]="estaSeleccionado(curso.id)"
-              (change)="toggleCurso(curso.id)">
-            <label [for]="'curso-' + curso.id" class="curso-info">
+              [id]="'curso-' + curso.idCurso"
+              [checked]="estaSeleccionado(curso.idCurso)"
+              (change)="toggleCurso(curso.idCurso)">
+            <label [for]="'curso-' + curso.idCurso" class="curso-info">
               <div class="curso-nombre">{{ curso?.codigo }} - {{ curso?.nombre }}</div>
               <div class="curso-creditos">{{ curso.creditos }} créditos</div>
             </label>
           </div>
 
-          <div class="curso-config" *ngIf="estaSeleccionado(curso.id)">
+          <div class="curso-config" *ngIf="estaSeleccionado(curso.idCurso)">
             <div class="config-item">
               <label>Semestre:</label>
               <input 
                 type="number" 
-                [value]="getSemestre(curso.id)"
-                (input)="actualizarSemestre(curso.id, +$any($event.target).value)"
+                [value]="getSemestre(curso.idCurso)"
+                (input)="actualizarSemestre(curso.idCurso, +$any($event.target).value)"
                 min="1"
                 [max]="carreraSeleccionada?.duracion">
             </div>
@@ -71,8 +71,8 @@
               <label>
                 <input 
                   type="checkbox"
-                  [checked]="getObligatorio(curso.id)"
-                  (change)="actualizarObligatorio(curso.id, $any($event.target).checked)">
+                  [checked]="getObligatorio(curso.idCurso)"
+                  (change)="actualizarObligatorio(curso.idCurso, $any($event.target).checked)">
                 Obligatorio
               </label>
             </div>

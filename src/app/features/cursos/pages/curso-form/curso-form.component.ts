@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CursoService } from '../../services/curso.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-curso-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './curso-form.html',
   styleUrl: './curso-form.scss',
 })
 export class CursoFormComponent {
 
   @Output() cursoCreado = new EventEmitter<void>();
-
   cursoForm: FormGroup;
   mensajeExito = false;
 
@@ -23,20 +23,25 @@ export class CursoFormComponent {
       codigo: ['', [Validators.required, Validators.minLength(3)]],
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       descripcion: ['', Validators.required],
-      creditos: ['', [Validators.required, Validators.min(1), Validators.max(10)]]
+      creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]]
     });
   }
 
   onSubmit(): void {
     if (this.cursoForm.valid) {
-      this.cursoService.createCurso(this.cursoForm.value);
-      
-      this.mensajeExito = true;
-      setTimeout(() => {
-        this.mensajeExito = false;
-        this.cursoForm.reset();
-        this.cursoCreado.emit();
-      }, 2000);
+      this.cursoService.createCurso(this.cursoForm.value).subscribe({
+        next: (res) => {
+          if (!res.blnError) {
+            this.mensajeExito = true;
+            setTimeout(() => {
+              this.mensajeExito = false;
+              this.cursoForm.reset();
+              this.cursoCreado.emit();
+            }, 2000);
+          }
+        },
+        error: (err) => console.error('Error al crear curso:', err)
+      });
     }
   }
 
@@ -45,5 +50,3 @@ export class CursoFormComponent {
   get descripcion() { return this.cursoForm.get('descripcion'); }
   get creditos() { return this.cursoForm.get('creditos'); }
 }
-
-

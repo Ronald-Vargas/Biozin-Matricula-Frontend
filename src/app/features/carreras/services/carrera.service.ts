@@ -21,7 +21,7 @@ export class CarreraService {
 
 
   private cargarCarreras(): void {
-  this.http.get<Respuesta<Carrera[]>>(`${this.apiUrl}/Listar`)  // <-- agregar /Listar
+  this.http.get<Respuesta<Carrera[]>>(`${this.apiUrl}/Listar`)  
     .subscribe(res => {
       if (!res.blnError) {
         this.carrerasSubject.next(res.valorRetorno || []);

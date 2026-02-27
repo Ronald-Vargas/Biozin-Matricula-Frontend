@@ -1,11 +1,10 @@
 export interface Curso {
-  id: number;
+  idCurso: number;
   codigo: string;
+  creditos: number;
   nombre: string;
   descripcion: string;
-  creditos: number;
-  estado: 'activo' | 'inactivo';
-  fechaCreacion: Date;
+  estado: boolean;
 }
 
 export interface CreateCursoDto {
@@ -13,4 +12,11 @@ export interface CreateCursoDto {
   nombre: string;
   descripcion: string;
   creditos: number;
+}
+
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }
