@@ -4,11 +4,19 @@
     <!-- Header -->
     <div class="section-header">
       <h1 class="page-title">📅 Períodos Academicos</h1>
-      <button class="btn btn-primary" (click)="nuevoPeriodo()">
-        ➕ Nuevo Período
+      <button class="btn btn-primary"
+      (click)="toggleFormulario()">
+      <span *ngIf="!mostrarFormulario">➕ Nuevo Periodo</span>
+      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
       </button>
     </div>
 
+
+    <!-- Formulario nuevo periodo -->
+    <app-periodo-form
+      *ngIf="mostrarFormulario"
+      (periodoCreado)="onPeriodoCreado()">
+    </app-periodo-form>
 
     <!-- Tabla -->
     <div class="table-container">
@@ -25,34 +33,31 @@
           </tr>
         </thead>
         <tbody>
-
-          <tr *ngIf="periodos.length === 0">
-            <td colspan="7" class="empty-state">
-              <div class="empty-icon">📭 No se encontraron períodos</div>
-            </td>
-          </tr>
+          <ng-container *ngIf="periodos$ | async as periodos">
 
           <tr *ngFor="let per of periodos; let i = index"
               class="table-row"
               [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="periodo-name">{{ per.periodo }}</strong></td>
+            <td><strong class="periodo-name">{{ per.nombre }}</strong></td>
 
             <td>{{ per.fechaInicio }}</td>
             <td>{{ per.fechaFin }}</td>
-            <td>{{ per.fechaMatricula }}</td>
-            <td>{{ per.MatriculaCierre }}</td>
+            <td>{{ per.fechaMatriculaInicio }}</td>
+            <td>{{ per.fechaMatriculaFin }}</td>
             <td>
-              <span class="status-badge"
-                    [ngClass]="getEstadoClass(per.estado)">
-                {{ per.estado }}
+              <span 
+              class="status-badge"
+              [class.active]="per.estadoMatricula === true"
+              [class.inactive]="per.estadoMatricula === false">
+              {{ per.estadoMatricula }}
               </span>
             </td>
 
             <td>
               <div class="action-buttons">
                 <button class="btn-icon btn-view"
-                        (click)="verDetalle(per)"
+                        (click)="verDetalles(per.idPeriodo)"
                         title="Ver detalles">👁️</button>
 
                 <button class="btn-icon btn-edit"
@@ -60,17 +65,27 @@
                         title="Editar">✏️</button>
 
                 <button class="btn-icon btn-delete"
-                        (click)="eliminarPeriodo(per)"
+                        (click)="eliminarPeriodo(per.idPeriodo)"
                         title="Eliminar">🗑️</button>
               </div>
             </td>
 
           </tr>
 
+          </ng-container>
         </tbody>
 
       </table>
     </div>
-
   </div>
+
+
+   <div class="no-data" *ngIf="(periodos$ | async)?.length === 0">
+    <div class="no-data-icon">📅</div>
+    <p>No hay peridodos registrados</p>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      Crear Primer Periodo
+    </button>
+  </div>
+
 </div>

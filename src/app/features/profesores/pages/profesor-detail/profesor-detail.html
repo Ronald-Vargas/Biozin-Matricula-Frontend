@@ -18,8 +18,7 @@
       <div class="profile-card">
         <div class="profile-avatar">{{ getIniciales() }}</div>
         <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
-        <p class="profile-code">{{ prof.codigoProfesor }}</p>
-        <span class="status-badge" [ngClass]="getEstadoClass()">{{ prof.estadoProfesor }}</span>
+        <span class="status-badge" [ngClass]="getEstadoClass()">{{ prof.estado }}</span>
 
         <div class="profile-meta">
           <div class="meta-item">
@@ -47,7 +46,7 @@
           </div>
           <div class="stat-detail-item">
             <span class="stat-detail-label">Estado</span>
-            <span class="stat-detail-value">{{ prof.estadoProfesor }}</span>
+            <span class="stat-detail-value">{{ prof.estado }}</span>
           </div>
         </div>
       </div>
@@ -101,7 +100,7 @@
       </div>
 
       <!-- Dirección -->
-      <div class="info-section" *ngIf="prof.provincia || prof.direccionExacta">
+      <div class="info-section" *ngIf="prof.provincia || prof.direccion">
         <h4 class="section-title">🏠 Dirección</h4>
         <div class="info-grid">
           <div class="info-item">
@@ -116,9 +115,9 @@
             <span class="info-label">Distrito</span>
             <span class="info-value">{{ prof.distrito || '-' }}</span>
           </div>
-          <div class="info-item" *ngIf="prof.direccionExacta">
+          <div class="info-item" *ngIf="prof.direccion">
             <span class="info-label">Dirección exacta</span>
-            <span class="info-value">{{ prof.direccionExacta }}</span>
+            <span class="info-value">{{ prof.direccion }}</span>
           </div>
         </div>
       </div>

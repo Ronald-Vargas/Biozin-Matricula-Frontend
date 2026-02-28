@@ -3,38 +3,38 @@
   <!-- Header -->
   <div class="form-page-header">
     <button class="btn-back" (click)="cancelar()">← Volver a la lista</button>
-    <h1 class="page-title">{{ titulo }}</h1>
+    <h1 class="page-title">{{ tituloPage }}</h1>
   </div>
 
   <div class="form-panel">
-    <form (ngSubmit)="guardar()" #profesorForm="ngForm">
+    <form [formGroup]="profesorForm" (ngSubmit)="onSubmit()">
 
       <!-- ═══ Información Personal ═══ -->
       <h3 class="form-section-title">👤 Información Personal</h3>
       <div class="form-grid">
         <div class="form-group">
           <label>Cédula *</label>
-          <input type="text" [(ngModel)]="form.cedula" name="cedula" required placeholder="1-0123-0456" />
+          <input type="text" formControlName="cedula" placeholder="1-0123-0456" />
         </div>
         <div class="form-group">
           <label>Nombres *</label>
-          <input type="text" [(ngModel)]="form.nombre" name="nombre" required placeholder="Carlos" />
+          <input type="text" formControlName="nombre" placeholder="Carlos" />
         </div>
         <div class="form-group">
           <label>Primer Apellido *</label>
-          <input type="text" [(ngModel)]="form.apellidoPaterno" name="apellidoPaterno" required placeholder="Ramírez" />
+          <input type="text" formControlName="apellidoPaterno" placeholder="Ramírez" />
         </div>
         <div class="form-group">
           <label>Segundo Apellido</label>
-          <input type="text" [(ngModel)]="form.apellidoMaterno" name="apellidoMaterno" placeholder="López" />
+          <input type="text" formControlName="apellidoMaterno" placeholder="López" />
         </div>
         <div class="form-group">
           <label>Fecha de Nacimiento *</label>
-          <input type="date" [(ngModel)]="form.fechaNacimiento" name="fechaNacimiento" required />
+          <input type="date" formControlName="fechaNacimiento" />
         </div>
         <div class="form-group">
           <label>Género *</label>
-          <select [(ngModel)]="form.genero" name="genero" required>
+          <select formControlName="genero">
             <option value="">Seleccionar...</option>
             <option value="M">Masculino</option>
             <option value="F">Femenino</option>
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group">
           <label>Nacionalidad</label>
-          <input type="text" [(ngModel)]="form.nacionalidad" name="nacionalidad" placeholder="Costarricense" />
+          <input type="text" formControlName="nacionalidad" placeholder="Costarricense" />
         </div>
       </div>
 
@@ -52,11 +52,11 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Email Personal *</label>
-          <input type="email" [(ngModel)]="form.emailPersonal" name="emailPersonal" required placeholder="carlos&#64;gmail.com" />
+          <input type="email" formControlName="emailPersonal" placeholder="carlos&#64;gmail.com" />
         </div>
         <div class="form-group">
           <label>Teléfono *</label>
-          <input type="tel" [(ngModel)]="form.telefono" name="telefono" required placeholder="8812-3456" />
+          <input type="tel" formControlName="telefono" placeholder="8812-3456" />
         </div>
       </div>
 
@@ -65,11 +65,11 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Título Académico *</label>
-          <input type="text" [(ngModel)]="form.titulo" name="titulo" required placeholder="Máster en Ciencias de la Computación" />
+          <input type="text" formControlName="titulo" placeholder="Máster en Ciencias de la Computación" />
         </div>
         <div class="form-group">
           <label>Especialidad *</label>
-          <input type="text" [(ngModel)]="form.especialidad" name="especialidad" required placeholder="Ingeniería de Software" />
+          <input type="text" formControlName="especialidad" placeholder="Ingeniería de Software" />
         </div>
       </div>
 
@@ -78,52 +78,48 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Provincia</label>
-          <input type="text" [(ngModel)]="form.provincia" name="provincia" placeholder="San José" />
+          <input type="text" formControlName="provincia" placeholder="San José" />
         </div>
         <div class="form-group">
           <label>Cantón</label>
-          <input type="text" [(ngModel)]="form.canton" name="canton" placeholder="Central" />
+          <input type="text" formControlName="canton" placeholder="Central" />
         </div>
         <div class="form-group">
           <label>Distrito</label>
-          <input type="text" [(ngModel)]="form.distrito" name="distrito" placeholder="Catedral" />
+          <input type="text" formControlName="distrito" placeholder="Catedral" />
         </div>
         <div class="form-group form-group-full">
-          <label>Dirección Exacta</label>
-          <textarea [(ngModel)]="form.direccionExacta" name="direccionExacta" rows="2" placeholder="Barrio Escalante, 100m sur de la iglesia..."></textarea>
+          <label>Dirección</label>
+          <textarea formControlName="direccion" rows="2" placeholder="Barrio Escalante, 100m sur de la iglesia..."></textarea>
         </div>
       </div>
 
-      <!-- ═══ Campos automáticos (solo en edición) ═══ -->
-      <div *ngIf="esEdicion" class="auto-fields-info">
+      <!-- ═══ Datos del Sistema (solo en edición) ═══ -->
+      <div *ngIf="esEdicion && profesorActual" class="auto-fields-info">
         <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
         <div class="auto-fields-grid">
           <div class="auto-field">
-            <span class="auto-label">Código:</span>
-            <span class="auto-value">{{ form.codigoProfesor }}</span>
-          </div>
-          <div class="auto-field">
             <span class="auto-label">Email Institucional:</span>
-            <span class="auto-value">{{ form.emailInstitucional }}</span>
+            <span class="auto-value">{{ profesorActual.emailInstitucional }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Fecha Ingreso:</span>
-            <span class="auto-value">{{ form.fechaIngreso }}</span>
+            <span class="auto-value">{{ profesorActual.fechaIngreso }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Estado:</span>
-            <span class="auto-value">{{ form.estadoProfesor }}</span>
+            <span class="auto-value">{{ profesorActual.estado ? 'Activo' : 'Inactivo' }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Cursos Asignados:</span>
-            <span class="auto-value">{{ form.cursosAsignados }}</span>
+            <span class="auto-value">{{ profesorActual.cursosAsignados }}</span>
           </div>
         </div>
       </div>
 
       <!-- ═══ Acciones ═══ -->
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" [disabled]="profesorForm.invalid">
           💾 {{ esEdicion ? 'Actualizar' : 'Guardar' }} Profesor
         </button>
         <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>

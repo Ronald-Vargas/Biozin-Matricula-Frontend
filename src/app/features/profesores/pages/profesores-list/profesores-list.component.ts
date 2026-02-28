@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Profesor } from '../../models/profesores.model';
+import { ProfesorService } from '../../services/profesores.services';
 
 
 @Component({
@@ -12,111 +14,80 @@ import { Profesor } from '../../models/profesores.model';
   templateUrl: './profesores-list.html',
   styleUrls: ['./profesores-list.scss'],
 })
-export class ProfesoresListComponent implements OnInit {
+export class ProfesoresListComponent implements OnInit, OnDestroy {
 
   profesores: Profesor[] = [];
   profesoresFiltrados: Profesor[] = [];
-  terminoBusqueda: string = '';
-  filtroActivo: string = 'todos';
+  terminoBusqueda = '';
+  filtroActivo: 'todos' | 'activo' | 'inactivo' = 'todos';
+
+  private sub?: Subscription;
 
   constructor(
+    private profesorService: ProfesorService,
     private router: Router,
-    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    // TODO: Reemplazar con tu ProfesorService
-    this.profesores = [
-      {
-        id: 1, cedula: '1-0123-0456',
-        nombre: 'Carlos', apellidoPaterno: 'Ramírez', apellidoMaterno: 'López',
-        fechaNacimiento: '1985-03-20', genero: 'M', nacionalidad: 'Costarricense',
-        emailPersonal: 'carlos.ramirez@gmail.com', telefono: '8812-3456',
-        titulo: 'Máster en Ciencias de la Computación', especialidad: 'Ingeniería de Software',
-        cursosAsignados: 3,
-        provincia: 'San José', canton: 'Central', distrito: 'Catedral',
-        direccionExacta: 'Barrio Escalante, 100m sur',
-        codigoProfesor: 'PROF-001', emailInstitucional: 'carlos.ramirez@universidad.ac.cr',
-        fechaIngreso: '2020-02-15', estadoProfesor: 'activo', contrasena: '********',
-      },
-      {
-        id: 2, cedula: '2-0345-0678',
-        nombre: 'María', apellidoPaterno: 'Fernández', apellidoMaterno: 'Mora',
-        fechaNacimiento: '1980-08-12', genero: 'F', nacionalidad: 'Costarricense',
-        emailPersonal: 'maria.fernandez@gmail.com', telefono: '8834-5678',
-        titulo: 'Doctorado en Matemática Aplicada', especialidad: 'Matemáticas',
-        cursosAsignados: 4,
-        provincia: 'Heredia', canton: 'Central', distrito: 'Heredia',
-        direccionExacta: 'Frente a la UNA',
-        codigoProfesor: 'PROF-002', emailInstitucional: 'maria.fernandez@universidad.ac.cr',
-        fechaIngreso: '2018-08-01', estadoProfesor: 'activo', contrasena: '********',
-      },
-      {
-        id: 3, cedula: '3-0456-0789',
-        nombre: 'José', apellidoPaterno: 'Vargas', apellidoMaterno: 'Solano',
-        fechaNacimiento: '1990-01-05', genero: 'M', nacionalidad: 'Costarricense',
-        emailPersonal: 'jose.vargas@gmail.com', telefono: '8856-7890',
-        titulo: 'MBA en Dirección de Empresas', especialidad: 'Administración',
-        cursosAsignados: 2,
-        provincia: 'San José', canton: 'Escazú', distrito: 'San Rafael',
-        direccionExacta: '',
-        codigoProfesor: 'PROF-003', emailInstitucional: 'jose.vargas@universidad.ac.cr',
-        fechaIngreso: '2019-03-10', estadoProfesor: 'activo', contrasena: '********',
-      },
-      {
-        id: 4, cedula: '4-0567-0890',
-        nombre: 'Ana', apellidoPaterno: 'Jiménez', apellidoMaterno: 'Castro',
-        fechaNacimiento: '1992-06-18', genero: 'F', nacionalidad: 'Costarricense',
-        emailPersonal: 'ana.jimenez@gmail.com', telefono: '8878-9012',
-        titulo: 'Licenciatura en Física', especialidad: 'Física',
-        cursosAsignados: 0,
-        provincia: 'Cartago', canton: 'Central', distrito: 'Oriental',
-        direccionExacta: '',
-        codigoProfesor: 'PROF-004', emailInstitucional: 'ana.jimenez@universidad.ac.cr',
-        fechaIngreso: '2021-07-20', estadoProfesor: 'inactivo', contrasena: '********',
-      },
-    ];
-    this.profesoresFiltrados = [...this.profesores];
+    this.sub = this.profesorService.getProfesores().subscribe(profesores => {
+      this.profesores = profesores;
+      this.aplicarFiltros();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   buscar(): void {
     this.aplicarFiltros();
   }
 
-  filtrar(estado: string): void {
-    this.filtroActivo = estado;
+  filtrar(filtro: 'todos' | 'activo' | 'inactivo'): void {
+    this.filtroActivo = filtro;
     this.aplicarFiltros();
   }
 
   private aplicarFiltros(): void {
-    let resultado = [...this.profesores];
+    let result = [...this.profesores];
 
     if (this.filtroActivo !== 'todos') {
-      resultado = resultado.filter(p => p.estadoProfesor === this.filtroActivo);
+      result = result.filter(p => p.estado === (this.filtroActivo === 'activo'));
     }
 
-    if (this.terminoBusqueda.trim()) {
-      const t = this.terminoBusqueda.toLowerCase();
-      resultado = resultado.filter(p =>
-        p.nombre.toLowerCase().includes(t) ||
-        p.apellidoPaterno.toLowerCase().includes(t) ||
-        (p.apellidoMaterno || '').toLowerCase().includes(t) ||
-        p.codigoProfesor.toLowerCase().includes(t) ||
-        p.emailInstitucional.toLowerCase().includes(t) ||
-        p.cedula.includes(t) ||
-        p.especialidad.toLowerCase().includes(t)
+    if (this.terminoBusqueda) {
+      const term = this.terminoBusqueda.toLowerCase();
+      result = result.filter(p =>
+        p.nombre.toLowerCase().includes(term) ||
+        p.apellidoPaterno.toLowerCase().includes(term) ||
+        p.cedula.toString().includes(term) ||
+        p.especialidad.toLowerCase().includes(term)
       );
     }
 
-    this.profesoresFiltrados = resultado;
+    this.profesoresFiltrados = result;
   }
 
-  getEstadoClass(estado: string): string {
-    const map: Record<string, string> = {
-      activo: 'badge-success',
-      inactivo: 'badge-danger',
-    };
-    return map[estado] || 'badge-warning';
+  getEstadoClass(estado: boolean): string {
+    return estado ? 'badge-success' : 'badge-danger';
+  }
+
+  verDetalles(id: number): void {
+    this.router.navigate(['/profesores', id]);
+  }
+
+  editarProfesor(id: number): void {
+    this.router.navigate(['/profesores/editar', id]);
+  }
+
+  eliminaProfesor(idProfesor: number): void {
+    if (confirm('¿Está seguro de eliminar este profesor?')) {
+      this.profesorService.deleteProfesor(idProfesor).subscribe();
+    }
+  }
+
+  toggleEstado(idProfesor: number): void {
+    this.profesorService.toggleEstado(idProfesor);
   }
 
   getIniciales(prof: Profesor): string {
@@ -125,24 +96,5 @@ export class ProfesoresListComponent implements OnInit {
 
   getNombreCompleto(prof: Profesor): string {
     return `${prof.nombre} ${prof.apellidoPaterno} ${prof.apellidoMaterno || ''}`.trim();
-  }
-
-  verDetalle(prof: Profesor): void {
-    this.router.navigate([prof.id], { relativeTo: this.route });
-  }
-
-  editarProfesor(prof: Profesor): void {
-    this.router.navigate(['editar', prof.id], { relativeTo: this.route });
-  }
-
-  eliminarProfesor(prof: Profesor): void {
-    if (confirm(`¿Está seguro de eliminar a ${this.getNombreCompleto(prof)}?`)) {
-      this.profesores = this.profesores.filter(p => p.id !== prof.id);
-      this.aplicarFiltros();
-    }
-  }
-
-  nuevoProfesor(): void {
-    this.router.navigate(['nuevo'], { relativeTo: this.route });
   }
 }

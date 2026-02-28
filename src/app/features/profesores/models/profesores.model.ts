@@ -1,38 +1,51 @@
 export interface Profesor {
+  idProfesor: number;
+  cedula: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  fechaNacimiento: Date;
+  genero: string;
+  nacionalidad: string;
+  emailPersonal: string;
+  telefono: string;
+  titulo: string;
+  especialidad: string;
+  cursosAsignados: number;
+  provincia: string;
+  canton: string;
+  distrito: string;
+  direccion: string;
+  codigo: string;
+  emailInstitucional: string;
+  contraseña: string;
+  fechaIngreso: Date;
+  estado: boolean;
 
-    id: number;
+}
 
-  // ── Información Personal ──
-    cedula: string;
-    nombre: string;
-    apellidoPaterno: string;
-    apellidoMaterno: string;
-    fechaNacimiento: string;
-    genero: string;
-    nacionalidad: string;
-   
-    // ── Contacto ──
-    emailPersonal: string;
-    telefono: string;
+export interface CreateProfesorDto {
+  cedula: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  fechaNacimiento: Date;
+  genero: string;
+  nacionalidad: string;
+  emailPersonal: string;
+  telefono: string;
+  titulo: string;
+  especialidad: string;
+  cursosAsignados: number;
+  provincia: string;
+  canton: string;
+  distrito: string;
+  direccion: string;
+}
 
-    // ── Académico ──
-    titulo: string;
-    especialidad: string;
-    cursosAsignados: number;
-
-
-    // ── Dirección ──
-    provincia: string;
-    canton: string;
-    distrito: string;
-    direccionExacta: string;
-
-
-    // ── Campos automáticos (solo lectura en edición) ──
-    codigoProfesor: string;
-    emailInstitucional: string;
-    contrasena: string;
-    fechaIngreso: string;
-    estadoProfesor: string;
-
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }

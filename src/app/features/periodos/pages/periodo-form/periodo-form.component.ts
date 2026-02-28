@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { Component, EventEmitter, Output } from "@angular/core";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { PeriodoService } from "../../services/periodos.services";
 
 
 
@@ -14,84 +15,50 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 })
 
 
-export class PeriodoFormComponent implements OnInit {
+export class PeriodoFormComponent {
 
-  mostrarMensaje: boolean = false;
-  esEdicion: boolean = false;
-  periodoId: number | null = null;
-  titulo: string = '📝 Nuevo Periodo';
-
-  form = {
-
-    periodo: '',
-    fechaInicio: '',
-    fechaFin: '',
-    fechaMatricula: '',
-    MatriculaCierre: '',
-    estado: 'Abierto'
-
-  };
-
+  @Output() periodoCreado = new EventEmitter<void>();
+  periodoForm: FormGroup;
+  mensajeExito = false;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private fb: FormBuilder,
+    private periodoService: PeriodoService
+  ) {
+    this.periodoForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      fechaInicio: ['', Validators.required],
+      fechaFin: ['', Validators.required],
+      fechaMatriculaInicio: ['', Validators.required],
+      fechaMatriculaFin: ['', Validators.required]
+    });
+   }
+    
 
 
-  
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.esEdicion = true;
-      this.periodoId = +id;
-      this.titulo = '✏️ Editar Periodo';
-      this.cargarPeriodo(this.periodoId);
+
+
+  onSubmit(): void {
+    if (this.periodoForm.valid) {
+      this.periodoService.createPeriodo(this.periodoForm.value).subscribe({
+        next: (res) => {
+          if (!res.blnError) {
+            this.mensajeExito = true;
+            setTimeout(() => {
+              this.mensajeExito = false;
+              this.periodoForm.reset();
+              this.periodoCreado.emit();
+            }, 2000);
+          }
+        },
+        error: (err) => console.error('Error al crear periodo:', err)
+      });
     }
   }
 
-  cargarPeriodo(id: number): void {
-    // TODO: Reemplazar con tu EstudianteService.getById(id)
-    this.form = {
-    periodo: 'I Semestre 2026',
-    fechaInicio: '10 feb 2026',
-    fechaFin: '28 jun 2026',
-    fechaMatricula: '1 feb 2026',
-    MatriculaCierre: '28 feb 2026',
-    estado: 'Abierto'
-    };
-  }
-
-
-
-
-
-
-  guardar(): void {
-    if (!this.form.periodo || !this.form.fechaInicio || !this.form.fechaFin || !this.form.fechaMatricula || !this.form.MatriculaCierre || !this.form.estado) {
-      alert('⚠️ Por favor complete los campos obligatorios');
-      return;
-    }
-
-    if (this.esEdicion) {
-      // TODO: Llamar servicio de actualización
-      console.log('Actualizar periodo:', this.periodoId, this.form);
-      alert('✅ Periodo actualizado exitosamente');
-    } else {
-      // TODO: Llamar servicio de creación
-      console.log('Crear periodo:', this.form);
-      this.mostrarMensaje = true;
-    }
-
-    this.cancelar();
-  }
-
-  cancelar(): void {
-    if (this.esEdicion) {
-      this.router.navigate(['../..'], { relativeTo: this.route });
-    } else {
-      this.router.navigate(['..'], { relativeTo: this.route });
-    }
-  }
-
+  get nombre() { return this.periodoForm.get('nombre'); }
+  get fechaInicio() { return this.periodoForm.get('fechaInicio'); }
+  get fechaFin() { return this.periodoForm.get('fechaFin'); }
+  get fechaMatriculaInicio() { return this.periodoForm.get('fechaMatriculaInicio'); }
+  get fechaMatriculaFin() { return this.periodoForm.get('fechaMatriculaFin'); }
 }

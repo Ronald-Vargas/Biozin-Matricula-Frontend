@@ -3,79 +3,59 @@ import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { Periodo } from "../../models/periodos.model";
+import { PeriodoService } from "../../services/periodos.services";
+import { Observable } from "rxjs";
+import { PeriodoFormComponent } from "../periodo-form/periodo-form.component";
 
 
 @Component({
   selector: 'app-periodos-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PeriodoFormComponent],
   templateUrl: './periodos-list.html',
   styleUrls: ['./periodos-list.scss'],
 })
 
 export class PeriodosListComponent implements OnInit {
 
-  periodos: Periodo[] = [];
+  periodos$!: Observable<Periodo[]>;
+  mostrarFormulario = false;
 
   constructor(
+    private periodoService: PeriodoService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    // TODO: Reemplazar con tu PeriodoService
-    this.periodos = [
-      {
-        id: 1, periodo: 'I Semestre 2026', fechaInicio: '10 feb 2026',
-        fechaFin: '28 jun 2026', fechaMatricula: '1 feb 2026', MatriculaCierre: '28 feb 2026',
-        estado: 'Abierto', 
-        
-      },
-      {
-        id: 2, periodo: 'II Semestre 2026', fechaInicio: '14 jul 2026',
-        fechaFin: '29 nov 2026', fechaMatricula: '1 jul 2026', MatriculaCierre: '14 jul 2026',
-        estado: 'Cerrado', 
-   
-      },
-      {
-        id: 3, periodo: 'I Semestre 2025', fechaInicio: '10 feb 2025',
-        fechaFin: '28 jun 2025', fechaMatricula: '1 feb 2025', MatriculaCierre: '15 feb 2025',
-        estado: 'Cerrado', 
-    
-      },
-      
-    ];
-    
+    this.periodos$ = this.periodoService.getPeriodos();
   }
 
-
-
-  getEstadoClass(estado: string): string {
-    const map: Record<string, string> = {
-      Abierto: 'badge-success',
-      Cerrado: 'badge-danger',
-    };
-    return map[estado] || '';
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
   }
 
-
-
-  verDetalle(per: Periodo): void {
-      this.router.navigate([per.id], { relativeTo: this.route });
-    }
-  
-
-  editarPeriodo(est: Periodo): void {
-    this.router.navigate(['editar', est.id], { relativeTo: this.route });
+  verDetalles(id: number): void {
+    this.router.navigate(['/periodos', id]);
   }
 
-  eliminarPeriodo(per: Periodo): void {
-    if (confirm(`¿Está seguro de eliminar el periodo ${per.periodo}?`)) {
-      this.periodos = this.periodos.filter(e => e.id !== per.id);
+  eliminarPeriodo(idPeriodo: number): void {
+    if (confirm('¿Está seguro de eliminar este periodo?')) {
+      this.periodoService.deletePeriodo(idPeriodo).subscribe();
     }
   }
-
-  nuevoPeriodo(): void {
-    this.router.navigate(['nuevo'], { relativeTo: this.route });
+  editarPeriodo(per: Periodo): void {
+    this.router.navigate(['editar', per.idPeriodo], { relativeTo: this.route });
   }
+
+
+  toggleEstado(idPeriodo: number): void {
+    this.periodoService.toggleEstado(idPeriodo);
+  }
+
+  onPeriodoCreado(): void {
+    this.mostrarFormulario = false;
+  }
+
+
 }

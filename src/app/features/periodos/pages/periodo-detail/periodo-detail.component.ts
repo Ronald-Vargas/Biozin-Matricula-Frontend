@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Periodo } from '../../models/periodos.model';
+import { PeriodoService } from '../../services/periodos.services';
 
 
 @Component({
@@ -13,43 +15,32 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
   
 export class PeriodoDetailComponent implements OnInit {
 
-  periodoId: number | null = null;
-
-  periodo: any = null;
+  periodo?: Periodo;
+  cargando = true;
+  error = false;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private periodoService: PeriodoService
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-
-    if (id) {
-      this.periodoId = +id;
-      this.cargarPeriodo(this.periodoId);
-    }
-  }
-
-  cargarPeriodo(id: number): void {
-    // 🔥 Aquí luego conectarás tu servicio real
-    // Ejemplo temporal:
-
-    if (id === 1) {
-      this.periodo = {
-        periodo: 'I Semestre 2026',
-        fechaInicio: '2026-02-10',
-        fechaFin: '2026-06-28',
-        fechaMatricula: '2026-02-01',
-        MatriculaCierre: '2026-02-28',
-        estado: 'Abierto'
-      };
-    } else {
-      this.periodo = null;
-    }
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.periodoService.getPeriodoById(id).subscribe({
+      next: (periodo) => {
+        this.periodo = periodo;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al obtener periodo:', err);
+        this.cargando = false;
+        this.error = true;
+      }
+    });
   }
 
   volver(): void {
-    this.router.navigate(['..'], { relativeTo: this.route });
+    this.router.navigate(['/periodos']);
   }
 }

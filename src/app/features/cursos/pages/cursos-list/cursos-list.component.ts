@@ -43,7 +43,7 @@ export class CursosListComponent implements OnInit {
   }
 
   toggleEstado(idCurso: number): void {
-    this.cursoService.toggleEstado(idCurso);
+    this.cursoService.toggleEstado(idCurso );
   }
 
   onCursoCreado(): void {

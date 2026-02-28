@@ -2,7 +2,7 @@
 
   <div class="header">
     <div>
-      <h1 class="title">{{ periodo?.periodo }}</h1>
+      <h1 class="title">{{ periodo?.nombre }}</h1>
       <span class="subtitle">Información del periodo académico</span>
     </div>
 
@@ -32,23 +32,23 @@
       <div class="info-item">
         <span class="label">Inicio Matrícula</span>
         <span class="value">
-          {{ periodo?.fechaMatricula | date:'dd MMMM yyyy' }}
+          {{ periodo?.fechaMatriculaInicio | date:'dd MMMM yyyy' }}
         </span>
       </div>
 
       <div class="info-item">
         <span class="label">Cierre Matrícula</span>
         <span class="value">
-          {{ periodo?.MatriculaCierre | date:'dd MMMM yyyy' }}
+          {{ periodo?.fechaMatriculaFin | date:'dd MMMM yyyy' }}
         </span>
       </div>
 
       <div class="info-item full">
         <span class="label">Estado</span>
         <span class="status"
-              [class.abierto]="periodo?.estado === 'Abierto'"
-              [class.cerrado]="periodo?.estado === 'Cerrado'">
-          {{ periodo?.estado }}
+              [class.abierto]="periodo?.estadoMatricula === true"
+              [class.cerrado]="periodo?.estadoMatricula === false">
+          {{ periodo?.estadoMatricula }}
         </span>
       </div>
 

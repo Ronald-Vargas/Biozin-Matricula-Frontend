@@ -12,7 +12,7 @@
           </p>
         </div>
 
-        <button class="btn btn-primary" (click)="nuevoProfesor()">
+        <button class="btn btn-primary" routerLink="nuevo">
           ➕ Nuevo Profesor
         </button>
       </div>
@@ -45,7 +45,6 @@
       <table class="teachers-table">
         <thead>
           <tr>
-            <th>Código</th>
             <th>Profesor</th>
             <th>Especialidad</th>
             <th>Título</th>
@@ -65,14 +64,12 @@
           <tr *ngFor="let prof of profesoresFiltrados; let i = index"
               class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="teacher-code">{{ prof.codigoProfesor }}</strong></td>
-
             <td>
               <div class="teacher-info">
                 <div class="teacher-avatar">{{ getIniciales(prof) }}</div>
                 <div>
                   <div class="teacher-name">{{ getNombreCompleto(prof) }}</div>
-                  <div class="teacher-email">{{ prof.emailInstitucional }}</div>
+                  <div class="teacher-email">{{ prof.emailPersonal }}</div>
                 </div>
               </div>
             </td>
@@ -92,14 +89,16 @@
             </td>
 
             <td>
-              <span class="status-badge" [ngClass]="getEstadoClass(prof.estadoProfesor)">{{ prof.estadoProfesor }}</span>
+              <span class="status-badge" [ngClass]="getEstadoClass(prof.estado)">
+                {{ prof.estado ? 'Activo' : 'Inactivo' }}
+              </span>
             </td>
 
             <td>
               <div class="action-buttons">
-                <button class="btn-icon btn-view" (click)="verDetalle(prof)" title="Ver detalles">👁️</button>
-                <button class="btn-icon btn-edit" (click)="editarProfesor(prof)" title="Editar">✏️</button>
-                <button class="btn-icon btn-delete" (click)="eliminarProfesor(prof)" title="Eliminar">🗑️</button>
+                <button class="btn-icon btn-view" (click)="verDetalles(prof.idProfesor)" title="Ver detalles">👁️</button>
+                <button class="btn-icon btn-edit" (click)="editarProfesor(prof.idProfesor)" title="Editar">✏️</button>
+                <button class="btn-icon btn-delete" (click)="eliminaProfesor(prof.idProfesor)" title="Eliminar">🗑️</button>
               </div>
             </td>
           </tr>
@@ -118,3 +117,4 @@
       </span>
     </div>
   </div>
+</div>

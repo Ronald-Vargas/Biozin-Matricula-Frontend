@@ -1,10 +1,24 @@
 export interface Periodo {
-    id: number;
-    periodo: string;
-    fechaInicio: string;
-    fechaFin: string;
-    fechaMatricula: string;
-    MatriculaCierre: string;
-    estado: string;
+  idPeriodo: number;
+  nombre: string;
+  fechaInicio: Date;
+  fechaFin: Date;
+  fechaMatriculaInicio: Date;
+  fechaMatriculaFin: Date;
+  estadoMatricula: boolean;
+}
 
+export interface CreatePeriodoDto {
+  nombre: string;
+  fechaInicio: Date;
+  fechaFin: Date;
+  fechaMatriculaInicio: Date;
+  fechaMatriculaFin: Date;
+}
+
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }
