@@ -1,7 +1,7 @@
 <div class="estudiantes-container">
   <div class="section">
 
-    <!-- 🔵 Banner Azul Global -->
+    <!-- Banner Azul Global -->
   <div class="module-banner">
     <div class="module-banner-content">
       <div>
@@ -35,9 +35,8 @@
     <!-- Filtros -->
     <div class="filter-buttons">
       <button class="filter-btn" [class.active]="filtroActivo === 'todos'" (click)="filtrar('todos')">Todos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'activo'" (click)="filtrar('activo')">Activos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'graduado'" (click)="filtrar('graduado')">Graduados</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'retirado'" (click)="filtrar('retirado')">Retirados</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'Activo'" (click)="filtrar('Activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroActivo === 'Inactivo'" (click)="filtrar('Inactivo')">Inactivos</button>
     </div>
 
     <!-- Tabla -->
@@ -45,11 +44,9 @@
       <table class="students-table">
         <thead>
           <tr>
-            <th>Código</th>
+            <th>Carnet</th>
             <th>Estudiante</th>
             <th>Carrera</th>
-            <th>Semestre</th>
-            <th>Progreso</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
@@ -65,7 +62,7 @@
           <tr *ngFor="let est of estudiantesFiltrados; let i = index"
               class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="student-code">{{ est.codigoEstudiante }}</strong></td>
+            <td><strong class="student-carnet">{{ est.carnet }}</strong></td>
 
             <td>
               <div class="student-info">
@@ -82,20 +79,6 @@
                 <span class="career-code">{{ est.carreraCodigo }}</span>
                 <span class="career-name">{{ est.carreraNombre }}</span>
               </div>
-            </td>
-
-            <td class="text-center">
-              <span class="semester-badge">Sem. {{ est.semestreActual }}</span>
-            </td>
-
-            <td>
-              <div class="progress-container">
-                <div class="progress-bar">
-                  <div class="progress-fill" [style.width.%]="getProgreso(est)"></div>
-                </div>
-                <span class="progress-text">{{ getProgreso(est) }}%</span>
-              </div>
-              <div class="credits-info">{{ est.creditosAprobados }}/{{ est.creditosTotales }} créditos</div>
             </td>
 
             <td>

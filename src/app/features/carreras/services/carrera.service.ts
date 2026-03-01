@@ -51,9 +51,9 @@ export class CarreraService {
   }
 
   deleteCarrera(id: number): Observable<Respuesta<boolean>> {
-    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idCarrera: id })
+    return this.http.delete<Respuesta<boolean>>(`${this.apiUrl}/Eliminar/${id}`)
       .pipe(tap(() => this.cargarCarreras()));
-  }
+}
 
   toggleEstado(id: number): void {
     const carreras = this.carrerasSubject.getValue();

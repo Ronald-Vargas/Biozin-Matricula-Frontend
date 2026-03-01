@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CarreraOption } from '../../models/estudiantes.model';
+import { CreateEstudianteDto, Estudiante } from '../../models/estudiantes.model';
+import { EstudianteService } from '../../services/estudiantes.services';
+import { Carrera } from '../../../carreras/models/carrera.model';
+import { CarreraService } from '../../../carreras/services/carrera.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-estudiante-form',
@@ -11,11 +15,13 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './estudiante-form.html',
   styleUrl: './estudiante-form.scss',
 })
-export class EstudianteFormComponent implements OnInit {
+export class EstudianteFormComponent implements OnInit, OnDestroy {
 
   esEdicion: boolean = false;
   estudianteId: number | null = null;
   titulo: string = '📝 Nuevo Estudiante';
+
+  private estudianteOriginal: Estudiante | null = null;
 
   form = {
     // ── Información Personal ──
@@ -37,7 +43,7 @@ export class EstudianteFormComponent implements OnInit {
     nombreContactoEmergencia: '',
 
     // ── Académico ──
-    idCarrera: '',
+    idCarrera: 0,
     condicionSocioeconomica: '',
     tipoBeca: 'Ninguna',
     trabaja: false,
@@ -57,26 +63,28 @@ export class EstudianteFormComponent implements OnInit {
     observaciones: '',
 
     // ── Campos automáticos (solo lectura en edición) ──
-    codigoEstudiante: '',
+    carnet: 0,
     emailInstitucional: '',
-    contrasena: '',
     semestreActual: 1,
     fechaIngreso: '',
-    estadoEstudiante: 'activo',
+    estadoEstudiante: 'Activo',
   };
 
-  carreras: CarreraOption[] = [
-    { id: 1, codigo: 'ING-SIS', nombre: 'Ingeniería en Sistemas', creditos: 180 },
-    { id: 2, codigo: 'ING-IND', nombre: 'Ingeniería Industrial', creditos: 175 },
-    { id: 3, codigo: 'ADM-EMP', nombre: 'Administración de Empresas', creditos: 140 },
-  ];
+  carreras: Carrera[] = [];
+  private subCarreras?: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private estudianteService: EstudianteService,
+    private carreraService: CarreraService,
   ) {}
 
   ngOnInit(): void {
+    this.subCarreras = this.carreraService.getCarreras().subscribe(c => {
+      this.carreras = c;
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.esEdicion = true;
@@ -86,42 +94,48 @@ export class EstudianteFormComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.subCarreras?.unsubscribe();
+  }
+
   cargarEstudiante(id: number): void {
-    // TODO: Reemplazar con tu EstudianteService.getById(id)
-    this.form = {
-      cedula: '1-1234-5678',
-      nombre: 'Juan Carlos',
-      apellidoPaterno: 'Pérez',
-      apellidoMaterno: 'Rodríguez',
-      fechaNacimiento: '2000-05-15',
-      genero: 'M',
-      nacionalidad: 'Costarricense',
-      discapacidad: false,
-      tipoDiscapacidad: '',
-      necesitaAsistencia: false,
-      emailPersonal: 'juan.perez@gmail.com',
-      telefonoMovil: '8888-1234',
-      telefonoEmergencia: '7777-5678',
-      nombreContactoEmergencia: 'María Pérez (Madre)',
-      idCarrera: '1',
-      condicionSocioeconomica: 'Media',
-      tipoBeca: 'Ninguna',
-      trabaja: false,
-      colegioProcedencia: 'Liceo de Costa Rica',
-      tipoColegio: 'Publico',
-      anioGraduacionColegio: 2024,
-      provincia: 'San José',
-      canton: 'Central',
-      distrito: 'Catedral',
-      direccionExacta: 'Del parque central 200m norte',
-      observaciones: '',
-      codigoEstudiante: 'EST-2025-1234',
-      emailInstitucional: 'juan.perez@universidad.ac.cr',
-      contrasena: '',
-      semestreActual: 3,
-      fechaIngreso: '2025-02-10',
-      estadoEstudiante: 'activo',
-    };
+    this.estudianteService.getEstudianteById(id).subscribe(est => {
+      if (!est) return;
+      this.estudianteOriginal = est;
+      this.form = {
+        cedula: est.cedula,
+        nombre: est.nombre,
+        apellidoPaterno: est.apellidoPaterno,
+        apellidoMaterno: est.apellidoMaterno ?? '',
+        fechaNacimiento: est.fechaNacimiento ? est.fechaNacimiento.split('T')[0] : '',
+        genero: est.genero,
+        nacionalidad: est.nacionalidad ?? '',
+        discapacidad: est.discapacidad,
+        tipoDiscapacidad: est.tipoDiscapacidad ?? '',
+        necesitaAsistencia: est.necesitaAsistencia,
+        emailPersonal: est.emailPersonal,
+        telefonoMovil: est.telefonoMovil,
+        telefonoEmergencia: est.telefonoEmergencia ?? '',
+        nombreContactoEmergencia: est.nombreContactoEmergencia ?? '',
+        idCarrera: est.idCarrera,
+        condicionSocioeconomica: est.condicionSocioeconomica ?? '',
+        tipoBeca: est.tipoBeca,
+        trabaja: est.trabaja,
+        colegioProcedencia: est.colegioProcedencia ?? '',
+        tipoColegio: est.tipoColegio ?? '',
+        anioGraduacionColegio: est.anioGraduacionColegio ?? null,
+        provincia: est.provincia ?? '',
+        canton: est.canton ?? '',
+        distrito: est.distrito ?? '',
+        direccionExacta: est.direccionExacta ?? '',
+        observaciones: est.observaciones ?? '',
+        carnet: est.carnet,
+        emailInstitucional: est.emailInstitucional,
+        semestreActual: est.semestreActual,
+        fechaIngreso: est.fechaIngreso ? est.fechaIngreso.split('T')[0] : '',
+        estadoEstudiante: est.estadoEstudiante,
+      };
+    });
   }
 
   guardar(): void {
@@ -130,54 +144,94 @@ export class EstudianteFormComponent implements OnInit {
       return;
     }
 
-    if (!this.esEdicion) {
-      // Generar campos automáticos
-      this.form.codigoEstudiante = this.generarCodigo();
-      this.form.emailInstitucional = this.generarEmailInstitucional();
-      this.form.contrasena = this.generarContrasena();
-      this.form.semestreActual = 1;
-      this.form.fechaIngreso = new Date().toISOString().split('T')[0];
-      this.form.estadoEstudiante = 'activo';
+    const carreraSeleccionada = this.carreras.find(c => c.idCarrera === this.form.idCarrera);
+    if (!carreraSeleccionada) {
+      alert('⚠️ Por favor seleccione una carrera válida');
+      return;
     }
 
-    if (this.esEdicion) {
-      // TODO: Llamar servicio de actualización
-      console.log('Actualizar estudiante:', this.estudianteId, this.form);
-      alert('✅ Estudiante actualizado exitosamente');
+    if (this.esEdicion && this.estudianteOriginal) {
+      const updated: Estudiante = {
+        ...this.estudianteOriginal,
+        cedula: this.form.cedula,
+        nombre: this.form.nombre,
+        apellidoPaterno: this.form.apellidoPaterno,
+        apellidoMaterno: this.form.apellidoMaterno || undefined,
+        fechaNacimiento: this.form.fechaNacimiento,
+        genero: this.form.genero,
+        nacionalidad: this.form.nacionalidad || undefined,
+        discapacidad: this.form.discapacidad,
+        tipoDiscapacidad: this.form.tipoDiscapacidad || undefined,
+        necesitaAsistencia: this.form.necesitaAsistencia,
+        emailPersonal: this.form.emailPersonal,
+        telefonoMovil: this.form.telefonoMovil,
+        telefonoEmergencia: this.form.telefonoEmergencia || undefined,
+        nombreContactoEmergencia: this.form.nombreContactoEmergencia || undefined,
+        idCarrera: carreraSeleccionada.idCarrera,
+        condicionSocioeconomica: this.form.condicionSocioeconomica || undefined,
+        tipoBeca: this.form.tipoBeca,
+        trabaja: this.form.trabaja,
+        colegioProcedencia: this.form.colegioProcedencia || undefined,
+        tipoColegio: this.form.tipoColegio || undefined,
+        anioGraduacionColegio: this.form.anioGraduacionColegio || undefined,
+        provincia: this.form.provincia || undefined,
+        canton: this.form.canton || undefined,
+        distrito: this.form.distrito || undefined,
+        direccionExacta: this.form.direccionExacta || undefined,
+        observaciones: this.form.observaciones || undefined,
+      };
+
+      this.estudianteService.updateEstudiante(updated).subscribe(res => {
+        if (!res.blnError) {
+          alert('✅ Estudiante actualizado exitosamente');
+          this.cancelar();
+        } else {
+          alert('❌ ' + res.strMensajeRespuesta);
+        }
+      });
     } else {
-      // TODO: Llamar servicio de creación
-      console.log('Crear estudiante:', this.form);
-      alert('✅ Estudiante creado exitosamente');
-    }
+      const dto: CreateEstudianteDto = {
+        cedula: this.form.cedula,
+        nombre: this.form.nombre,
+        apellidoPaterno: this.form.apellidoPaterno,
+        apellidoMaterno: this.form.apellidoMaterno || undefined,
+        fechaNacimiento: this.form.fechaNacimiento,
+        genero: this.form.genero,
+        nacionalidad: this.form.nacionalidad || undefined,
+        discapacidad: this.form.discapacidad,
+        tipoDiscapacidad: this.form.tipoDiscapacidad || undefined,
+        necesitaAsistencia: this.form.necesitaAsistencia,
+        emailPersonal: this.form.emailPersonal,
+        telefonoMovil: this.form.telefonoMovil,
+        telefonoEmergencia: this.form.telefonoEmergencia || undefined,
+        nombreContactoEmergencia: this.form.nombreContactoEmergencia || undefined,
+        idCarrera: carreraSeleccionada.idCarrera,
+        estadoEstudiante: this.form.estadoEstudiante,
+        tipoBeca: this.form.tipoBeca,
+        condicionSocioeconomica: this.form.condicionSocioeconomica || undefined,
+        trabaja: this.form.trabaja,
+        colegioProcedencia: this.form.colegioProcedencia || undefined,
+        tipoColegio: this.form.tipoColegio || undefined,
+        anioGraduacionColegio: this.form.anioGraduacionColegio || undefined,
+        provincia: this.form.provincia || undefined,
+        canton: this.form.canton || undefined,
+        distrito: this.form.distrito || undefined,
+        direccionExacta: this.form.direccionExacta || undefined,
+        observaciones: this.form.observaciones || undefined,
+      };
 
-    this.cancelar();
+      this.estudianteService.createEstudiante(dto).subscribe(res => {
+        if (!res.blnError) {
+          alert('✅ Estudiante creado exitosamente');
+          this.cancelar();
+        } else {
+          alert('❌ ' + res.strMensajeRespuesta);
+        }
+      });
+    }
   }
 
   cancelar(): void {
-    if (this.esEdicion) {
-      this.router.navigate(['../..'], { relativeTo: this.route });
-    } else {
-      this.router.navigate(['..'], { relativeTo: this.route });
-    }
-  }
-
-  // ── Generadores automáticos ──
-
-  private generarCodigo(): string {
-    const year = new Date().getFullYear();
-    const random = Math.floor(Math.random() * 9000) + 1000;
-    return `EST-${year}-${random}`;
-  }
-
-  private generarEmailInstitucional(): string {
-    const nombre = this.form.nombre.split(' ')[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const apellido = this.form.apellidoPaterno.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    return `${nombre}.${apellido}@universidad.ac.cr`;
-  }
-
-  private generarContrasena(): string {
-    const apellido = this.form.apellidoPaterno.substring(0, 3).toLowerCase();
-    const cedula = this.form.cedula.replace(/-/g, '').slice(-4);
-    return `${apellido}${cedula}`;
+    this.router.navigate(['/estudiantes']);
   }
 }

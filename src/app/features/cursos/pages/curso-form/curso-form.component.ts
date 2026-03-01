@@ -9,6 +9,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './curso-form.html',
   styleUrl: './curso-form.scss',
 })
+
+
+
+
 export class CursoFormComponent {
 
   @Output() cursoCreado = new EventEmitter<void>();

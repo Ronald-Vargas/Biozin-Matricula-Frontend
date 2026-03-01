@@ -11,6 +11,9 @@
 
   <div class="detail-grid">
 
+
+
+
     <!-- ═══ COLUMNA IZQUIERDA ═══ -->
     <div class="detail-left">
 
@@ -18,7 +21,7 @@
       <div class="profile-card">
         <div class="profile-avatar">{{ getIniciales() }}</div>
         <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
-        <p class="profile-code">{{ est.codigoEstudiante }}</p>
+        <p class="profile-code">Carnet: {{ est.carnet }}</p>
         <span class="status-badge" [ngClass]="getEstadoClass()">{{ est.estadoEstudiante }}</span>
 
         <div class="profile-meta">
@@ -68,6 +71,12 @@
       </div>
     </div>
 
+
+
+
+
+
+
     <!-- ═══ COLUMNA DERECHA ═══ -->
     <div class="detail-right">
 
@@ -77,8 +86,8 @@
         <div class="career-card">
           <div>
             <span class="career-label">Carrera</span>
-            <span class="career-name">{{ est.carreraNombre }}</span>
-            <span class="career-code">{{ est.carreraCodigo }}</span>
+            <span class="career-name">{{ getCarreraNombre() }}</span>
+            <span class="career-code">{{ getCarreraCodigo() }}</span>
           </div>
           <div class="career-semester">
             <span class="career-label">Semestre</span>
@@ -88,7 +97,7 @@
         <div class="info-grid" style="margin-top: 1rem;">
           <div class="info-item">
             <span class="info-label">Fecha de ingreso</span>
-            <span class="info-value">{{ est.fechaIngreso }}</span>
+            <span class="info-value">{{ est.fechaIngreso | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Condición socioeconómica</span>
@@ -218,7 +227,7 @@
   </div>
 </div>
 
-<!-- Si no se encontró -->
+
 <div class="not-found" *ngIf="!estudiante">
   <div class="not-found-icon">🔍</div>
   <h2>Estudiante no encontrado</h2>

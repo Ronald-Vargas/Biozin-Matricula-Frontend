@@ -70,9 +70,9 @@
 
 
 
-/* ══════════════════════════════════════════
+/* 
    HEADER — Tonos cálidos
-   ══════════════════════════════════════════ */
+ */
 .card-header {
   background: linear-gradient(
     135deg,
@@ -82,9 +82,9 @@
     #8b6914 100%
   );
   padding: 40px 40px 34px;
-  display: flex;                    /* agregar */
-  flex-direction: column;           /* agregar */
-  align-items: center;              /* agregar */
+  display: flex;                  
+  flex-direction: column;        
+  align-items: center;           
   position: relative;
   overflow: hidden;
 
@@ -121,7 +121,7 @@
   position: relative;
   z-index: 1;
   letter-spacing: 0.3px;
-  text-align: center;          /* agregar */
+  text-align: center;         
 }
 
 .header-accent {
@@ -129,10 +129,14 @@
   height: 3px;
   background: linear-gradient(90deg, #daa520, #e8c547);
   border-radius: 2px;
-  margin: 12px auto 0;    /* de 40px a 12px */
+  margin: 12px auto 0;    
   position: relative;
   z-index: 1;
 }
+
+
+
+
 
 /* ══════════════════════════════════════════
    BODY — Formulario
@@ -222,6 +226,11 @@ input {
   }
 }
 
+
+
+
+
+
 /* ── OLVIDÓ CONTRASEÑA ── */
 .forgot-password {
   text-align: right;
@@ -241,6 +250,11 @@ input {
     }
   }
 }
+
+
+
+
+
 
 /* ── BOTÓN ── */
 .login-btn {
@@ -278,6 +292,14 @@ input {
   }
 }
 
+
+
+
+
+
+
+
+
 /* SPINNER */
 .spinner {
   width: 20px;
@@ -294,6 +316,15 @@ input {
   }
 }
 
+
+
+
+
+
+
+
+
+
 /* ── FOOTER ── */
 .card-footer {
   background: #fffdf8;
@@ -304,6 +335,12 @@ input {
   color: #bfad8e;
   font-weight: 400;
 }
+
+
+
+
+
+
 
 /* ══════════════════════════════════════════
    RESPONSIVE

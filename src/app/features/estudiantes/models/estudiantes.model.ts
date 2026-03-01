@@ -1,8 +1,7 @@
 export interface Estudiante {
-  id: number;
+  idEstudiante: number;
 
   // Información personal
-  codigoEstudiante: string;
   cedula: string;
   nombre: string;
   apellidoPaterno: string;
@@ -37,6 +36,7 @@ export interface Estudiante {
   tipoBeca: string;
   condicionSocioeconomica?: string;
   trabaja: boolean;
+  carnet: number;
 
   // Colegio
   colegioProcedencia?: string;
@@ -52,9 +52,67 @@ export interface Estudiante {
 }
 
 
+export interface CreateEstudianteDto {
+
+  // Información personal
+  cedula: string;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno?: string;
+  fechaNacimiento: string;
+  genero: string;
+  nacionalidad?: string;
+  discapacidad: boolean;
+  tipoDiscapacidad?: string;
+  necesitaAsistencia: boolean;
+
+  // Contacto
+  emailPersonal: string;
+  telefonoMovil: string;
+  telefonoEmergencia?: string;
+  nombreContactoEmergencia?: string;
+
+  // Dirección
+  provincia?: string;
+  canton?: string;
+  distrito?: string;
+  direccionExacta?: string;
+
+  // Académico
+  idCarrera: number;
+  estadoEstudiante: string;
+  tipoBeca: string;
+  condicionSocioeconomica?: string;
+  trabaja: boolean;
+
+  // Colegio
+  colegioProcedencia?: string;
+  tipoColegio?: string;
+  anioGraduacionColegio?: number;
+
+  // Observaciones
+  observaciones?: string;
+}
+
+
+
+
+
+
 export interface CarreraOption {
   id: number;
   codigo: string;
   nombre: string;
   creditos: number;
+}
+
+
+
+
+
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }

@@ -93,8 +93,8 @@
         <div class="form-group">
           <label>Carrera *</label>
           <select [(ngModel)]="form.idCarrera" name="idCarrera" required>
-            <option value="">Seleccionar carrera...</option>
-            <option *ngFor="let c of carreras" [value]="c.id">
+            <option [ngValue]="0">Seleccionar carrera...</option>
+            <option *ngFor="let c of carreras" [ngValue]="c.idCarrera">
               {{ c.codigo }} - {{ c.nombre }}
             </option>
           </select>
@@ -178,8 +178,8 @@
         <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
         <div class="auto-fields-grid">
           <div class="auto-field">
-            <span class="auto-label">Código:</span>
-            <span class="auto-value">{{ form.codigoEstudiante }}</span>
+            <span class="auto-label">Carnet:</span>
+            <span class="auto-value">{{ form.carnet }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Email Institucional:</span>
@@ -191,7 +191,7 @@
           </div>
           <div class="auto-field">
             <span class="auto-label">Fecha Ingreso:</span>
-            <span class="auto-value">{{ form.fechaIngreso }}</span>
+            <span class="auto-value">{{ form.fechaIngreso | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Estado:</span>

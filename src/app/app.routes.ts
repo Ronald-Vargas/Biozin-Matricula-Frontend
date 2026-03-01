@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-   // ── Login (sin layout) ──
+   // ── Login 
   {
      path: '',
     loadComponent: () =>
       import('./auth/login/login.component').then((m) => m.LoginComponent),
   },
 
-  // ── App (con layout sidebar + header) ──
+  // ── App (Main Layout) ──
   {
     path: '',
     loadComponent: () =>

@@ -27,7 +27,6 @@ export class LoginComponent {
   onLogin(): void {
     this.isLoading = true;
 
-    // TODO: Reemplazar con tu servicio de autenticación
     setTimeout(() => {
       this.isLoading = false;
       this.router.navigate(['/dashboard']);
