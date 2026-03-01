@@ -15,7 +15,9 @@
     <!-- Formulario nuevo periodo -->
     <app-periodo-form
       *ngIf="mostrarFormulario"
-      (periodoCreado)="onPeriodoCreado()">
+      [periodoEditar]="periodoSeleccionado"
+      (periodoCreado)="onPeriodoCreado()"
+      (periodoActualizado)="onPeriodoActualizado()">
     </app-periodo-form>
 
     <!-- Tabla -->
@@ -41,10 +43,10 @@
 
             <td><strong class="periodo-name">{{ per.nombre }}</strong></td>
 
-            <td>{{ per.fechaInicio }}</td>
-            <td>{{ per.fechaFin }}</td>
-            <td>{{ per.fechaMatriculaInicio }}</td>
-            <td>{{ per.fechaMatriculaFin }}</td>
+            <td>{{ per.fechaInicio | date:'dd/MM/yyyy' }}</td>
+            <td>{{ per.fechaFin | date:'dd/MM/yyyy' }}</td>
+            <td>{{ per.fechaMatriculaInicio | date:'dd/MM/yyyy' }}</td>
+            <td>{{ per.fechaMatriculaFin | date:'dd/MM/yyyy' }}</td>
             <td>
               <span 
               class="status-badge"

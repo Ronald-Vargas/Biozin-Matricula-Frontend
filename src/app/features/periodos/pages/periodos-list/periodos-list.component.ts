@@ -20,6 +20,7 @@ export class PeriodosListComponent implements OnInit {
 
   periodos$!: Observable<Periodo[]>;
   mostrarFormulario = false;
+  periodoSeleccionado: Periodo | null = null;
 
   constructor(
     private periodoService: PeriodoService,
@@ -33,6 +34,9 @@ export class PeriodosListComponent implements OnInit {
 
   toggleFormulario(): void {
     this.mostrarFormulario = !this.mostrarFormulario;
+    if (!this.mostrarFormulario) {
+      this.periodoSeleccionado = null;
+    }
   }
 
   verDetalles(id: number): void {
@@ -45,7 +49,8 @@ export class PeriodosListComponent implements OnInit {
     }
   }
   editarPeriodo(per: Periodo): void {
-    this.router.navigate(['editar', per.idPeriodo], { relativeTo: this.route });
+    this.periodoSeleccionado = per;
+    this.mostrarFormulario = true;
   }
 
 
@@ -55,6 +60,12 @@ export class PeriodosListComponent implements OnInit {
 
   onPeriodoCreado(): void {
     this.mostrarFormulario = false;
+    this.periodoSeleccionado = null;
+  }
+
+  onPeriodoActualizado(): void {
+    this.mostrarFormulario = false;
+    this.periodoSeleccionado = null;
   }
 
 

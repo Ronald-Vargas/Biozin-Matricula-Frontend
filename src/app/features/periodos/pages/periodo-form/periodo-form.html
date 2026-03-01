@@ -1,8 +1,8 @@
 <div class="form-container">
-  <h2 class="form-title">Crear Nuevo Periodo</h2>
+  <h2 class="form-title">{{ periodoEditar ? 'Editar Periodo' : 'Crear Nuevo Periodo' }}</h2>
 
   <div class="success-message" *ngIf="mensajeExito">
-    ✓ Periodo creado exitosamente
+    ✓ Periodo {{ periodoEditar ? 'actualizado' : 'creado' }} exitosamente
   </div>
 
 
@@ -47,10 +47,10 @@
     </div>
 
 
-    <button 
-      type="submit" 
+    <button
+      type="submit"
       class="btn btn-primary">
-      ➕ Crear Periodo
+      {{ periodoEditar ? '💾 Guardar Cambios' : '➕ Crear Periodo' }}
     </button>
   </form>
 </div>
