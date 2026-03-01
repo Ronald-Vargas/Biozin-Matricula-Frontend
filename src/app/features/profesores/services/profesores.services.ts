@@ -52,11 +52,6 @@ export class ProfesorService {
       .pipe(tap(() => this.cargarProfesores()));
   }
 
-  deleteProfesor(id: number): Observable<Respuesta<boolean>> {
-    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idProfesor: id })
-      .pipe(tap(() => this.cargarProfesores()));
-  }
-
   toggleEstado(id: number): void {
     const profesores = this.profesoresSubject.getValue();
     const profesor = profesores.find(c => c.idProfesor === id);

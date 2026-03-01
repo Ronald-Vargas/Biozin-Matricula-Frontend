@@ -118,14 +118,6 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   }
 
 
-
-  eliminarEstudiante(est: Estudiante): void {
-    if (confirm('¿Está seguro de eliminar este estudiante?')) {
-      this.estudianteService.deleteEstudiante(est.idEstudiante).subscribe();
-    }
-  }
-
-
   getIniciales(est: Estudiante): string {
     return (est.nombre.charAt(0) + est.apellidoPaterno.charAt(0)).toUpperCase();
   }

@@ -85,12 +85,6 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profesores/editar', id]);
   }
 
-  eliminaProfesor(idProfesor: number): void {
-    if (confirm('¿Está seguro de eliminar este profesor?')) {
-      this.profesorService.deleteProfesor(idProfesor).subscribe();
-    }
-  }
-
   toggleEstado(idProfesor: number): void {
     this.profesorService.toggleEstado(idProfesor);
   }

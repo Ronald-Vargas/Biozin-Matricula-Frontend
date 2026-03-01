@@ -50,10 +50,6 @@ export class CursoService {
       .pipe(tap(() => this.cargarCursos()));
   }
 
-  deleteCurso(id: number): Observable<Respuesta<boolean>> {
-    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idCurso: id })
-      .pipe(tap(() => this.cargarCursos()));
-  }
 
   toggleEstado(id: number): void {
     const cursos = this.cursosSubject.getValue();

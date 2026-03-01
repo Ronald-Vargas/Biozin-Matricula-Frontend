@@ -36,12 +36,6 @@ export class CursosListComponent implements OnInit {
     this.router.navigate(['/cursos', id]);
   }
 
-  eliminarCurso(idCurso: number): void {
-    if (confirm('¿Está seguro de eliminar este curso?')) {
-      this.cursoService.deleteCurso(idCurso).subscribe();
-    }
-  }
-
   toggleEstado(idCurso: number): void {
     this.cursoService.toggleEstado(idCurso );
   }

@@ -40,12 +40,6 @@ export class CarrerasListComponent implements OnInit {
     this.router.navigate(['/carreras', id]);
   }
 
-  eliminarCarrera(id: number): void {
-    if (confirm('¿Está seguro de eliminar esta carrera?')) {
-      this.carreraService.deleteCarrera(id).subscribe();
-    }
-  }
-
   toggleEstado(id: number): void {
     this.carreraService.toggleEstado(id);
   }

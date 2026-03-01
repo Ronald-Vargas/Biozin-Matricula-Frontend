@@ -52,11 +52,6 @@ export class PeriodoService {
       .pipe(tap(() => this.cargarPeriodos()));
   }
 
-  deletePeriodo(id: number): Observable<Respuesta<boolean>> {
-    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idPeriodo: id })
-      .pipe(tap(() => this.cargarPeriodos()));
-  }
-
   toggleEstado(id: number): void {
     const periodos = this.periodosSubject.getValue();
     const periodo = periodos.find(c => c.idPeriodo === id);

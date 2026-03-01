@@ -53,11 +53,6 @@ export class EstudianteService {
       .pipe(tap(() => this.cargarEstudiantes()));
   }
 
-  deleteEstudiante(id: number): Observable<Respuesta<boolean>> {
-    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/Eliminar`, { idEstudiante: id })
-      .pipe(tap(() => this.cargarEstudiantes()));
-  }
-
   toggleEstado(id: number): void {
     const estudiantes = this.estudiantesSubject.getValue();
     const estudiante = estudiantes.find(c => c.idEstudiante === id);

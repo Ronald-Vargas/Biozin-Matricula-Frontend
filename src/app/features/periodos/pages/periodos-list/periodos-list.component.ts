@@ -43,11 +43,6 @@ export class PeriodosListComponent implements OnInit {
     this.router.navigate(['/periodos', id]);
   }
 
-  eliminarPeriodo(idPeriodo: number): void {
-    if (confirm('¿Está seguro de eliminar este periodo?')) {
-      this.periodoService.deletePeriodo(idPeriodo).subscribe();
-    }
-  }
   editarPeriodo(per: Periodo): void {
     this.periodoSeleccionado = per;
     this.mostrarFormulario = true;
