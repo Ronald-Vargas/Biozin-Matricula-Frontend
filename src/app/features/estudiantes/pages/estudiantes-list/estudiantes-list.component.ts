@@ -22,7 +22,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   estudiantes: Estudiante[] = [];
   estudiantesFiltrados: Estudiante[] = [];
   terminoBusqueda = '';
-  filtroActivo: 'todos' | 'Retirado' | 'Activo' | 'Inactivo' = 'todos';
+  filtroActivo: 'todos' | 'Activo' | 'Inactivo' = 'todos';
 
   private sub?: Subscription;
 

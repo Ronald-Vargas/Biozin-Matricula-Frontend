@@ -20,7 +20,7 @@ export interface Profesor {
   emailInstitucional: string;
   contraseña: string;
   fechaIngreso: Date;
-  estado: boolean;
+  estado: string;
 
 }
 
@@ -41,6 +41,7 @@ export interface CreateProfesorDto {
   canton: string;
   distrito: string;
   direccion: string;
+  estado: string;
 }
 
 export interface Respuesta<T> {

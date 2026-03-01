@@ -42,15 +42,18 @@
           </div>
           <div class="stat-detail-item">
             <span class="stat-detail-label">Fecha de ingreso</span>
-            <span class="stat-detail-value">{{ prof.fechaIngreso }}</span>
+            <span class="stat-detail-value">{{ prof.fechaIngreso | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="stat-detail-item">
             <span class="stat-detail-label">Estado</span>
-            <span class="stat-detail-value">{{ prof.estado }}</span>
+            <span class="stat-detail-value" [ngClass]="getEstadoClass()">{{ prof.estado }}</span>
           </div>
         </div>
       </div>
     </div>
+
+
+
 
     <!-- ═══ COLUMNA DERECHA ═══ -->
     <div class="detail-right">

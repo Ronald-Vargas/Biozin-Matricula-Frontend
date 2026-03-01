@@ -52,7 +52,7 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     let result = [...this.profesores];
 
     if (this.filtroActivo !== 'todos') {
-      result = result.filter(p => p.estado === (this.filtroActivo === 'activo'));
+      result = result.filter(e => e.estado === this.filtroActivo);
     }
 
     if (this.terminoBusqueda) {
@@ -68,9 +68,14 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     this.profesoresFiltrados = result;
   }
 
-  getEstadoClass(estado: boolean): string {
-    return estado ? 'badge-success' : 'badge-danger';
+  getEstadoClass(estado: string): string {
+    switch (estado) {
+      case 'Activo':   return 'badge-success';
+      case 'Inactivo': return 'badge-warning';
+      default:         return 'badge-primary';
+    }
   }
+  
 
   verDetalles(id: number): void {
     this.router.navigate(['/profesores', id]);

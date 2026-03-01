@@ -9,6 +9,9 @@
   <div class="form-panel">
     <form [formGroup]="profesorForm" (ngSubmit)="onSubmit()">
 
+
+
+      
       <!-- ═══ Información Personal ═══ -->
       <h3 class="form-section-title">👤 Información Personal</h3>
       <div class="form-grid">
@@ -47,6 +50,11 @@
         </div>
       </div>
 
+
+
+
+
+
       <!-- ═══ Información de Contacto ═══ -->
       <h3 class="form-section-title">📱 Información de Contacto</h3>
       <div class="form-grid">
@@ -60,6 +68,13 @@
         </div>
       </div>
 
+
+
+
+
+
+
+
       <!-- ═══ Información Académica ═══ -->
       <h3 class="form-section-title">🎓 Información Académica</h3>
       <div class="form-grid">
@@ -72,6 +87,11 @@
           <input type="text" formControlName="especialidad" placeholder="Ingeniería de Software" />
         </div>
       </div>
+
+
+
+
+
 
       <!-- ═══ Dirección ═══ -->
       <h3 class="form-section-title">🏠 Dirección</h3>
@@ -94,6 +114,11 @@
         </div>
       </div>
 
+
+
+
+
+
       <!-- ═══ Datos del Sistema (solo en edición) ═══ -->
       <div *ngIf="esEdicion && profesorActual" class="auto-fields-info">
         <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
@@ -104,7 +129,7 @@
           </div>
           <div class="auto-field">
             <span class="auto-label">Fecha Ingreso:</span>
-            <span class="auto-value">{{ profesorActual.fechaIngreso }}</span>
+            <span class="auto-value">{{ profesorActual.fechaIngreso | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="auto-field">
             <span class="auto-label">Estado:</span>

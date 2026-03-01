@@ -13,7 +13,6 @@ import { ProfesorService } from '../../services/profesores.services';
 })
 export class ProfesorDetailComponent implements OnInit {
 
-  
     profesor?: Profesor;
     cargando = true;
     error = false;
@@ -61,12 +60,13 @@ export class ProfesorDetailComponent implements OnInit {
     return `${p.nombre} ${p.apellidoPaterno} ${p.apellidoMaterno || ''}`.trim();
   }
 
+
   getEstadoClass(): string {
     if (!this.profesor) return '';
     switch (this.profesor.estado) {
-      case true: return 'badge-success';
-      case false: return 'badge-danger';
-      default: return 'badge-warning';
+      case 'Activo':   return 'badge-success';
+      case 'Inactivo': return 'badge-warning';
+      default:         return 'badge-primary';
     }
   }
 

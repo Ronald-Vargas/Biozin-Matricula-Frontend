@@ -38,7 +38,7 @@ export class ProfesorService {
 
 
   getProfesorById(id: number): Observable<Profesor | undefined> {
-    return this.http.post<Respuesta<Profesor[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id })
+    return this.http.post<Respuesta<Profesor[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id, estado: '' })
       .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
   }
 
@@ -61,12 +61,12 @@ export class ProfesorService {
     const profesores = this.profesoresSubject.getValue();
     const profesor = profesores.find(c => c.idProfesor === id);
     if (profesor) {
-      const updated = { ...profesor, estado: !profesor.estado };
+      const updated = { ...profesor, estado: profesor.estado === 'Activo' ? 'Inactivo' : 'Activo' };
       this.updateProfesor(updated).subscribe();
     }
   }
 
   getProfesoresActivos(): Profesor[] {
-    return this.profesoresSubject.getValue().filter(c => c.estado === true);
+    return this.profesoresSubject.getValue().filter(c => c.estado === "activo");
   }
 }

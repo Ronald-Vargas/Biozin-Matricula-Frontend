@@ -20,6 +20,7 @@ export class ProfesorFormComponent implements OnInit {
   mensajeExito = false;
   profesorActual?: Profesor;
 
+  
   constructor(
     private fb: FormBuilder,
     private profesorService: ProfesorService,
@@ -42,6 +43,7 @@ export class ProfesorFormComponent implements OnInit {
       canton: [''],
       distrito: [''],
       direccion: [''],
+      
     });
   }
 
@@ -58,8 +60,9 @@ export class ProfesorFormComponent implements OnInit {
             nombre: profesor.nombre,
             apellidoPaterno: profesor.apellidoPaterno,
             apellidoMaterno: profesor.apellidoMaterno,
-            fechaNacimiento: profesor.fechaNacimiento,
+            fechaNacimiento: profesor.fechaNacimiento ? new Date(profesor.fechaNacimiento).toISOString().split('T')[0] : '',
             genero: profesor.genero,
+            estado: profesor.estado,
             nacionalidad: profesor.nacionalidad,
             emailPersonal: profesor.emailPersonal,
             telefono: profesor.telefono,
@@ -113,6 +116,7 @@ export class ProfesorFormComponent implements OnInit {
       const dto: import('../../models/profesores.model').CreateProfesorDto = {
         ...this.profesorForm.value,
         cursosAsignados: 0,
+        estado: 'Activo',
       };
       this.profesorService.createProfesor(dto).subscribe({
         next: (res) => {
