@@ -11,7 +11,7 @@
       </p>
     </div>
 
-    <button 
+    <button
       class="btn btn-primary banner-btn"
       (click)="toggleFormulario()">
       <span *ngIf="!mostrarFormulario">➕ Nuevo Curso</span>
@@ -20,21 +20,56 @@
   </div>
 </div>
 
-  <!-- Formulario de creación -->
-  <app-curso-form 
+  <!-- Formulario de creación / edición -->
+  <app-curso-form
     *ngIf="mostrarFormulario"
+    [cursoId]="cursoEditandoId"
     (cursoCreado)="onCursoCreado()">
   </app-curso-form>
 
+
+  <!-- Barra de filtros -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-icon">🔍</span>
+      <input
+        type="text"
+        class="filter-input"
+        placeholder="Buscar por nombre o código..."
+        [(ngModel)]="filtroNombre">
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-icon">📋</span>
+      <select class="filter-select" [(ngModel)]="filtroEstado">
+        <option value="todos">Todos los estados</option>
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+    </div>
+
+    <button
+      class="btn-clear-filters"
+      (click)="limpiarFiltros()"
+      *ngIf="filtroNombre || filtroEstado !== 'todos'">
+      ✕ Limpiar filtros
+    </button>
+
+    <span class="filter-count">
+      {{ cursosFiltrados.length }} de {{ cursos.length }} cursos
+    </span>
+  </div>
+
+
   <!-- Lista de cursos -->
   <div class="cursos-grid">
-    <div class="curso-card" *ngFor="let curso of cursos$ | async">
+    <div class="curso-card" *ngFor="let curso of cursosFiltrados">
       <div class="card-header">
         <div>
           <span class="card-code">{{ curso.codigo }}</span>
           <h3 class="card-title">{{ curso.nombre }}</h3>
         </div>
-        <span 
+        <span
           class="status-badge"
           [class.active]="curso.estado === true"
           [class.inactive]="curso.estado === false">
@@ -51,21 +86,35 @@
       </div>
 
       <div class="card-actions">
-        <button 
-          class="btn btn-secondary btn-sm" 
+        <button
+          class="btn btn-secondary btn-sm"
           (click)="verDetalles(curso.idCurso)">
           👁️ Ver Detalles
         </button>
-         <button 
-          class="btn btn-danger btn-sm" 
+         <button
+          class="btn btn-danger btn-sm"
           (click)="toggleEstado(curso.idCurso)">
           🗑️
+        </button>
+        <button
+        class="btn btn-warning btn-sm"
+        (click)="editarCurso(curso.idCurso)"
+        title="Editar">
+         ✏️
         </button>
       </div>
     </div>
   </div>
 
-  <div class="no-data" *ngIf="(cursos$ | async)?.length === 0">
+  <div class="no-data" *ngIf="cursosFiltrados.length === 0 && cursos.length > 0">
+    <div class="no-data-icon">🔍</div>
+    <p>No se encontraron cursos con los filtros aplicados</p>
+    <button class="btn btn-primary" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+  </div>
+
+  <div class="no-data" *ngIf="cursos.length === 0">
     <div class="no-data-icon">📖</div>
     <p>No hay cursos registrados</p>
     <button class="btn btn-primary" (click)="toggleFormulario()">

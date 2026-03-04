@@ -14,6 +14,11 @@ export const CURSOS_ROUTES: Routes = [
         .then(m => m.CursoFormComponent)
   },
   {
+    path: 'editar/:id',
+    loadComponent: () =>
+      import('./pages/curso-form/curso-form.component').then(m => m.CursoFormComponent),
+  },
+  {
     path: ':id',
     loadComponent: () =>
       import('./pages/curso-detail/curso-detail.component')

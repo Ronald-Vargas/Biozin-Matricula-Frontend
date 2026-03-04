@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CursoService } from '../../services/curso.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { CursoService } from '../../services/curso.service';
 
 @Component({
   selector: 'app-curso-form',
@@ -9,19 +10,21 @@ import { CommonModule } from '@angular/common';
   templateUrl: './curso-form.html',
   styleUrl: './curso-form.scss',
 })
+export class CursoFormComponent implements OnInit {
 
-
-
-
-export class CursoFormComponent {
-
+  @Input() cursoId: number | null = null;
   @Output() cursoCreado = new EventEmitter<void>();
+
   cursoForm: FormGroup;
   mensajeExito = false;
+  modoEdicion = false;
+  idCurso: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private cursoService: CursoService
+    private cursoService: CursoService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.cursoForm = this.fb.group({
       codigo: ['', [Validators.required, Validators.minLength(3)]],
@@ -31,21 +34,61 @@ export class CursoFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    const routeId = this.route.snapshot.paramMap.get('id');
+    const id = this.cursoId ?? (routeId ? +routeId : null);
+
+    if (id) {
+      this.modoEdicion = true;
+      this.idCurso = id;
+      this.cursoService.getCursoById(this.idCurso).subscribe(curso => {
+        if (curso) {
+          this.cursoForm.patchValue({
+            codigo: curso.codigo,
+            nombre: curso.nombre,
+            descripcion: curso.descripcion,
+            creditos: curso.creditos
+          });
+        }
+      });
+    }
+  }
+
   onSubmit(): void {
     if (this.cursoForm.valid) {
-      this.cursoService.createCurso(this.cursoForm.value).subscribe({
-        next: (res) => {
-          if (!res.blnError) {
-            this.mensajeExito = true;
-            setTimeout(() => {
-              this.mensajeExito = false;
-              this.cursoForm.reset();
-              this.cursoCreado.emit();
-            }, 2000);
-          }
-        },
-        error: (err) => console.error('Error al crear curso:', err)
-      });
+      if (this.modoEdicion && this.idCurso !== null) {
+        const cursoActualizado = { idCurso: this.idCurso, ...this.cursoForm.value, estado: true };
+        this.cursoService.updateCurso(cursoActualizado).subscribe({
+          next: (res) => {
+            if (!res.blnError) {
+              this.mensajeExito = true;
+              setTimeout(() => {
+                this.mensajeExito = false;
+                if (this.cursoId !== null) {
+                  this.cursoCreado.emit();
+                } else {
+                  this.router.navigate(['/cursos']);
+                }
+              }, 2000);
+            }
+          },
+          error: (err) => console.error('Error al actualizar curso:', err)
+        });
+      } else {
+        this.cursoService.createCurso(this.cursoForm.value).subscribe({
+          next: (res) => {
+            if (!res.blnError) {
+              this.mensajeExito = true;
+              setTimeout(() => {
+                this.mensajeExito = false;
+                this.cursoForm.reset();
+                this.cursoCreado.emit();
+              }, 2000);
+            }
+          },
+          error: (err) => console.error('Error al crear curso:', err)
+        });
+      }
     }
   }
 

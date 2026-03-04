@@ -14,6 +14,11 @@ export const CARRERAS_ROUTES: Routes = [
         .then(m => m.CarreraFormComponent)
   },
   {
+    path: 'editar/:id',
+    loadComponent: () =>
+      import('./pages/carrera-form/carreras-form.component').then(m => m.CarreraFormComponent),
+  },
+  {
     path: ':id',
     loadComponent: () =>
       import('./pages/carrera-detail/carreras-detail.component')

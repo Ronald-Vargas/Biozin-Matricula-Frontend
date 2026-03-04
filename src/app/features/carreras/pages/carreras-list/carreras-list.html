@@ -21,25 +21,56 @@
 
 
 
-  <!-- Formulario de creación -->
-  <app-carreras-form 
+  <!-- Formulario de creación / edición -->
+  <app-carreras-form
     *ngIf="mostrarFormulario"
+    [carreraId]="carreraEditandoId"
     (carreraCreada)="onCarreraCreada()">
   </app-carreras-form>
 
 
+  <!-- Barra de filtros -->
+  <div class="filter-bar">
+    <div class="filter-group">
+      <span class="filter-icon">🔍</span>
+      <input
+        type="text"
+        class="filter-input"
+        placeholder="Buscar por nombre o código..."
+        [(ngModel)]="filtroNombre">
+    </div>
 
+    <div class="filter-group">
+      <span class="filter-icon">📋</span>
+      <select class="filter-select" [(ngModel)]="filtroEstado">
+        <option value="todos">Todos los estados</option>
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+    </div>
+
+    <button
+      class="btn-clear-filters"
+      (click)="limpiarFiltros()"
+      *ngIf="filtroNombre || filtroEstado !== 'todos'">
+      ✕ Limpiar filtros
+    </button>
+
+    <span class="filter-count">
+      {{ carrerasFiltradas.length }} de {{ carreras.length }} carreras
+    </span>
+  </div>
 
 
   <!-- Lista de carreras -->
   <div class="carreras-grid">
-    <div class="carrera-card" *ngFor="let carrera of carreras$ | async">
+    <div class="carrera-card" *ngFor="let carrera of carrerasFiltradas">
       <div class="card-header">
         <div>
           <span class="card-code">{{ carrera.codigo }}</span>
           <h3 class="card-title">{{ carrera.nombre }}</h3>
         </div>
-        <span 
+        <span
           class="status-badge"
           [class.active]="carrera.estado === true"
           [class.inactive]="carrera.estado === false">
@@ -56,27 +87,41 @@
       </div>
 
       <div class="card-actions">
-        <button 
-          class="btn btn-secondary btn-sm" 
+        <button
+          class="btn btn-secondary btn-sm"
           (click)="verDetalles(carrera.idCarrera)">
           👁️ Ver Detalles
         </button>
-        <button 
-          class="btn btn-success btn-sm" 
+        <button
+          class="btn btn-success btn-sm"
           (click)="generarPlanEstudios(carrera)"
           title="Generar Plan de Estudios PDF">
           📄 Plan de Estudios
         </button>
-        <button 
-          class="btn btn-danger btn-sm" 
+        <button
+          class="btn btn-danger btn-sm"
           (click)="toggleEstado(carrera.idCarrera)">
           🗑️
+        </button>
+         <button
+           class="btn btn-warning btn-sm"
+           (click)="editarCarrera(carrera.idCarrera)"
+           title="Editar">
+           ✏️
         </button>
       </div>
     </div>
   </div>
 
-  <div class="no-data" *ngIf="(carreras$ | async)?.length === 0">
+  <div class="no-data" *ngIf="carrerasFiltradas.length === 0 && carreras.length > 0">
+    <div class="no-data-icon">🔍</div>
+    <p>No se encontraron carreras con los filtros aplicados</p>
+    <button class="btn btn-primary" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+  </div>
+
+  <div class="no-data" *ngIf="carreras.length === 0">
     <div class="no-data-icon">📚</div>
     <p>No hay carreras registradas</p>
     <button class="btn btn-primary" (click)="toggleFormulario()">
