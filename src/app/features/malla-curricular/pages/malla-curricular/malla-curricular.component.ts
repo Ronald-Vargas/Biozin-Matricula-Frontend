@@ -29,7 +29,6 @@ export class MallaCurricularComponent implements OnInit {
   async onCarreraSeleccionada(event: any): Promise<void> {
   const id = Number(event.target.value);
   if (id) {
-    this.mallaCurricular = await this.asignacionService.getMallaCurricular(id);
   } else {
     this.mallaCurricular = undefined;
   }
