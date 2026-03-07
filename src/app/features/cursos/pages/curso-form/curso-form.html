@@ -69,8 +69,51 @@
       </div>
     </div>
 
-    <button 
-      type="submit" 
+    <div class="form-row">
+      <div class="form-group">
+        <label for="precio">Precio del Curso *</label>
+        <input
+          type="number"
+          id="precio"
+          formControlName="precio"
+          placeholder="Ej: 150.00"
+          min="0"
+          step="0.01"
+          [class.invalid]="precio?.invalid && precio?.touched">
+        <div class="error-message" *ngIf="precio?.invalid && precio?.touched">
+          <span *ngIf="precio?.errors?.['required']">El precio es requerido</span>
+          <span *ngIf="precio?.errors?.['min']">El precio no puede ser negativo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          formControlName="tieneLaboratorio">
+        Lleva Laboratorio
+      </label>
+    </div>
+
+    <div class="form-group" *ngIf="tieneLaboratorio?.value">
+      <label for="precioLaboratorio">Precio de Laboratorio *</label>
+      <input
+        type="number"
+        id="precioLaboratorio"
+        formControlName="precioLaboratorio"
+        placeholder="Ej: 50.00"
+        min="0"
+        step="0.01"
+        [class.invalid]="precioLaboratorio?.invalid && precioLaboratorio?.touched">
+      <div class="error-message" *ngIf="precioLaboratorio?.invalid && precioLaboratorio?.touched">
+        <span *ngIf="precioLaboratorio?.errors?.['required']">El precio de laboratorio es requerido</span>
+        <span *ngIf="precioLaboratorio?.errors?.['min']">El precio no puede ser negativo</span>
+      </div>
+    </div>
+
+    <button
+      type="submit"
       class="btn btn-primary"
       [disabled]="cursoForm.invalid">
       ➕ Crear Curso

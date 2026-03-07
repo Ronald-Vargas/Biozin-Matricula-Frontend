@@ -23,6 +23,18 @@
           {{ curso?.estado }}
         </span>
       </div>
+      <div class="detail-item">
+        <span class="label">Precio:</span>
+        <span class="value">{{ curso?.precio | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Laboratorio:</span>
+        <span class="value">{{ curso?.tieneLaboratorio ? 'Sí' : 'No' }}</span>
+      </div>
+      <div class="detail-item" *ngIf="curso?.tieneLaboratorio">
+        <span class="label">Precio Laboratorio:</span>
+        <span class="value">{{ curso?.precioLaboratorio | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
     </div>
 
     <div class="description-section">

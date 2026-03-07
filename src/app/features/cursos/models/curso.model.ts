@@ -5,6 +5,9 @@ export interface Curso {
   nombre: string;
   descripcion: string;
   estado: boolean;
+  precio: number;
+  tieneLaboratorio: boolean;
+  precioLaboratorio?: number;
 }
 
 export interface CreateCursoDto {
@@ -12,6 +15,9 @@ export interface CreateCursoDto {
   nombre: string;
   descripcion: string;
   creditos: number;
+  precio: number;
+  tieneLaboratorio: boolean;
+  precioLaboratorio?: number;
 }
 
 export interface Respuesta<T> {

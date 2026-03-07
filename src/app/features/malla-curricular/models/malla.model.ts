@@ -32,18 +32,7 @@ export interface CursoMalla {
   prerequisitos?: string[];
 }
 
-export interface PreformaMatricula {
-  estudiante: {
-    codigo: string;
-    nombre: string;
-    carrera: string;
-  };
-  periodo: string;
-  cursos: CursoPreforma[];
-  subtotal: number;
-  descuentos: number;
-  total: number;
-}
+
 
 export interface CursoPreforma {
   codigo: string;
