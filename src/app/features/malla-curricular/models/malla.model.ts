@@ -3,7 +3,6 @@ export interface Asignacion {
   idCarrera: number;
   idCurso: number;
   semestre: number;
-  esObligatorio: boolean;
   prerequisitos?: number[]; // IDs de cursos prerequisitos
 }
 
@@ -11,7 +10,6 @@ export interface CreateAsignacionDto {
   idCarrera: number;
   idCurso: number;
   semestre: number;
-  esObligatorio: boolean;
   prerequisitos?: number[];
 }
 
@@ -31,7 +29,6 @@ export interface CursoMalla {
   codigo: string;
   nombre: string;
   creditos: number;
-  esObligatorio: boolean;
   prerequisitos?: string[];
 }
 

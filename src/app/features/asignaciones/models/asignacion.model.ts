@@ -4,6 +4,7 @@ export interface Asignacion {
   idCarrera: number;
   idCurso: number;
   semestre: number;
+  prerequisitos?: number[];
 }
 
 export interface CreateAsignacionDto {
@@ -44,6 +45,6 @@ export interface CursoMalla {
   codigo: string;
   nombre: string;
   creditos: number;
-  esObligatorio: boolean;
+  esObligatorio?: boolean;
   prerequisitos?: string[];
 }

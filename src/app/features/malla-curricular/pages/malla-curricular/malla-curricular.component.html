@@ -15,6 +15,10 @@
       </select>
     </div>
 
+    <div *ngIf="cargando" class="no-data">
+      <p>Cargando malla curricular...</p>
+    </div>
+
     <div *ngIf="mallaCurricular">
       <h2 class="section-title">{{ mallaCurricular?.carrera }}</h2>
 
