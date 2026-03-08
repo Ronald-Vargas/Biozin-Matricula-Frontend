@@ -37,7 +37,7 @@ export class CarreraService {
 
   getCarreraById(id: number): Observable<Carrera | undefined> {
     return this.http.post<Respuesta<Carrera[]>>(`${this.apiUrl}/Obtener`, { idCarrera: id })
-      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
+      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idCarrera === id)));
   }
 
   createCarrera(dto: CreateCarreraDto): Observable<Respuesta<number>> {

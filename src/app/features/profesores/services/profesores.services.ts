@@ -39,7 +39,7 @@ export class ProfesorService {
 
   getProfesorById(id: number): Observable<Profesor | undefined> {
     return this.http.post<Respuesta<Profesor[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id, estado: '' })
-      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
+      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idProfesor === id)));
   }
 
   createProfesor(dto: CreateProfesorDto): Observable<Respuesta<number>> {

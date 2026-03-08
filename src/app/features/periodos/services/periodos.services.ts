@@ -39,7 +39,7 @@ export class PeriodoService {
 
   getPeriodoById(id: number): Observable<Periodo | undefined> {
     return this.http.post<Respuesta<Periodo[]>>(`${this.apiUrl}/Obtener`, { idPeriodo: id })
-      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
+      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idPeriodo === id)));
   }
 
   createPeriodo(dto: CreatePeriodoDto): Observable<Respuesta<number>> {

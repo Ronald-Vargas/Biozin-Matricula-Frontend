@@ -37,7 +37,7 @@ export class CursoService {
 
   getCursoById(id: number): Observable<Curso | undefined> {
     return this.http.post<Respuesta<Curso[]>>(`${this.apiUrl}/Obtener`, { idCurso: id })
-      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno[0]));
+      .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idCurso === id)));
   }
 
   createCurso(dto: CreateCursoDto): Observable<Respuesta<number>> {
@@ -49,6 +49,7 @@ export class CursoService {
     return this.http.put<Respuesta<number>>(`${this.apiUrl}/Modificar`, curso)
       .pipe(tap(() => this.cargarCursos()));
   }
+
 
 
   toggleEstado(id: number): void {
