@@ -61,13 +61,9 @@ export class ProfesorDetailComponent implements OnInit {
   }
 
 
-  getEstadoClass(): string {
-    if (!this.profesor) return '';
-    switch (this.profesor.estado) {
-      case true:  return 'badge-success';
-      case false: return 'badge-warning';
-      default:    return 'badge-primary';
-    }
+  getEstadoClass(estado: boolean): string {
+    return estado ? 'badge-active' : 'badge-inactive';
+  }
   }
 
 
@@ -77,5 +73,3 @@ export class ProfesorDetailComponent implements OnInit {
 
 
 
-
-  }

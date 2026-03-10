@@ -38,7 +38,7 @@ export class ProfesorService {
 
 
   getProfesorById(id: number): Observable<Profesor | undefined> {
-    return this.http.post<Respuesta<Profesor[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id, estado: '' })
+    return this.http.post<Respuesta<Profesor[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id })
       .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idProfesor === id)));
   }
 

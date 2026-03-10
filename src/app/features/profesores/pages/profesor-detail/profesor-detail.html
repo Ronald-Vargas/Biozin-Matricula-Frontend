@@ -18,7 +18,7 @@
       <div class="profile-card">
         <div class="profile-avatar">{{ getIniciales() }}</div>
         <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
-        <span class="status-badge" [ngClass]="getEstadoClass()">{{ prof.estado }}</span>
+        <span class="status-badge" [ngClass]="getEstadoClass(prof.estado)">{{ prof.estado ? 'Activo' : 'Inactivo' }}</span>
 
         <div class="profile-meta">
           <div class="meta-item">
@@ -46,7 +46,7 @@
           </div>
           <div class="stat-detail-item">
             <span class="stat-detail-label">Estado</span>
-            <span class="stat-detail-value" [ngClass]="getEstadoClass()">{{ prof.estado }}</span>
+            <span class="stat-detail-value" [ngClass]="getEstadoClass(prof.estado)">{{ prof.estado ? 'Activo' : 'Inactivo' }}</span>
           </div>
         </div>
       </div>
