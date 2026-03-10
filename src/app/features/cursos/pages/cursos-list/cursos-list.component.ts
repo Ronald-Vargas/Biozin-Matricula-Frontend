@@ -80,4 +80,13 @@ export class CursosListComponent implements OnInit, OnDestroy {
     this.cursoEditandoId = id;
     this.mostrarFormulario = true;
   }
+
+
+  getToggleButtonConfig(estado: boolean): { icon: string; label: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️' , label: 'Desactivar', tooltip: 'Desactivar' }
+      : { icon: '✅', label: 'Activar', tooltip: 'Activar' };
+  }
+
+  
 }

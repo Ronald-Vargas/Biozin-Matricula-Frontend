@@ -28,16 +28,14 @@
         type="text"
         class="search-input"
         placeholder="Buscar por nombre, cédula o especialidad..."
-        [(ngModel)]="terminoBusqueda"
-        (input)="buscar()"
-      />
+        [(ngModel)]="filtroNombre">
     </div>
 
     <!-- Filtros -->
     <div class="filter-buttons">
-      <button class="filter-btn" [class.active]="filtroActivo === 'todos'" (click)="filtrar('todos')">Todos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'activo'" (click)="filtrar('activo')">Activos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtrar('activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
     </div>
 
     <!-- Tabla -->
@@ -96,9 +94,27 @@
 
             <td>
               <div class="action-buttons">
-                <button class="btn-icon btn-view" (click)="verDetalles(prof.idProfesor)" title="Ver detalles">👁️</button>
-                <button class="btn-icon btn-edit" (click)="editarProfesor(prof.idProfesor)" title="Editar">✏️</button>
-                <button class="btn-icon btn-delete"  title="Eliminar">🗑️</button>
+                <button 
+                  class="btn-icon btn-view" 
+                  (click)="verDetalles(prof.idProfesor)" 
+                  title="Ver detalles">
+                  👁️
+                </button>
+                <button
+                  class="btn-icon btn-edit" 
+                  (click)="editarProfesor(prof.idProfesor)" 
+                  title="Editar">
+                  ✏️
+                </button>
+                <button
+                  class="btn-icon"
+                  [class.btn-danger]="prof.estado === true"
+                  [class.btn-success]="prof.estado === false"
+                  [title]="getToggleButtonConfig(prof.estado).tooltip"
+                  (click)="toggleEstado(prof.idProfesor)">
+                  {{ getToggleButtonConfig(prof.estado).icon }}
+                </button>
+                
               </div>
             </td>
           </tr>

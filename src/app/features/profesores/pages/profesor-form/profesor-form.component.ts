@@ -116,7 +116,7 @@ export class ProfesorFormComponent implements OnInit {
       const dto: import('../../models/profesores.model').CreateProfesorDto = {
         ...this.profesorForm.value,
         cursosAsignados: 0,
-        estado: 'Activo',
+        estado: true,
       };
       this.profesorService.createProfesor(dto).subscribe({
         next: (res) => {

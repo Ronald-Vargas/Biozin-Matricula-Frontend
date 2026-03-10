@@ -92,15 +92,18 @@
           👁️ Ver Detalles
         </button>
          <button
-          class="btn btn-danger btn-sm"
+          class="btn btn-sm"
+          [class.btn-danger]="curso.estado === true"
+          [class.btn-success]="curso.estado === false"
+          [title]="getToggleButtonConfig(curso.estado).tooltip"
           (click)="toggleEstado(curso.idCurso)">
-          🗑️
+          {{ getToggleButtonConfig(curso.estado).icon }} {{ getToggleButtonConfig(curso.estado).label }}
         </button>
         <button
-        class="btn btn-warning btn-sm"
-        (click)="editarCurso(curso.idCurso)"
-        title="Editar">
-         ✏️
+          class="btn btn-warning btn-sm"
+          (click)="editarCurso(curso.idCurso)"
+          title="Editar">
+          ✏️
         </button>
       </div>
     </div>

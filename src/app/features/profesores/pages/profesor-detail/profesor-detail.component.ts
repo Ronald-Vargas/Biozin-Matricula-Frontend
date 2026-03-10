@@ -64,11 +64,12 @@ export class ProfesorDetailComponent implements OnInit {
   getEstadoClass(): string {
     if (!this.profesor) return '';
     switch (this.profesor.estado) {
-      case 'Activo':   return 'badge-success';
-      case 'Inactivo': return 'badge-warning';
-      default:         return 'badge-primary';
+      case true:  return 'badge-success';
+      case false: return 'badge-warning';
+      default:    return 'badge-primary';
     }
   }
+
 
 
 

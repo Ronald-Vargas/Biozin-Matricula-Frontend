@@ -74,7 +74,7 @@
           class="status-badge"
           [class.active]="carrera.estado === true"
           [class.inactive]="carrera.estado === false">
-          {{ carrera.estado }}
+          {{ carrera.estado ? 'Activo' : 'Inactivo' }}
         </span>
       </div>
 
@@ -98,10 +98,13 @@
           title="Generar Plan de Estudios PDF">
           📄 Plan de Estudios
         </button>
-        <button
-          class="btn btn-danger btn-sm"
+        <button 
+          class="btn btn-sm"
+          [class.btn-danger]="carrera.estado === true"
+          [class.btn-success]="carrera.estado === false"
+          [title]="getToggleButtonConfig(carrera.estado).tooltip"
           (click)="toggleEstado(carrera.idCarrera)">
-          🗑️
+          {{ getToggleButtonConfig(carrera.estado).icon }} {{ getToggleButtonConfig(carrera.estado).label }}
         </button>
          <button
            class="btn btn-warning btn-sm"

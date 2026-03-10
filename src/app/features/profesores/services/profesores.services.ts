@@ -56,12 +56,13 @@ export class ProfesorService {
     const profesores = this.profesoresSubject.getValue();
     const profesor = profesores.find(c => c.idProfesor === id);
     if (profesor) {
-      const updated = { ...profesor, estado: profesor.estado === 'Activo' ? 'Inactivo' : 'Activo' };
+      const updated = { ...profesor, estado: !profesor.estado };
       this.updateProfesor(updated).subscribe();
     }
   }
 
   getProfesoresActivos(): Profesor[] {
-    return this.profesoresSubject.getValue().filter(c => c.estado === "activo");
+    return this.profesoresSubject.getValue().filter(c => c.estado === true);
   }
+
 }

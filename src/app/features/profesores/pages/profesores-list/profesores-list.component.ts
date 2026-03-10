@@ -17,9 +17,8 @@ import { ProfesorService } from '../../services/profesores.services';
 export class ProfesoresListComponent implements OnInit, OnDestroy {
 
   profesores: Profesor[] = [];
-  profesoresFiltrados: Profesor[] = [];
-  terminoBusqueda = '';
-  filtroActivo: 'todos' | 'activo' | 'inactivo' = 'todos';
+  filtroNombre = '';
+  filtroEstado = 'todos';
 
   private sub?: Subscription;
 
@@ -31,7 +30,6 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.profesorService.getProfesores().subscribe(profesores => {
       this.profesores = profesores;
-      this.aplicarFiltros();
     });
   }
 
@@ -39,43 +37,20 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  buscar(): void {
-    this.aplicarFiltros();
-  }
 
-  filtrar(filtro: 'todos' | 'activo' | 'inactivo'): void {
-    this.filtroActivo = filtro;
-    this.aplicarFiltros();
-  }
-
-  private aplicarFiltros(): void {
-    let result = [...this.profesores];
-
-    if (this.filtroActivo !== 'todos') {
-      result = result.filter(e => e.estado === this.filtroActivo);
+  get profesoresFiltrados(): Profesor[] {
+      return this.profesores.filter(c => {
+        const term = this.filtroNombre.toLowerCase();
+        const matchNombre = !term || c.nombre.toLowerCase().includes(term) || c.cedula.toLowerCase().includes(term) || c.especialidad.toLowerCase().includes(term);
+        const matchEstado =
+          this.filtroEstado === 'todos' ||
+          (this.filtroEstado === 'activo' && c.estado === true) ||
+          (this.filtroEstado === 'inactivo' && c.estado === false);
+        return matchNombre && matchEstado;
+      });
     }
 
-    if (this.terminoBusqueda) {
-      const term = this.terminoBusqueda.toLowerCase();
-      result = result.filter(p =>
-        p.nombre.toLowerCase().includes(term) ||
-        p.apellidoPaterno.toLowerCase().includes(term) ||
-        p.cedula.toString().includes(term) ||
-        p.especialidad.toLowerCase().includes(term)
-      );
-    }
 
-    this.profesoresFiltrados = result;
-  }
-
-  getEstadoClass(estado: string): string {
-    switch (estado) {
-      case 'Activo':   return 'badge-success';
-      case 'Inactivo': return 'badge-warning';
-      default:         return 'badge-primary';
-    }
-  }
-  
 
   verDetalles(id: number): void {
     this.router.navigate(['/profesores', id]);
@@ -95,5 +70,19 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
 
   getNombreCompleto(prof: Profesor): string {
     return `${prof.nombre} ${prof.apellidoPaterno} ${prof.apellidoMaterno || ''}`.trim();
+  }
+
+    filtrar(estado: string): void {
+    this.filtroEstado = estado;
+  }
+
+  getEstadoClass(estado: boolean): string {
+    return estado ? 'badge-active' : 'badge-inactive';
+  }
+
+  getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️', tooltip: 'Desactivar' }
+      : { icon: '✅', tooltip: 'Activar' };
   }
 }

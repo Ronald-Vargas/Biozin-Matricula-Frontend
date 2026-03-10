@@ -28,8 +28,6 @@ export class CarrerasListComponent implements OnInit, OnDestroy {
 
   constructor(
     private carreraService: CarreraService,
-    private asignacionService: AsignacionService,
-    private pdfService: PdfGeneratorService,
     private router: Router
   ) {}
 
@@ -84,6 +82,26 @@ export class CarrerasListComponent implements OnInit, OnDestroy {
     this.carreraEditandoId = id;
     this.mostrarFormulario = true;
   }
+
+
+    getToggleButtonConfig(estado: boolean): { icon: string; label: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️' , label: 'Desactivar', tooltip: 'Desactivar' }
+      : { icon: '✅', label: 'Activar', tooltip: 'Activar' };
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   async generarPlanEstudios(carrera: Carrera): Promise<void> {
     /*const malla = await this.asignacionService.getMallaCurricular(carrera.idCarrera);
