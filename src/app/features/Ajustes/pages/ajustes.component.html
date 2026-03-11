@@ -1,0 +1,124 @@
+<div class="ajustes-container">
+
+  <div class="page-header">
+    <h1 class="page-title">Configuración de la Universidad</h1>
+  </div>
+
+  <div class="card" *ngIf="!cargando">
+    <div class="form-grid">
+
+      <!-- Nombre -->
+      <div class="form-group full">
+        <label class="form-label">Nombre de la Universidad</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="Ej. Universidad Tecnológica de Biozin"
+          [(ngModel)]="form.nombreUniversidad"
+        />
+      </div>
+
+      <!-- Sitio Web -->
+      <div class="form-group">
+        <label class="form-label">Sitio Web</label>
+        <div class="input-icon-wrapper">
+          <span class="input-icon">🌐</span>
+          <input
+            class="form-input with-icon"
+            type="url"
+            placeholder="https://www.ejemplo.edu"
+            [(ngModel)]="form.sitioWeb"
+          />
+        </div>
+      </div>
+
+      <!-- Correo Institucional -->
+      <div class="form-group">
+        <label class="form-label">Correo Institucional</label>
+        <div class="input-icon-wrapper">
+          <span class="input-icon">✉️</span>
+          <input
+            class="form-input with-icon"
+            type="email"
+            placeholder="contacto@universidad.edu"
+            [(ngModel)]="form.correoInstitucional"
+          />
+        </div>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="form-group">
+        <label class="form-label">Teléfono</label>
+        <input
+          class="form-input"
+          type="tel"
+          placeholder="+506 0000-0000"
+          [(ngModel)]="form.telefono"
+        />
+      </div>
+
+      <!-- Dirección -->
+      <div class="form-group">
+        <label class="form-label">Dirección</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="Calle, número de edificio, oficina"
+          [(ngModel)]="form.direccion"
+        />
+      </div>
+
+      <!-- Separador ubicación -->
+      <div class="section-divider full">
+        <span class="divider-label">UBICACIÓN GEOGRÁFICA</span>
+      </div>
+
+      <!-- Provincia -->
+      <div class="form-group provincia">
+        <label class="form-label">Provincia</label>
+        <select class="form-select" [(ngModel)]="form.privincia">
+          <option value="">Seleccione...</option>
+          <option *ngFor="let p of provincias" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+      <!-- Cantón -->
+      <div class="form-group">
+        <label class="form-label">Cantón</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="Ej. Cantón Central"
+          [(ngModel)]="form.canton"
+        />
+      </div>
+
+      <!-- Distrito -->
+      <div class="form-group">
+        <label class="form-label">Distrito</label>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="Ej. Distrito Primero"
+          [(ngModel)]="form.distrito"
+        />
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <button class="btn-discard" (click)="descartar()" [disabled]="guardando">Descartar</button>
+      <button class="btn-save" (click)="guardar()" [disabled]="guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div class="loading-state" *ngIf="cargando">
+    <div class="spinner"></div>
+    <p>Cargando configuración...</p>
+  </div>
+
+</div>

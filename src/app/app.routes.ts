@@ -59,6 +59,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/OfertaAcademica/ofertas.routes').then((m) => m.OFERTA_ACADEMICA_ROUTES),
       },
+      {
+        path: 'ajustes',
+        loadChildren: () =>
+          import('./features/Ajustes/ajustes.routes').then((m) => m.AJUSTES_ROUTES),
+      },
     ],
   },
 

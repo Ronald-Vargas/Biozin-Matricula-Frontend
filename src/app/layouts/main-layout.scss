@@ -302,6 +302,17 @@
   }
 }
 
+.settings-btn {
+  font-size: 1.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: rotate(30deg);
+  }
+}
+
 /* ── Content Area ── */
 .content-area {
   padding: 2rem;
