@@ -72,7 +72,7 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     return `${prof.nombre} ${prof.apellidoPaterno} ${prof.apellidoMaterno || ''}`.trim();
   }
 
-    filtrar(estado: string): void {
+  filtrar(estado: string): void {
     this.filtroEstado = estado;
   }
 

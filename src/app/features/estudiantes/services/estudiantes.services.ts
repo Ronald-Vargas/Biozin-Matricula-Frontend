@@ -31,16 +31,14 @@ export class EstudianteService {
     });
 }
 
-
   getEstudiantes(): Observable<Estudiante[]> {
     return this.estudiantes$;
   }
 
 
   getEstudianteById(id: number): Observable<Estudiante | undefined> {
-    return this.estudiantes$.pipe(
-      map(estudiantes => estudiantes.find(e => Number(e.idEstudiante) === Number(id)))
-    );
+    return this.http.post<Respuesta<Estudiante[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id })
+          .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idEstudiante === id)));
   }
 
   createEstudiante(dto: CreateEstudianteDto): Observable<Respuesta<number>> {
@@ -57,12 +55,12 @@ export class EstudianteService {
     const estudiantes = this.estudiantesSubject.getValue();
     const estudiante = estudiantes.find(c => c.idEstudiante === id);
     if (estudiante) {
-      const updated = { ...estudiante, estadoEstudiante: estudiante.estadoEstudiante === 'Activo' ? 'Inactivo' : 'Activo' };
+      const updated = { ...estudiante, estadoEstudiante: !estudiante.estadoEstudiante };
       this.updateEstudiante(updated).subscribe();
     }
   }
 
   getEstudiantesActivos(): Estudiante[] {
-    return this.estudiantesSubject.getValue().filter(c => c.estadoEstudiante === 'Activo');
+    return this.estudiantesSubject.getValue().filter(c => c.estadoEstudiante === true);
   }
 }

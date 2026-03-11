@@ -38,6 +38,9 @@ export class ProfesorDetailComponent implements OnInit {
       });
     }
   
+
+
+    
     volver(): void {
       this.router.navigate(['/profesores']);
     }
@@ -49,7 +52,8 @@ export class ProfesorDetailComponent implements OnInit {
     }
 
 
-    getIniciales(): string {
+
+  getIniciales(): string {
     if (!this.profesor) return '';
     return (this.profesor.nombre.charAt(0) + this.profesor.apellidoPaterno.charAt(0)).toUpperCase();
   }

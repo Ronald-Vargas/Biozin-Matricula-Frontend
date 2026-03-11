@@ -26,17 +26,15 @@
       <input
         type="text"
         class="search-input"
-        placeholder="Buscar por nombre, cédula o correo..."
-        [(ngModel)]="terminoBusqueda"
-        (input)="buscar()"
-      />
+        placeholder="Buscar por nombre, cédula o correo institucional..."
+        [(ngModel)]="filtroNombre">
     </div>
 
     <!-- Filtros -->
     <div class="filter-buttons">
-      <button class="filter-btn" [class.active]="filtroActivo === 'todos'" (click)="filtrar('todos')">Todos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'Activo'" (click)="filtrar('Activo')">Activos</button>
-      <button class="filter-btn" [class.active]="filtroActivo === 'Inactivo'" (click)="filtrar('Inactivo')">Inactivos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'Activo'" (click)="filtrar('Activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'Inactivo'" (click)="filtrar('Inactivo')">Inactivos</button>
     </div>
 
     <!-- Tabla -->
@@ -82,14 +80,32 @@
             </td>
 
             <td>
-              <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">{{ est.estadoEstudiante }}</span>
-            </td>
+                <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">
+                {{ est.estadoEstudiante ? 'Activo' : 'Inactivo' }}
+              </span>            </td>
 
             <td>
               <div class="action-buttons">
-                <button class="btn-icon btn-view" (click)="verDetalle(est)" title="Ver detalles">👁️</button>
-                <button class="btn-icon btn-edit" (click)="editarEstudiante(est)" title="Editar">✏️</button>
-                <button class="btn-icon btn-delete"  title="Eliminar">🗑️</button>
+                <button 
+                  class="btn-icon btn-view" 
+                  (click)="verDetalle(est)" 
+                  title="Ver detalles">
+                  👁️
+                </button>
+                <button 
+                  class="btn-icon btn-edit" 
+                  (click)="editarEstudiante(est)" 
+                  title="Editar">
+                  ✏️
+                </button>
+                <button 
+                  class="btn-icon"
+                  [class.btn-danger]="est.estadoEstudiante === true"
+                  [class.btn-success]="est.estadoEstudiante === false"
+                  [title]="getToggleButtonConfig(est.estadoEstudiante).tooltip"
+                  (click)="toggleEstado(est.idEstudiante)">
+                  {{ getToggleButtonConfig(est.estadoEstudiante).icon }}
+                </button>
               </div>
             </td>
           </tr>

@@ -33,6 +33,8 @@ export class EstudianteDetailComponent implements OnInit {
     });
   }
 
+
+
   getCarreraNombre(): string {
     if (!this.estudiante) return '';
     const c = this.carreras.find(c => c.idCarrera === this.estudiante!.idCarrera);
@@ -61,15 +63,6 @@ export class EstudianteDetailComponent implements OnInit {
     return `${est.nombre} ${est.apellidoPaterno} ${est.apellidoMaterno || ''}`.trim();
   }
 
-  getEstadoClass(): string {
-    if (!this.estudiante) return '';
-    switch (this.estudiante.estadoEstudiante) {
-      case 'Activo':   return 'badge-success';
-      case 'Inactivo': return 'badge-warning';
-      default:         return 'badge-primary';
-    }
-  }
-
   getEdad(): number {
     if (!this.estudiante?.fechaNacimiento) return 0;
     const hoy = new Date();
@@ -89,4 +82,12 @@ export class EstudianteDetailComponent implements OnInit {
   volver(): void {
     this.router.navigate(['/estudiantes']);
   }
+
+
+
+
+  getEstadoClass(estadoEstudiante: boolean): string {
+    return estadoEstudiante ? 'badge-active' : 'badge-inactive';
+  }
+
 }

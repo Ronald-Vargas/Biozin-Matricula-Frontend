@@ -22,7 +22,7 @@
         <div class="profile-avatar">{{ getIniciales() }}</div>
         <h3 class="profile-name">{{ getNombreCompleto() }}</h3>
         <p class="profile-code">Carnet: {{ est.carnet }}</p>
-        <span class="status-badge" [ngClass]="getEstadoClass()">{{ est.estadoEstudiante }}</span>
+        <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">{{ est.estadoEstudiante ? 'Activo' : 'Inactivo' }}</span>
 
         <div class="profile-meta">
           <div class="meta-item">

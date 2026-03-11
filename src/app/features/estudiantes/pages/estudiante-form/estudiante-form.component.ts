@@ -21,7 +21,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   estudianteId: number | null = null;
   titulo: string = '📝 Nuevo Estudiante';
 
-  private estudianteOriginal: Estudiante | null = null;
+  estudianteOriginal?: Estudiante;
 
   form = {
     // ── Información Personal ──
@@ -67,7 +67,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     emailInstitucional: '',
     semestreActual: 1,
     fechaIngreso: '',
-    estadoEstudiante: 'Activo',
+    estadoEstudiante: true,
   };
 
   carreras: Carrera[] = [];

@@ -32,7 +32,7 @@ export interface Estudiante {
   carreraNombre: string;
   fechaIngreso: string;
   semestreActual: number;
-  estadoEstudiante: string;
+  estadoEstudiante: boolean;
   tipoBeca: string;
   condicionSocioeconomica?: string;
   trabaja: boolean;
@@ -80,7 +80,7 @@ export interface CreateEstudianteDto {
 
   // Académico
   idCarrera: number;
-  estadoEstudiante: string;
+  estadoEstudiante: boolean;
   tipoBeca: string;
   condicionSocioeconomica?: string;
   trabaja: boolean;

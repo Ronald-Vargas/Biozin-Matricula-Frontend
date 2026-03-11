@@ -20,9 +20,8 @@ import { CarreraService } from '../../../carreras/services/carrera.service';
 export class EstudiantesListComponent implements OnInit, OnDestroy {
 
   estudiantes: Estudiante[] = [];
-  estudiantesFiltrados: Estudiante[] = [];
-  terminoBusqueda = '';
-  filtroActivo: 'todos' | 'Activo' | 'Inactivo' = 'todos';
+  filtroNombre = '';
+  filtroEstado = 'todos';
 
   private sub?: Subscription;
 
@@ -47,7 +46,6 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
           carreraCodigo: carrera?.codigo ?? '',
         };
       });
-      this.aplicarFiltros();
     });
   }
 
@@ -59,6 +57,19 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
 
 
 
+  get estudiantesFiltrados(): Estudiante[] {
+        return this.estudiantes.filter(c => {
+          const term = this.filtroNombre.toLowerCase();
+          const matchNombre = !term || c.nombre.toLowerCase().includes(term) || c.cedula.toLowerCase().includes(term) || c.emailInstitucional.toLowerCase().includes(term);
+          const matchEstado =
+            this.filtroEstado === 'todos' ||
+            (this.filtroEstado === 'activo' && c.estadoEstudiante === true) ||
+            (this.filtroEstado === 'inactivo' && c.estadoEstudiante === false);
+          return matchNombre && matchEstado;
+        });
+      }
+
+
 
 
   nuevoEstudiante(): void {
@@ -66,46 +77,18 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   }
 
 
-  buscar(): void {
-    this.aplicarFiltros();
-  }
-
-
-  filtrar(filtro: 'todos' | 'Activo' | 'Inactivo'): void {
-    this.filtroActivo = filtro;
-    this.aplicarFiltros();
-  }
-
-
-  private aplicarFiltros(): void {
-    let result = [...this.estudiantes];
-
-    if (this.filtroActivo !== 'todos') {
-      result = result.filter(e => e.estadoEstudiante === this.filtroActivo);
-    }
-
-    if (this.terminoBusqueda) {
-      const term = this.terminoBusqueda.toLowerCase();
-      result = result.filter(p =>
-        p.nombre.toLowerCase().includes(term) ||
-        p.apellidoPaterno.toLowerCase().includes(term) ||
-        p.apellidoMaterno?.toLowerCase().includes(term) ||
-        p.cedula.toString().includes(term) ||
-        p.carreraNombre.toLowerCase().includes(term)
-      );
-    }
-
-    this.estudiantesFiltrados = result;
+  filtrar(estado: string): void {
+    this.filtroEstado = estado;
   }
 
 
 
-  getEstadoClass(estado: string): string {
-    switch (estado) {
-      case 'Activo':   return 'badge-success';
-      case 'Inactivo': return 'badge-warning';
-      default:         return 'badge-primary';
-    }
+  getEstadoClass(estado: boolean): string {
+    return estado ? 'badge-active' : 'badge-inactive';
+  }
+
+  toggleEstado(idProfesor: number): void {
+    this.estudianteService.toggleEstado(idProfesor);
   }
 
 
@@ -125,6 +108,12 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
 
   getNombreCompleto(est: Estudiante): string {
     return `${est.nombre} ${est.apellidoPaterno} ${est.apellidoMaterno || ''}`.trim();
+  }
+
+  getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️', tooltip: 'Desactivar' }
+      : { icon: '✅', tooltip: 'Activar' };
   }
 
 }
