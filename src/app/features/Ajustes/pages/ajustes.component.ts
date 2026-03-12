@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Ajustes, CreateAjustesDto } from '../model/ajustes.model';
+import { CreateAjustesDto } from '../model/ajustes.model';
 import { AjustesService } from '../services/ajustes.services';
 
 @Component({
@@ -62,13 +62,18 @@ export class AjustesComponent implements OnInit {
     this.form = { ...this.originalForm };
   }
 
+  
   guardar(): void {
     this.guardando = true;
-    const ajuste: Ajustes = { idAjuste: this.idAjuste!, ...this.form };
-    this.ajustesService.updateAjustes(ajuste).subscribe({
+    const operacion$ = this.idAjuste === null
+      ? this.ajustesService.crearAjustes(this.form)
+      : this.ajustesService.updateAjustes({ idAjuste: this.idAjuste, ...this.form });
+
+    operacion$.subscribe({
       next: (res) => {
         if (!res.blnError) {
           this.originalForm = { ...this.form };
+          if (res.valorRetorno) this.idAjuste = res.valorRetorno;
         }
         this.guardando = false;
       },

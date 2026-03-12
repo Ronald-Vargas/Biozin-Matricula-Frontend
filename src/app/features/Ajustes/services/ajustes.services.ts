@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Ajustes, Respuesta } from '../model/ajustes.model';
+import { Ajustes, CreateAjustesDto, Respuesta } from '../model/ajustes.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -29,6 +29,11 @@ export class AjustesService {
 
   cargasAjustes(): Observable<Respuesta<Ajustes>> {
     return this.http.get<Respuesta<Ajustes>>(`${this.apiUrl}/Obtener`);
+  }
+
+  crearAjustes(ajuste: CreateAjustesDto): Observable<Respuesta<number>> {
+    return this.http.post<Respuesta<number>>(`${this.apiUrl}/Insertar`, ajuste)
+      .pipe(tap(() => this.cargarAjustes()));
   }
 
   updateAjustes(ajuste: Ajustes): Observable<Respuesta<number>> {
