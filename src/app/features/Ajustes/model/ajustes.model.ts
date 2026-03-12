@@ -5,7 +5,7 @@ export interface Ajustes {
     correoInstitucional: string,
     telefono: string,
     direccion: string,
-    privincia: string,
+    provincia: string,
     canton: string,
     distrito: string,
 }
@@ -17,7 +17,7 @@ export interface CreateAjustesDto {
     correoInstitucional: string,
     telefono: string,
     direccion: string,
-    privincia: string,
+    provincia: string,
     canton: string,
     distrito: string,
 }

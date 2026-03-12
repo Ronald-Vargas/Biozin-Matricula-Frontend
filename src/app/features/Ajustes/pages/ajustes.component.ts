@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CreateAjustesDto } from '../model/ajustes.model';
+import { Ajustes, CreateAjustesDto } from '../model/ajustes.model';
 import { AjustesService } from '../services/ajustes.services';
 
 @Component({
@@ -14,6 +14,7 @@ import { AjustesService } from '../services/ajustes.services';
 export class AjustesComponent implements OnInit {
   cargando = true;
   guardando = false;
+  private idAjuste: number | null = null;
 
   form: CreateAjustesDto = {
     nombreUniversidad: '',
@@ -21,7 +22,7 @@ export class AjustesComponent implements OnInit {
     correoInstitucional: '',
     telefono: '',
     direccion: '',
-    privincia: '',
+    provincia: '',
     canton: '',
     distrito: '',
   };
@@ -41,10 +42,11 @@ export class AjustesComponent implements OnInit {
   constructor(private ajustesService: AjustesService) {}
 
   ngOnInit(): void {
-    this.ajustesService.getAjustes().subscribe({
+    this.ajustesService.cargasAjustes().subscribe({
       next: (res) => {
         if (!res.blnError && res.valorRetorno) {
           const { idAjuste, ...datos } = res.valorRetorno;
+          this.idAjuste = idAjuste;
           this.form = { ...datos };
           this.originalForm = { ...datos };
         }
@@ -62,7 +64,8 @@ export class AjustesComponent implements OnInit {
 
   guardar(): void {
     this.guardando = true;
-    this.ajustesService.updateAjustes(this.form).subscribe({
+    const ajuste: Ajustes = { idAjuste: this.idAjuste!, ...this.form };
+    this.ajustesService.updateAjustes(ajuste).subscribe({
       next: (res) => {
         if (!res.blnError) {
           this.originalForm = { ...this.form };
