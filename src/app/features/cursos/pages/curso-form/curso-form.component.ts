@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CursoService } from '../../services/curso.service';
+import { Curso } from '../../models/curso.model';
 
 @Component({
   selector: 'app-curso-form',
@@ -19,6 +20,7 @@ export class CursoFormComponent implements OnInit {
   mensajeExito = false;
   modoEdicion = false;
   idCurso: number | null = null;
+  cursosDisponibles: Curso[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +35,8 @@ export class CursoFormComponent implements OnInit {
       creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]],
       precio: ['', [Validators.required, Validators.min(0)]],
       tieneLaboratorio: [false],
-      precioLaboratorio: ['']
+      precioLaboratorio: [''],
+      idCursoRequisito: [null]
     });
 
     this.cursoForm.get('tieneLaboratorio')!.valueChanges.subscribe((tiene: boolean) => {
@@ -52,6 +55,10 @@ export class CursoFormComponent implements OnInit {
     const routeId = this.route.snapshot.paramMap.get('id');
     const id = this.cursoId ?? (routeId ? +routeId : null);
 
+    this.cursoService.getCursos().subscribe(cursos => {
+      this.cursosDisponibles = cursos.filter(c => c.idCurso !== id);
+    });
+
     if (id) {
       this.modoEdicion = true;
       this.idCurso = id;
@@ -64,7 +71,8 @@ export class CursoFormComponent implements OnInit {
             creditos: curso.creditos,
             precio: curso.precio,
             tieneLaboratorio: curso.tieneLaboratorio,
-            precioLaboratorio: curso.precioLaboratorio ?? ''
+            precioLaboratorio: curso.precioLaboratorio ?? '',
+            idCursoRequisito: curso.idCursoRequisito ?? null
           });
         }
       });
@@ -75,8 +83,9 @@ export class CursoFormComponent implements OnInit {
     if (this.cursoForm.valid) {
       const val = this.cursoForm.value;
       const precioLaboratorio = val.precioLaboratorio || 0;
+      const idCursoRequisito = val.idCursoRequisito ? +val.idCursoRequisito : undefined;
       if (this.modoEdicion && this.idCurso !== null) {
-        const cursoActualizado = { idCurso: this.idCurso, ...val, precioLaboratorio, estado: true };
+        const cursoActualizado = { idCurso: this.idCurso, ...val, precioLaboratorio, idCursoRequisito, estado: true };
         this.cursoService.updateCurso(cursoActualizado).subscribe({
           next: (res) => {
             if (!res.blnError) {
@@ -94,7 +103,7 @@ export class CursoFormComponent implements OnInit {
           error: (err) => console.error('Error al actualizar curso:', err)
         });
       } else {
-        this.cursoService.createCurso({ ...val, precioLaboratorio }).subscribe({
+        this.cursoService.createCurso({ ...val, precioLaboratorio, idCursoRequisito }).subscribe({
           next: (res) => {
             if (!res.blnError) {
               this.mensajeExito = true;
@@ -118,4 +127,5 @@ export class CursoFormComponent implements OnInit {
   get precio() { return this.cursoForm.get('precio'); }
   get tieneLaboratorio() { return this.cursoForm.get('tieneLaboratorio'); }
   get precioLaboratorio() { return this.cursoForm.get('precioLaboratorio'); }
+  get idCursoRequisito() { return this.cursoForm.get('idCursoRequisito'); }
 }

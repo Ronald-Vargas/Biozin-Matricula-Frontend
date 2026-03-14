@@ -112,6 +112,18 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="idCursoRequisito">Curso Requisito (opcional)</label>
+      <select
+        id="idCursoRequisito"
+        formControlName="idCursoRequisito">
+        <option [ngValue]="null">-- Sin requisito --</option>
+        <option *ngFor="let curso of cursosDisponibles" [ngValue]="curso.idCurso">
+          {{ curso.codigo }} - {{ curso.nombre }}
+        </option>
+      </select>
+    </div>
+
     <button
       type="submit"
       class="btn btn-primary"
