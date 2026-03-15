@@ -3,7 +3,7 @@ export interface Asignacion {
   idCarrera: number;
   idCurso: number;
   semestre: number;
-  prerequisitos?: number[]; // IDs de cursos prerequisitos
+  prerequisitos?: number[]; 
 }
 
 export interface CreateAsignacionDto {

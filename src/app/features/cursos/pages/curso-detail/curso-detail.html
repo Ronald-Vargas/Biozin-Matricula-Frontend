@@ -35,6 +35,12 @@
         <span class="label">Precio Laboratorio:</span>
         <span class="value">{{ curso?.precioLaboratorio | currency:'USD':'symbol':'1.2-2' }}</span>
       </div>
+      <div class="detail-item" *ngIf="curso?.idCursoRequisito">
+        <span class="label">Prerrequisito:</span>
+        <span class="value prerequisito-badge">
+          {{ prerequisitoCurso ? prerequisitoCurso.codigo + ' - ' + prerequisitoCurso.nombre : 'ID: ' + curso?.idCursoRequisito }}
+        </span>
+      </div>
     </div>
 
     <div class="description-section">

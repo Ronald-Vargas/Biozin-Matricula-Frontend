@@ -22,6 +22,17 @@
   color: var(--text);
 }
 
+.prerequisito-badge {
+  display: inline-block;
+  background-color: var(--primary-light, #e8f0fe);
+  color: var(--primary, #1a73e8);
+  border: 1px solid var(--primary, #1a73e8);
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .description-section {
   margin-top: 2rem;
   padding-top: 2rem;

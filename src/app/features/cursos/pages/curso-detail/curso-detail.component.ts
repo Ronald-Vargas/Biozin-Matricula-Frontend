@@ -4,6 +4,7 @@ import { AsignacionService } from '../../../asignaciones/services/asignacion.ser
 import { Curso } from '../../models/curso.model';
 import { CursoService } from '../../services/curso.service';
 import { CommonModule } from '@angular/common';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-curso-detail',
@@ -13,6 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CursoDetailComponent implements OnInit {
   curso?: Curso;
+  prerequisitoCurso?: Curso;
   cargando = true;
   error = false;
 
@@ -27,6 +29,11 @@ export class CursoDetailComponent implements OnInit {
     this.cursoService.getCursoById(id).subscribe({
       next: (curso) => {
         this.curso = curso;
+        if (curso?.idCursoRequisito) {
+          this.cursoService.cursos$.pipe(first()).subscribe(cursos => {
+            this.prerequisitoCurso = cursos.find(c => c.idCurso === curso.idCursoRequisito);
+          });
+        }
         this.cargando = false;
       },
       error: (err) => {

@@ -35,7 +35,6 @@
                 <th>Código</th>
                 <th>Nombre del Curso</th>
                 <th class="text-center">Créditos</th>
-                <th>Tipo</th>
                 <th>Prerrequisitos</th>
               </tr>
             </thead>
@@ -45,17 +44,14 @@
                 <td>{{ curso?.nombre }}</td>
                 <td class="text-center">{{ curso?.creditos }}</td>
                 <td>
-                  <span class="status-badge" [class.active]="curso.esObligatorio">
-                    {{ curso.esObligatorio ? 'Obligatorio' : 'Electivo' }}
-                  </span>
-                </td>
-                <td>
-                  <span *ngIf="curso.prerequisitos && curso.prerequisitos.length > 0">
-                    {{ curso.prerequisitos.join(', ') }}
-                  </span>
-                  <span *ngIf="!curso.prerequisitos || curso.prerequisitos.length === 0">
-                    -
-                  </span>
+                  <ng-container *ngIf="curso.prerequisitos && curso.prerequisitos.length > 0; else sinPrereq">
+                    <span *ngFor="let prereq of curso.prerequisitos" class="prereq-badge">
+                      {{ prereq }}
+                    </span>
+                  </ng-container>
+                  <ng-template #sinPrereq>
+                    <span class="text-muted">-</span>
+                  </ng-template>
                 </td>
               </tr>
             </tbody>

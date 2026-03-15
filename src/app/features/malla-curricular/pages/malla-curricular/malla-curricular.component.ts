@@ -54,8 +54,15 @@ export class MallaCurricularComponent implements OnInit {
           const curso = cursosMap.get(asig.idCurso);
           if (!curso) continue;
 
-          const prerequisitos = (asig.prerequisitos || [])
-            .map(pid => cursosMap.get(pid)?.codigo)
+          const prerequisitoIds = asig.prerequisitos?.length
+            ? asig.prerequisitos
+            : (curso.idCursoRequisito ? [curso.idCursoRequisito] : []);
+
+          const prerequisitos = prerequisitoIds
+            .map(pid => {
+              const c = cursosMap.get(pid);
+              return c ? `${c.codigo} - ${c.nombre}` : undefined;
+            })
             .filter((c): c is string => !!c);
 
           const cursoMalla: CursoMalla = {
