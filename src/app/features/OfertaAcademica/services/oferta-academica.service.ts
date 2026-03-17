@@ -33,7 +33,6 @@ export class OfertaAcademicaService {
         aula: 'A-201',
         cupoMaximo: 35,
         matriculados: 27,
-        precio: 85000,
         estado: 'activo',
       },
       {
@@ -51,7 +50,6 @@ export class OfertaAcademicaService {
         aula: 'B-105',
         cupoMaximo: 35,
         matriculados: 14,
-        precio: 85000,
         estado: 'activo',
       },
       {
@@ -69,7 +67,6 @@ export class OfertaAcademicaService {
         aula: 'Lab-3',
         cupoMaximo: 35,
         matriculados: 32,
-        precio: 95000,
         estado: 'activo',
       },
       {
@@ -87,7 +84,6 @@ export class OfertaAcademicaService {
         aula: 'C-301',
         cupoMaximo: 35,
         matriculados: 10,
-        precio: 75000,
         estado: 'activo',
       },
       {
@@ -105,7 +101,6 @@ export class OfertaAcademicaService {
         aula: 'A-201',
         cupoMaximo: 35,
         matriculados: 35,
-        precio: 85000,
         estado: 'lleno',
       },
     ];

@@ -13,6 +13,5 @@ export interface OfertaAcademica {
   aula: string;
   cupoMaximo: number;
   matriculados: number;
-  precio: number;
   estado: 'activo' | 'inactivo' | 'lleno';
 }

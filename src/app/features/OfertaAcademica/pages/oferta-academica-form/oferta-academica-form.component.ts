@@ -27,7 +27,6 @@ export class OfertaAcademicaFormComponent implements OnInit {
     dias: '',
     aula: '',
     cupoMaximo: 35,
-    precio: 85000,
   };
 
   // Estos datos vendrían de sus respectivos servicios
@@ -118,7 +117,6 @@ export class OfertaAcademicaFormComponent implements OnInit {
       dias: '',
       aula: '',
       cupoMaximo: 35,
-      precio: 85000,
     };
   }
 }
