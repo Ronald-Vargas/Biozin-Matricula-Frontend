@@ -1,3 +1,9 @@
+export interface DiaHorario {
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
+}
+
 export interface OfertaAcademica {
   id: string;
   codigo: string;
@@ -10,6 +16,7 @@ export interface OfertaAcademica {
   profesorNombre: string;
   horario: string;
   dias: string;
+  diasHorarios?: DiaHorario[];
   aula: string;
   cupoMaximo: number;
   matriculados: number;

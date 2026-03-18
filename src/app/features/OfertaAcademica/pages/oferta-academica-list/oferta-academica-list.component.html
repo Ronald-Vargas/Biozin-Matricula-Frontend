@@ -20,18 +20,7 @@
 
 
   <div class="section">
-    <!-- Tabs de períodos -->
-    <div class="period-tabs">
-      <button
-        *ngFor="let p of periodos"
-        class="period-tab"
-        [class.active]="periodoSeleccionado === p.id"
-        (click)="seleccionarPeriodo(p.id)"
-      >
-        {{ p.nombre }}
-      </button>
-    </div>
-
+  
     <!-- Búsqueda -->
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -74,17 +63,21 @@
             <span class="detail-icon">👨‍🏫</span>
             <span>{{ oferta.profesorNombre }}</span>
           </div>
-          <div class="detail-row">
-            <span class="detail-icon">🕐</span>
-            <span>{{ oferta.dias }} {{ oferta.horario }}</span>
-          </div>
+          <ng-container *ngIf="oferta.diasHorarios && oferta.diasHorarios.length > 0; else legacyHorario">
+            <div class="detail-row" *ngFor="let dh of oferta.diasHorarios">
+              <span class="detail-icon">🕐</span>
+              <span>{{ dh.dia }}: {{ dh.horaInicio }} - {{ dh.horaFin }}</span>
+            </div>
+          </ng-container>
+          <ng-template #legacyHorario>
+            <div class="detail-row">
+              <span class="detail-icon">🕐</span>
+              <span>{{ oferta.dias }} {{ oferta.horario }}</span>
+            </div>
+          </ng-template>
           <div class="detail-row">
             <span class="detail-icon">🏫</span>
             <span>{{ oferta.aula }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-icon">💰</span>
-            <span>{{ formatPrecio(oferta.precio) }}</span>
           </div>
         </div>
 

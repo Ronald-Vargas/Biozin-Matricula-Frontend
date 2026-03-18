@@ -21,7 +21,7 @@
             (ngModelChange)="onPeriodoChange()"
           >
             <option value="">Seleccionar período...</option>
-            <option *ngFor="let p of periodos" [value]="p.id">{{ p.nombre }}</option>
+            <option *ngFor="let p of periodos" [value]="p.idPeriodo">{{ p.nombre }}</option>
           </select>
         </div>
 
@@ -34,7 +34,7 @@
             (ngModelChange)="onCursoChange()"
           >
             <option value="">Seleccionar curso...</option>
-            <option *ngFor="let c of cursos" [value]="c.id">
+            <option *ngFor="let c of cursos" [value]="c.idCurso">
               {{ c.codigo }} — {{ c.nombre }}
             </option>
           </select>
@@ -49,30 +49,43 @@
             (ngModelChange)="onProfesorChange()"
           >
             <option value="">Seleccionar profesor...</option>
-            <option *ngFor="let pr of profesores" [value]="pr.id">
-              {{ pr.nombre }}
+            <option *ngFor="let pr of profesores" [value]="pr.idProfesor">
+              {{ pr.nombre }} {{ pr.apellidoPaterno }} {{ pr.apellidoMaterno }}
             </option>
           </select>
         </div>
 
-        <!-- Días -->
-        <div class="form-group">
-          <label class="form-label">Días</label>
-          <select class="form-select" [(ngModel)]="oferta.dias">
-            <option value="">Seleccionar días...</option>
-            <option *ngFor="let d of diasOptions" [value]="d">{{ d }}</option>
-          </select>
-        </div>
-
-        <!-- Horario -->
-        <div class="form-group">
-          <label class="form-label">Horario</label>
-          <input
-            class="form-input"
-            type="text"
-            placeholder="Ej: 8:00 - 9:40 am"
-            [(ngModel)]="oferta.horario"
-          />
+        <!-- Días y Horarios -->
+        <div class="form-group full">
+          <label class="form-label">Días y Horarios</label>
+          <div class="dias-container">
+            <div *ngFor="let d of diasOptions" class="dia-row">
+              <label class="dia-check-label">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="d.seleccionado"
+                  [name]="'dia-' + d.abrev"
+                  class="dia-checkbox"
+                />
+                <span class="dia-nombre">{{ d.nombre }}</span>
+              </label>
+              <div *ngIf="d.seleccionado" class="dia-times">
+                <input
+                  type="time"
+                  class="form-input time-input"
+                  [(ngModel)]="d.horaInicio"
+                  [name]="'inicio-' + d.abrev"
+                />
+                <span class="time-sep">a</span>
+                <input
+                  type="time"
+                  class="form-input time-input"
+                  [(ngModel)]="d.horaFin"
+                  [name]="'fin-' + d.abrev"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Aula -->

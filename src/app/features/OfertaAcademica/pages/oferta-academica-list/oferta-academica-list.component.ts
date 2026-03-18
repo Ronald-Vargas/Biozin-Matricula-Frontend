@@ -19,7 +19,6 @@ export class OfertaAcademicaListComponent implements OnInit {
   ofertas: OfertaAcademica[] = [];
   ofertasFiltradas: OfertaAcademica[] = [];
   periodos: { id: string; nombre: string }[] = [];
-  periodoSeleccionado = '';
   busqueda = '';
   mostrarModal = false;
 
@@ -28,29 +27,13 @@ export class OfertaAcademicaListComponent implements OnInit {
   ngOnInit(): void {
     this.ofertaService.getAll().subscribe((ofertas) => {
       this.ofertas = ofertas;
-      this.actualizarPeriodos();
       this.filtrar();
     });
   }
 
-  private actualizarPeriodos(): void {
-    const map = new Map<string, string>();
-    this.ofertas.forEach((o) => map.set(o.periodoId, o.periodoNombre));
-    this.periodos = Array.from(map, ([id, nombre]) => ({ id, nombre }));
-
-    // Seleccionar el primer período si no hay selección
-    if (!this.periodoSeleccionado && this.periodos.length > 0) {
-      this.periodoSeleccionado = this.periodos[0].id;
-    }
-  }
 
   filtrar(): void {
     let resultado = this.ofertas;
-
-    // Filtrar por período
-    if (this.periodoSeleccionado) {
-      resultado = resultado.filter((o) => o.periodoId === this.periodoSeleccionado);
-    }
 
     // Filtrar por búsqueda
     if (this.busqueda.trim()) {
@@ -67,10 +50,6 @@ export class OfertaAcademicaListComponent implements OnInit {
     this.ofertasFiltradas = resultado;
   }
 
-  seleccionarPeriodo(periodoId: string): void {
-    this.periodoSeleccionado = periodoId;
-    this.filtrar();
-  }
 
   getPorcentajeOcupacion(oferta: OfertaAcademica): number {
     if (oferta.cupoMaximo === 0) return 0;

@@ -2,6 +2,12 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OfertaAcademicaService } from '../../services/oferta-academica.service';
+import { ProfesorService } from '../../../profesores/services/profesores.services';
+import { Profesor } from '../../../profesores/models/profesores.model';
+import { PeriodoService } from '../../../periodos/services/periodos.services';
+import { Periodo } from '../../../periodos/models/periodos.model';
+import { CursoService } from '../../../cursos/services/curso.service';
+import { Curso } from '../../../cursos/models/curso.model';
 
 @Component({
   selector: 'app-oferta-academica-form',
@@ -11,6 +17,7 @@ import { OfertaAcademicaService } from '../../services/oferta-academica.service'
   styleUrls: ['./oferta-academica-form.component.scss'],
 })
 export class OfertaAcademicaFormComponent implements OnInit {
+
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() ofertaCreada = new EventEmitter<void>();
@@ -23,77 +30,76 @@ export class OfertaAcademicaFormComponent implements OnInit {
     cursoCodigo: '',
     profesorId: '',
     profesorNombre: '',
-    horario: '',
-    dias: '',
     aula: '',
     cupoMaximo: 35,
   };
 
-  // Estos datos vendrían de sus respectivos servicios
-  // Por ahora usamos datos de ejemplo
-  periodos = [
-    { id: '1', nombre: 'I Semestre 2026' },
-    { id: '2', nombre: 'II Semestre 2025' },
-  ];
-
-  cursos = [
-    { id: '1', nombre: 'Programación I', codigo: 'CS-101' },
-    { id: '2', nombre: 'Cálculo I', codigo: 'MAT-201' },
-    { id: '3', nombre: 'Base de Datos', codigo: 'CS-301' },
-    { id: '4', nombre: 'Administración I', codigo: 'ADM-101' },
-    { id: '5', nombre: 'Programación II', codigo: 'CS-201' },
-    { id: '6', nombre: 'Estructuras de Datos', codigo: 'CS-202' },
-    { id: '7', nombre: 'Física I', codigo: 'FIS-101' },
-  ];
-
-  profesores = [
-    { id: '1', nombre: 'Carlos Ramírez López' },
-    { id: '2', nombre: 'María Fernández Mora' },
-    { id: '3', nombre: 'José Vargas Solano' },
-    { id: '4', nombre: 'Ana Jiménez Castro' },
-  ];
-
   diasOptions = [
-    'Lun - Mié',
-    'Mar - Jue',
-    'Lun - Mié - Vie',
-    'Mar - Jue - Sáb',
-    'Viernes',
-    'Sábado',
+    { nombre: 'Lunes',     abrev: 'Lun', seleccionado: false, horaInicio: '', horaFin: '' },
+    { nombre: 'Martes',    abrev: 'Mar', seleccionado: false, horaInicio: '', horaFin: '' },
+    { nombre: 'Miércoles', abrev: 'Mié', seleccionado: false, horaInicio: '', horaFin: '' },
+    { nombre: 'Jueves',    abrev: 'Jue', seleccionado: false, horaInicio: '', horaFin: '' },
+    { nombre: 'Viernes',   abrev: 'Vie', seleccionado: false, horaInicio: '', horaFin: '' },
+    { nombre: 'Sábado',    abrev: 'Sáb', seleccionado: false, horaInicio: '', horaFin: '' },
   ];
 
-  constructor(private ofertaService: OfertaAcademicaService) {}
+  cursos: Curso[] = [];
+  profesores: Profesor[] = [];
+  periodos: Periodo[] = [];
 
-  ngOnInit(): void {}
+  constructor(
+    private profesorService: ProfesorService,
+    private periodoService: PeriodoService,
+    private cursoService: CursoService,
+    private ofertaService: OfertaAcademicaService
+  ) {}
+
+  ngOnInit(): void {
+    this.cursoService.getCursos().subscribe(cursos => this.cursos = cursos);
+    this.profesorService.getProfesores().subscribe(profesores => this.profesores = profesores);
+    this.periodoService.getPeriodos().subscribe(periodos => this.periodos = periodos);
+  }
 
   onPeriodoChange(): void {
-    const periodo = this.periodos.find((p) => p.id === this.oferta.periodoId);
+    const periodo = this.periodos.find((p) => String(p.idPeriodo) === this.oferta.periodoId);
     this.oferta.periodoNombre = periodo ? periodo.nombre : '';
   }
 
   onCursoChange(): void {
-    const curso = this.cursos.find((c) => c.id === this.oferta.cursoId);
+    const curso = this.cursos.find((c) => String(c.idCurso) === this.oferta.cursoId);
     this.oferta.cursoNombre = curso ? curso.nombre : '';
     this.oferta.cursoCodigo = curso ? curso.codigo : '';
   }
 
   onProfesorChange(): void {
-    const profesor = this.profesores.find((p) => p.id === this.oferta.profesorId);
-    this.oferta.profesorNombre = profesor ? profesor.nombre : '';
+    const profesor = this.profesores.find((p) => String(p.idProfesor) === this.oferta.profesorId);
+    this.oferta.profesorNombre = profesor ? `${profesor.nombre} ${profesor.apellidoPaterno} ${profesor.apellidoMaterno}` : '';
   }
 
   guardar(): void {
+    const seleccionados = this.diasOptions.filter(d => d.seleccionado);
+
     if (
       !this.oferta.periodoId ||
       !this.oferta.cursoId ||
       !this.oferta.profesorId ||
-      !this.oferta.horario ||
-      !this.oferta.aula
+      !this.oferta.aula ||
+      seleccionados.length === 0 ||
+      seleccionados.some(d => !d.horaInicio || !d.horaFin)
     ) {
       return;
     }
 
-    this.ofertaService.crear(this.oferta);
+    const diasHorarios = seleccionados.map(d => ({
+      dia: d.nombre,
+      horaInicio: d.horaInicio,
+      horaFin: d.horaFin,
+    }));
+
+    const dias = seleccionados.map(d => d.abrev).join(' - ');
+    const horario = seleccionados.map(d => `${d.horaInicio}-${d.horaFin}`).join(', ');
+
+    this.ofertaService.crear({ ...this.oferta, dias, horario, diasHorarios });
     this.ofertaCreada.emit();
     this.cerrar();
     this.limpiar();
@@ -113,10 +119,13 @@ export class OfertaAcademicaFormComponent implements OnInit {
       cursoCodigo: '',
       profesorId: '',
       profesorNombre: '',
-      horario: '',
-      dias: '',
       aula: '',
       cupoMaximo: 35,
     };
+    this.diasOptions.forEach(d => {
+      d.seleccionado = false;
+      d.horaInicio = '';
+      d.horaFin = '';
+    });
   }
 }
