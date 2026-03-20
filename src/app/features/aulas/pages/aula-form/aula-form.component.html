@@ -1,0 +1,72 @@
+<div class="form-container">
+  <h2 class="form-title">{{ aulaEditar ? 'Editar Aula' : 'Nueva Aula' }}</h2>
+
+  <div class="success-message" *ngIf="mensajeExito">
+    ✓ Aula {{ aulaEditar ? 'actualizada' : 'creada' }} exitosamente
+  </div>
+
+  <form [formGroup]="aulaForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="numero">Numero de Aula *</label>
+        <input
+          type="text"
+          id="numero"
+          formControlName="numero"
+          placeholder="Ej: A-101"
+          [class.input-error]="numero?.invalid && numero?.touched">
+        <span class="error-text" *ngIf="numero?.invalid && numero?.touched">
+          El numero del aula es requerido.
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="capacidad">Capacidad *</label>
+        <input
+          type="number"
+          id="capacidad"
+          formControlName="capacidad"
+          placeholder="Ej: 30"
+          min="1"
+          [class.input-error]="capacidad?.invalid && capacidad?.touched">
+        <span class="error-text" *ngIf="capacidad?.invalid && capacidad?.touched">
+          La capacidad debe ser mayor a 0.
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="descripcion">Descripcion</label>
+        <input
+          type="text"
+          id="descripcion"
+          formControlName="descripcion"
+          placeholder="Ej: Aula de informatica, planta baja">
+      </div>
+    </div>
+
+    <div class="form-row checkboxes-row">
+      <div class="form-group form-group-check">
+        <label class="check-label">
+          <input type="checkbox" formControlName="esLaboratorio">
+          <span class="check-box"></span>
+          Es Laboratorio
+        </label>
+      </div>
+
+      <div class="form-group form-group-check">
+        <label class="check-label">
+          <input type="checkbox" formControlName="estado">
+          <span class="check-box"></span>
+          Activo
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="aulaForm.invalid || guardando">
+      <span *ngIf="guardando">⏳ Guardando...</span>
+      <span *ngIf="!guardando">{{ aulaEditar ? '💾 Guardar Cambios' : '➕ Crear Aula' }}</span>
+    </button>
+  </form>
+</div>

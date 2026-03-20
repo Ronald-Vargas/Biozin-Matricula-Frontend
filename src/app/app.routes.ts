@@ -64,6 +64,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/Ajustes/ajustes.routes').then((m) => m.AJUSTES_ROUTES),
       },
+      {
+        path: 'aulas',
+        loadChildren: () =>
+          import('./features/aulas/aulas.routes').then((m) => m.AULAS_ROUTES),
+      },
     ],
   },
 

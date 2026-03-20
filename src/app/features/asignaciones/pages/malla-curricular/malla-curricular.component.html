@@ -1,0 +1,73 @@
+
+<div class="container">z
+  <div class="header-section">
+    <h1 class="page-title">📚 Malla Curricular</h1>
+  </div>
+
+  <div class="section">
+    <div class="form-group">
+      <label for="carrera">Ver Malla de:</label>
+      <select id="carrera" (change)="onCarreraSeleccionada($event)">
+        <option value="">-- Selecciona una carrera --</option>
+        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.id">
+          {{ carrera?.codigo }} - {{ carrera?.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="mallaCurricular">
+      <h2 class="section-title">{{ mallaCurricular?.carrera }}</h2>
+
+      <div class="semestre-container" *ngFor="let semestre of mallaCurricular.semestres">
+        <div class="semestre-header" *ngIf="semestre.cursos.length > 0">
+          <h3>📅 Semestre {{ semestre?.numero }}</h3>
+          <span class="creditos-badge">{{ semestre?.creditosSemestre }} créditos</span>
+        </div>
+
+        <div class="table-container" *ngIf="semestre.cursos.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre del Curso</th>
+                <th class="text-center">Créditos</th>
+                <th>Tipo</th>
+                <th>Prerrequisitos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let curso of semestre.cursos">
+                <td><strong>{{ curso?.codigo }}</strong></td>
+                <td>{{ curso?.nombre }}</td>
+                <td class="text-center">{{ curso?.creditos }}</td>
+                <td>
+                  <span class="status-badge" [class.active]="curso.esObligatorio">
+                    {{ curso.esObligatorio ? 'Obligatorio' : 'Electivo' }}
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="curso.prerequisitos && curso.prerequisitos.length > 0">
+                    {{ curso.prerequisitos.join(', ') }}
+                  </span>
+                  <span *ngIf="!curso.prerequisitos || curso.prerequisitos.length === 0">
+                    -
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="resumen-final">
+        <h3>Resumen</h3>
+        <p><strong>Total de créditos:</strong> {{ mallaCurricular?.creditosTotales }}</p>
+      </div>
+    </div>
+
+    <div class="no-data" *ngIf="mallaCurricular && mallaCurricular.creditosTotales === 0">
+      <div class="no-data-icon">📚</div>
+      <p>No hay cursos asignados a esta carrera</p>
+    </div>
+  </div>
+</div>

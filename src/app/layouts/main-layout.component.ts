@@ -55,6 +55,12 @@ export class MainLayoutComponent {
       ],
     },
     {
+      title: 'Infraestructura',
+      items: [
+        { path: '/aulas', label: 'Aulas', icon: '🏫' },
+      ],
+    },
+    {
       title: 'Estudiantes',
       items: [
         { path: '/estudiantes', label: 'Lista Estudiantes', icon: '👨‍🎓' },

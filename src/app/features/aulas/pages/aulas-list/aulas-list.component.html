@@ -1,0 +1,79 @@
+<div class="aulas-container">
+  <div class="section">
+
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="page-title">🏫 Aulas</h1>
+      <button class="btn btn-primary" (click)="toggleFormulario()">
+        <span *ngIf="!mostrarFormulario">➕ Nueva Aula</span>
+        <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <app-aula-form
+      *ngIf="mostrarFormulario"
+      [aulaEditar]="aulaSeleccionada"
+      (aulaCreada)="onAulaCreada()"
+      (aulaActualizada)="onAulaActualizada()">
+    </app-aula-form>
+
+    <!-- Tabla -->
+    <div class="table-container">
+      <table class="aulas-table">
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Capacidad</th>
+            <th>Tipo</th>
+            <th>Descripcion</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="aulas$ | async as aulas">
+            <tr *ngFor="let aula of aulas; let i = index"
+                class="table-row"
+                [style.animation-delay]="(i * 0.05) + 's'">
+
+              <td><strong class="aula-numero">{{ aula.numero }}</strong></td>
+              <td>{{ aula.capacidad }} personas</td>
+              <td>
+                <span class="tipo-badge" [class.lab]="aula.esLaboratorio">
+                  {{ aula.esLaboratorio ? '🔬 Laboratorio' : '🏫 Aula' }}
+                </span>
+              </td>
+              <td class="desc-cell">{{ aula.descripcion || '—' }}</td>
+              <td>
+                <span class="status-badge"
+                      [class.active]="aula.estado"
+                      [class.inactive]="!aula.estado">
+                  {{ aula.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-icon btn-edit"
+                          (click)="editarAula(aula)"
+                          title="Editar">✏️</button>
+                  <button class="btn-icon btn-delete"
+                          (click)="eliminarAula(aula.idAula)"
+                          title="Eliminar">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="(aulas$ | async)?.length === 0">
+    <div class="no-data-icon">🏫</div>
+    <p>No hay aulas registradas</p>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      Agregar Primera Aula
+    </button>
+  </div>
+</div>
