@@ -4,7 +4,7 @@ export const ASIGNACIONES_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./pages/asignar-cursos/asignar-cursos.component')
+      import('./pages/asignar-cursos.component')
         .then(m => m.AsignarCursosComponent)
   }
   

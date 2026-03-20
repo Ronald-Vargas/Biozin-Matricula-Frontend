@@ -1,13 +1,14 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Carrera } from '../../../carreras/models/carrera.model';
-import { CarreraService } from '../../../carreras/services/carrera.service';
-import { Curso } from '../../../cursos/models/curso.model';
-import { CursoService } from '../../../cursos/services/curso.service';
-import { Asignacion, CreateAsignacionDto } from '../../models/asignacion.model';
-import { AsignacionService } from '../../services/asignacion.service';
+
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { Carrera } from '../../carreras/models/carrera.model';
+import { CarreraService } from '../../carreras/services/carrera.service';
+import { Curso } from '../../cursos/models/curso.model';
+import { CursoService } from '../../cursos/services/curso.service';
+import { Asignacion, CreateAsignacionDto } from '../models/asignacion.model';
+import { AsignacionService } from '../services/asignacion.service';
 
 
 @Component({
