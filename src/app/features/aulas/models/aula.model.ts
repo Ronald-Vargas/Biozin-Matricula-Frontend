@@ -1,18 +1,18 @@
 export interface Aula {
   idAula: number;
-  numero: string;
+  numeroAula: string;
   capacidad: number;
   esLaboratorio: boolean;
   descripcion: string;
-  estado: boolean;
+  activo: boolean;
 }
 
 export interface CreateAulaDto {
-  numero: string;
+  numeroAula: string;
   capacidad: number;
   esLaboratorio: boolean;
   descripcion: string;
-  estado: boolean;
+  activo: boolean;
 }
 
 export interface Respuesta<T> {

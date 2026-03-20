@@ -37,7 +37,7 @@
                 class="table-row"
                 [style.animation-delay]="(i * 0.05) + 's'">
 
-              <td><strong class="aula-numero">{{ aula.numero }}</strong></td>
+              <td><strong class="aula-numero">{{ aula.numeroAula }}</strong></td>
               <td>{{ aula.capacidad }} personas</td>
               <td>
                 <span class="tipo-badge" [class.lab]="aula.esLaboratorio">
@@ -47,9 +47,9 @@
               <td class="desc-cell">{{ aula.descripcion || '—' }}</td>
               <td>
                 <span class="status-badge"
-                      [class.active]="aula.estado"
-                      [class.inactive]="!aula.estado">
-                  {{ aula.estado ? 'Activo' : 'Inactivo' }}
+                      [class.active]="aula.activo"
+                      [class.inactive]="!aula.activo">
+                  {{ aula.activo ? 'Activo' : 'Inactivo' }}
                 </span>
               </td>
               <td>

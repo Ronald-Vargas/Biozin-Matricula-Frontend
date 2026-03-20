@@ -12,6 +12,8 @@ import { AulaService } from '../../services/aula.service';
   templateUrl: './aula-form.component.html',
   styleUrl: './aula-form.component.scss',
 })
+
+
 export class AulaFormComponent implements OnChanges {
 
   @Input() aulaEditar: Aula | null = null;
@@ -24,25 +26,25 @@ export class AulaFormComponent implements OnChanges {
 
   constructor(private fb: FormBuilder, private aulaService: AulaService) {
     this.aulaForm = this.fb.group({
-      numero: ['', [Validators.required, Validators.maxLength(20)]],
+      numeroAula: ['', [Validators.required, Validators.maxLength(20)]],
       capacidad: [null, [Validators.required, Validators.min(1)]],
       esLaboratorio: [false],
       descripcion: [''],
-      estado: [true],
+      activo: [true],
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['aulaEditar'] && this.aulaEditar) {
       this.aulaForm.patchValue({
-        numero: this.aulaEditar.numero,
+        numeroAula: this.aulaEditar.numeroAula,
         capacidad: this.aulaEditar.capacidad,
         esLaboratorio: this.aulaEditar.esLaboratorio,
         descripcion: this.aulaEditar.descripcion,
-        estado: this.aulaEditar.estado,
+        activo: this.aulaEditar.activo,
       });
     } else if (changes['aulaEditar'] && !this.aulaEditar) {
-      this.aulaForm.reset({ esLaboratorio: false, estado: true });
+      this.aulaForm.reset({ esLaboratorio: false, activo: true });
     }
   }
 
@@ -83,6 +85,6 @@ export class AulaFormComponent implements OnChanges {
     }
   }
 
-  get numero() { return this.aulaForm.get('numero'); }
+  get numeroAula() { return this.aulaForm.get('numeroAula'); }
   get capacidad() { return this.aulaForm.get('capacidad'); }
 }

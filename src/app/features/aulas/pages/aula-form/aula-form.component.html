@@ -11,11 +11,11 @@
         <label for="numero">Numero de Aula *</label>
         <input
           type="text"
-          id="numero"
-          formControlName="numero"
+          id="numeroAula"
+          formControlName="numeroAula"
           placeholder="Ej: A-101"
-          [class.input-error]="numero?.invalid && numero?.touched">
-        <span class="error-text" *ngIf="numero?.invalid && numero?.touched">
+          [class.input-error]="numeroAula?.invalid && numeroAula?.touched">
+        <span class="error-text" *ngIf="numeroAula?.invalid && numeroAula?.touched">
           El numero del aula es requerido.
         </span>
       </div>
@@ -57,7 +57,7 @@
 
       <div class="form-group form-group-check">
         <label class="check-label">
-          <input type="checkbox" formControlName="estado">
+          <input type="checkbox" formControlName="activo">
           <span class="check-box"></span>
           Activo
         </label>
