@@ -12,13 +12,10 @@ import { OfertaAcademicaFormComponent } from '../oferta-academica-form/oferta-ac
   templateUrl: './oferta-academica-list.component.html',
   styleUrls: ['./oferta-academica-list.component.scss'],
 })
-
-
 export class OfertaAcademicaListComponent implements OnInit {
-  
+
   ofertas: OfertaAcademica[] = [];
   ofertasFiltradas: OfertaAcademica[] = [];
-  periodos: { id: string; nombre: string }[] = [];
   busqueda = '';
   mostrarModal = false;
 
@@ -31,11 +28,9 @@ export class OfertaAcademicaListComponent implements OnInit {
     });
   }
 
-
   filtrar(): void {
     let resultado = this.ofertas;
 
-    // Filtrar por búsqueda
     if (this.busqueda.trim()) {
       const termino = this.busqueda.toLowerCase();
       resultado = resultado.filter(
@@ -49,7 +44,6 @@ export class OfertaAcademicaListComponent implements OnInit {
 
     this.ofertasFiltradas = resultado;
   }
-
 
   getPorcentajeOcupacion(oferta: OfertaAcademica): number {
     if (oferta.cupoMaximo === 0) return 0;
@@ -68,12 +62,12 @@ export class OfertaAcademicaListComponent implements OnInit {
   }
 
   toggleEstado(oferta: OfertaAcademica): void {
-    this.ofertaService.toggleEstado(oferta.id);
+    this.ofertaService.toggleEstado(oferta.idOferta, oferta.estado).subscribe();
   }
 
   eliminar(oferta: OfertaAcademica): void {
     if (confirm(`¿Eliminar la oferta de "${oferta.cursoNombre}"?`)) {
-      this.ofertaService.eliminar(oferta.id);
+      this.ofertaService.eliminar(oferta.idOferta).subscribe();
     }
   }
 

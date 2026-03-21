@@ -5,20 +5,40 @@ export interface DiaHorario {
 }
 
 export interface OfertaAcademica {
-  id: string;
+  idOferta: number;
   codigo: string;
-  periodoId: string;
+  idPeriodo: number;
   periodoNombre: string;
-  cursoId: string;
+  idCurso: number;
   cursoNombre: string;
   cursoCodigo: string;
-  profesorId: string;
+  idProfesor: number;
   profesorNombre: string;
-  horario: string;
-  dias: string;
-  diasHorarios?: DiaHorario[];
+  idAula: number;
   aula: string;
   cupoMaximo: number;
   matriculados: number;
   estado: 'activo' | 'inactivo' | 'lleno';
+  diasHorarios: DiaHorario[];
+}
+
+export interface CreateOfertaDto {
+  idPeriodo: number;
+  idCurso: number;
+  idProfesor: number;
+  idAula: number;
+  cupoMaximo: number;
+  diasHorarios: DiaHorario[];
+}
+
+export interface UpdateOfertaDto extends CreateOfertaDto {
+  idOferta: number;
+  estado: string;
+}
+
+export interface Respuesta<T> {
+  valorRetorno: T;
+  strMensajeRespuesta: string;
+  blnError: boolean;
+  strTituloRespuesta: string;
 }

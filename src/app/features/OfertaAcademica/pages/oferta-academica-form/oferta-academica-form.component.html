@@ -17,10 +17,9 @@
           <label class="form-label">Período Académico</label>
           <select
             class="form-select"
-            [(ngModel)]="oferta.periodoId"
-            (ngModelChange)="onPeriodoChange()"
+            [(ngModel)]="oferta.idPeriodo"
           >
-            <option value="">Seleccionar período...</option>
+            <option [value]="0">Seleccionar período...</option>
             <option *ngFor="let p of periodos" [value]="p.idPeriodo">{{ p.nombre }}</option>
           </select>
         </div>
@@ -30,10 +29,10 @@
           <label class="form-label">Curso</label>
           <select
             class="form-select"
-            [(ngModel)]="oferta.cursoId"
+            [(ngModel)]="oferta.idCurso"
             (ngModelChange)="onCursoChange()"
           >
-            <option value="">Seleccionar curso...</option>
+            <option [value]="0">Seleccionar curso...</option>
             <option *ngFor="let c of cursos" [value]="c.idCurso">
               {{ c.codigo }} — {{ c.nombre }}
             </option>
@@ -45,10 +44,9 @@
           <label class="form-label">Profesor</label>
           <select
             class="form-select"
-            [(ngModel)]="oferta.profesorId"
-            (ngModelChange)="onProfesorChange()"
+            [(ngModel)]="oferta.idProfesor"
           >
-            <option value="">Seleccionar profesor...</option>
+            <option [value]="0">Seleccionar profesor...</option>
             <option *ngFor="let pr of profesores" [value]="pr.idProfesor">
               {{ pr.nombre }} {{ pr.apellidoPaterno }} {{ pr.apellidoMaterno }}
             </option>
@@ -93,18 +91,18 @@
           <label class="form-label">Aula</label>
           <select
             class="form-select"
-            [(ngModel)]="oferta.aulaId"
+            [(ngModel)]="oferta.idAula"
             (ngModelChange)="onAulaChange()"
-            [disabled]="!oferta.cursoId"
+            [disabled]="!oferta.idCurso"
           >
-            <option value="">
-              {{ oferta.cursoId ? 'Seleccionar aula...' : 'Seleccione un curso primero' }}
+            <option [value]="0">
+              {{ oferta.idCurso ? 'Seleccionar aula...' : 'Seleccione un curso primero' }}
             </option>
             <option *ngFor="let a of aulasFiltradas" [value]="a.idAula">
               {{ a.numeroAula }} — Cap. {{ a.capacidad }}{{ a.esLaboratorio ? ' (Laboratorio)' : '' }}
             </option>
           </select>
-          <small *ngIf="oferta.cursoId && aulasFiltradas.length === 0" class="form-hint">
+          <small *ngIf="oferta.idCurso && aulasFiltradas.length === 0" class="form-hint">
             No hay aulas disponibles para este tipo de curso.
           </small>
         </div>
@@ -116,8 +114,8 @@
             class="form-input"
             type="number"
             [(ngModel)]="oferta.cupoMaximo"
-            [readonly]="!!oferta.aulaId"
-            [placeholder]="oferta.aulaId ? '' : 'Seleccione un aula'"
+            [readonly]="!!oferta.idAula"
+            [placeholder]="oferta.idAula ? '' : 'Seleccione un aula'"
             min="1"
             max="100"
           />

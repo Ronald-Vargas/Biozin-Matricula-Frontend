@@ -25,15 +25,10 @@ export class OfertaAcademicaFormComponent implements OnInit {
   @Output() ofertaCreada = new EventEmitter<void>();
 
   oferta = {
-    periodoId: '',
-    periodoNombre: '',
-    cursoId: '',
-    cursoNombre: '',
-    cursoCodigo: '',
-    profesorId: '',
-    profesorNombre: '',
-    aulaId: '',
-    aula: '',
+    idPeriodo: 0,
+    idCurso: 0,
+    idProfesor: 0,
+    idAula: 0,
     cupoMaximo: null as number | null,
   };
 
@@ -52,6 +47,8 @@ export class OfertaAcademicaFormComponent implements OnInit {
   aulas: Aula[] = [];
   aulasFiltradas: Aula[] = [];
 
+  cursoSeleccionado: Curso | null = null;
+
   constructor(
     private profesorService: ProfesorService,
     private periodoService: PeriodoService,
@@ -69,51 +66,32 @@ export class OfertaAcademicaFormComponent implements OnInit {
     });
   }
 
-  onPeriodoChange(): void {
-    const periodo = this.periodos.find((p) => String(p.idPeriodo) === this.oferta.periodoId);
-    this.oferta.periodoNombre = periodo ? periodo.nombre : '';
-  }
-
   onCursoChange(): void {
-    const curso = this.cursos.find((c) => String(c.idCurso) === this.oferta.cursoId);
-    this.oferta.cursoNombre = curso ? curso.nombre : '';
-    this.oferta.cursoCodigo = curso ? curso.codigo : '';
-    // Filtrar aulas según si el curso tiene laboratorio
-    if (curso) {
-      this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === curso.tieneLaboratorio);
+    const id = Number(this.oferta.idCurso);
+    this.cursoSeleccionado = this.cursos.find(c => c.idCurso === id) || null;
+    if (this.cursoSeleccionado) {
+      this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === this.cursoSeleccionado!.tieneLaboratorio);
     } else {
       this.aulasFiltradas = [];
     }
-    // Resetear aula seleccionada al cambiar curso
-    this.oferta.aulaId = '';
-    this.oferta.aula = '';
+    this.oferta.idAula = 0;
     this.oferta.cupoMaximo = null;
   }
 
   onAulaChange(): void {
-    const aula = this.aulas.find(a => String(a.idAula) === this.oferta.aulaId);
-    if (aula) {
-      this.oferta.aula = aula.numeroAula;
-      this.oferta.cupoMaximo = aula.capacidad;
-    } else {
-      this.oferta.aula = '';
-      this.oferta.cupoMaximo = null;
-    }
-  }
-
-  onProfesorChange(): void {
-    const profesor = this.profesores.find((p) => String(p.idProfesor) === this.oferta.profesorId);
-    this.oferta.profesorNombre = profesor ? `${profesor.nombre} ${profesor.apellidoPaterno} ${profesor.apellidoMaterno}` : '';
+    const id = Number(this.oferta.idAula);
+    const aula = this.aulas.find(a => a.idAula === id);
+    this.oferta.cupoMaximo = aula ? aula.capacidad : null;
   }
 
   guardar(): void {
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
 
     if (
-      !this.oferta.periodoId ||
-      !this.oferta.cursoId ||
-      !this.oferta.profesorId ||
-      !this.oferta.aula ||
+      !this.oferta.idPeriodo ||
+      !this.oferta.idCurso ||
+      !this.oferta.idProfesor ||
+      !this.oferta.idAula ||
       !this.oferta.cupoMaximo ||
       seleccionados.length === 0 ||
       seleccionados.some(d => !d.horaInicio || !d.horaFin)
@@ -121,19 +99,26 @@ export class OfertaAcademicaFormComponent implements OnInit {
       return;
     }
 
-    const diasHorarios = seleccionados.map(d => ({
-      dia: d.nombre,
-      horaInicio: d.horaInicio,
-      horaFin: d.horaFin,
-    }));
+    const dto = {
+      idPeriodo: Number(this.oferta.idPeriodo),
+      idCurso: Number(this.oferta.idCurso),
+      idProfesor: Number(this.oferta.idProfesor),
+      idAula: Number(this.oferta.idAula),
+      cupoMaximo: this.oferta.cupoMaximo,
+      diasHorarios: seleccionados.map(d => ({
+        dia: d.nombre,
+        horaInicio: d.horaInicio,
+        horaFin: d.horaFin,
+      })),
+    };
 
-    const dias = seleccionados.map(d => d.abrev).join(' - ');
-    const horario = seleccionados.map(d => `${d.horaInicio}-${d.horaFin}`).join(', ');
-
-    this.ofertaService.crear({ ...this.oferta, cupoMaximo: this.oferta.cupoMaximo!, dias, horario, diasHorarios });
-    this.ofertaCreada.emit();
-    this.cerrar();
-    this.limpiar();
+    this.ofertaService.crear(dto).subscribe(res => {
+      if (!res.blnError) {
+        this.ofertaCreada.emit();
+        this.cerrar();
+        this.limpiar();
+      }
+    });
   }
 
   cerrar(): void {
@@ -143,17 +128,13 @@ export class OfertaAcademicaFormComponent implements OnInit {
 
   limpiar(): void {
     this.oferta = {
-      periodoId: '',
-      periodoNombre: '',
-      cursoId: '',
-      cursoNombre: '',
-      cursoCodigo: '',
-      profesorId: '',
-      profesorNombre: '',
-      aulaId: '',
-      aula: '',
-      cupoMaximo: 35,
+      idPeriodo: 0,
+      idCurso: 0,
+      idProfesor: 0,
+      idAula: 0,
+      cupoMaximo: null,
     };
+    this.cursoSeleccionado = null;
     this.aulasFiltradas = [];
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
