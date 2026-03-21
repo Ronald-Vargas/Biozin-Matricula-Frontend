@@ -8,6 +8,8 @@ import { PeriodoService } from '../../../periodos/services/periodos.services';
 import { Periodo } from '../../../periodos/models/periodos.model';
 import { CursoService } from '../../../cursos/services/curso.service';
 import { Curso } from '../../../cursos/models/curso.model';
+import { AulaService } from '../../../aulas/services/aula.service';
+import { Aula } from '../../../aulas/models/aula.model';
 
 @Component({
   selector: 'app-oferta-academica-form',
@@ -30,8 +32,9 @@ export class OfertaAcademicaFormComponent implements OnInit {
     cursoCodigo: '',
     profesorId: '',
     profesorNombre: '',
+    aulaId: '',
     aula: '',
-    cupoMaximo: 35,
+    cupoMaximo: null as number | null,
   };
 
   diasOptions = [
@@ -46,18 +49,24 @@ export class OfertaAcademicaFormComponent implements OnInit {
   cursos: Curso[] = [];
   profesores: Profesor[] = [];
   periodos: Periodo[] = [];
+  aulas: Aula[] = [];
+  aulasFiltradas: Aula[] = [];
 
   constructor(
     private profesorService: ProfesorService,
     private periodoService: PeriodoService,
     private cursoService: CursoService,
-    private ofertaService: OfertaAcademicaService
+    private ofertaService: OfertaAcademicaService,
+    private aulaService: AulaService
   ) {}
 
   ngOnInit(): void {
     this.cursoService.getCursos().subscribe(cursos => this.cursos = cursos);
     this.profesorService.getProfesores().subscribe(profesores => this.profesores = profesores);
     this.periodoService.getPeriodos().subscribe(periodos => this.periodos = periodos);
+    this.aulaService.getAulas().subscribe(aulas => {
+      this.aulas = aulas.filter(a => a.activo);
+    });
   }
 
   onPeriodoChange(): void {
@@ -69,6 +78,27 @@ export class OfertaAcademicaFormComponent implements OnInit {
     const curso = this.cursos.find((c) => String(c.idCurso) === this.oferta.cursoId);
     this.oferta.cursoNombre = curso ? curso.nombre : '';
     this.oferta.cursoCodigo = curso ? curso.codigo : '';
+    // Filtrar aulas según si el curso tiene laboratorio
+    if (curso) {
+      this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === curso.tieneLaboratorio);
+    } else {
+      this.aulasFiltradas = [];
+    }
+    // Resetear aula seleccionada al cambiar curso
+    this.oferta.aulaId = '';
+    this.oferta.aula = '';
+    this.oferta.cupoMaximo = null;
+  }
+
+  onAulaChange(): void {
+    const aula = this.aulas.find(a => String(a.idAula) === this.oferta.aulaId);
+    if (aula) {
+      this.oferta.aula = aula.numeroAula;
+      this.oferta.cupoMaximo = aula.capacidad;
+    } else {
+      this.oferta.aula = '';
+      this.oferta.cupoMaximo = null;
+    }
   }
 
   onProfesorChange(): void {
@@ -84,6 +114,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
       !this.oferta.cursoId ||
       !this.oferta.profesorId ||
       !this.oferta.aula ||
+      !this.oferta.cupoMaximo ||
       seleccionados.length === 0 ||
       seleccionados.some(d => !d.horaInicio || !d.horaFin)
     ) {
@@ -99,7 +130,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
     const dias = seleccionados.map(d => d.abrev).join(' - ');
     const horario = seleccionados.map(d => `${d.horaInicio}-${d.horaFin}`).join(', ');
 
-    this.ofertaService.crear({ ...this.oferta, dias, horario, diasHorarios });
+    this.ofertaService.crear({ ...this.oferta, cupoMaximo: this.oferta.cupoMaximo!, dias, horario, diasHorarios });
     this.ofertaCreada.emit();
     this.cerrar();
     this.limpiar();
@@ -119,9 +150,11 @@ export class OfertaAcademicaFormComponent implements OnInit {
       cursoCodigo: '',
       profesorId: '',
       profesorNombre: '',
+      aulaId: '',
       aula: '',
       cupoMaximo: 35,
     };
+    this.aulasFiltradas = [];
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
       d.horaInicio = '';

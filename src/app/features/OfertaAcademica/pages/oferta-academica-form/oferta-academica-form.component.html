@@ -91,12 +91,22 @@
         <!-- Aula -->
         <div class="form-group">
           <label class="form-label">Aula</label>
-          <input
-            class="form-input"
-            type="text"
-            placeholder="Ej: A-201"
-            [(ngModel)]="oferta.aula"
-          />
+          <select
+            class="form-select"
+            [(ngModel)]="oferta.aulaId"
+            (ngModelChange)="onAulaChange()"
+            [disabled]="!oferta.cursoId"
+          >
+            <option value="">
+              {{ oferta.cursoId ? 'Seleccionar aula...' : 'Seleccione un curso primero' }}
+            </option>
+            <option *ngFor="let a of aulasFiltradas" [value]="a.idAula">
+              {{ a.numeroAula }} — Cap. {{ a.capacidad }}{{ a.esLaboratorio ? ' (Laboratorio)' : '' }}
+            </option>
+          </select>
+          <small *ngIf="oferta.cursoId && aulasFiltradas.length === 0" class="form-hint">
+            No hay aulas disponibles para este tipo de curso.
+          </small>
         </div>
 
         <!-- Cupo -->
@@ -106,6 +116,8 @@
             class="form-input"
             type="number"
             [(ngModel)]="oferta.cupoMaximo"
+            [readonly]="!!oferta.aulaId"
+            [placeholder]="oferta.aulaId ? '' : 'Seleccione un aula'"
             min="1"
             max="100"
           />
