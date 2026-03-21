@@ -2,26 +2,25 @@
 <div class="oferta-container">
 
   <!-- ══════ HEADER ══════ -->
-   <!-- 🔵 Banner Global -->
   <div class="module-banner">
     <div class="module-banner-content">
       <div>
-        <h1 class="module-title">📋 Oferta Académica</h1>
+        <h1 class="module-title">Oferta Academica</h1>
         <p class="module-subtitle">
-          Cursos habilitados para matrícula por período
+          Cursos habilitados para matricula por periodo
         </p>
       </div>
 
       <button class="btn btn-primary" (click)="abrirModal()">
-        ➕ Habilitar Curso
+        + Habilitar Curso
       </button>
     </div>
   </div>
 
 
   <div class="section">
-  
-    <!-- Búsqueda -->
+
+    <!-- Busqueda -->
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input
@@ -38,22 +37,22 @@
       <div
         class="oferta-card"
         *ngFor="let oferta of ofertasFiltradas"
-        [class.card-inactive]="oferta.estado === 'inactivo'"
-        [class.card-full]="oferta.estado === 'lleno'"
+        [class.card-inactive]="oferta.estado === 'Inactivo'"
+        [class.card-full]="oferta.estado === 'Lleno'"
       >
         <!-- Card header -->
         <div class="card-top">
           <div class="card-title-area">
-            <h3 class="card-curso">{{ oferta.cursoNombre }}</h3>
-            <span class="card-code">{{ oferta.cursoCodigo }}</span>
+            <h3 class="card-curso">{{ getNombreCurso(oferta.idCurso) }}</h3>
+            <span class="card-code">{{ getCodigoCurso(oferta.idCurso) }}</span>
           </div>
           <span
             class="badge"
-            [class.badge-success]="oferta.estado === 'activo'"
-            [class.badge-danger]="oferta.estado === 'inactivo'"
-            [class.badge-warning]="oferta.estado === 'lleno'"
+            [class.badge-success]="oferta.estado === 'Activo'"
+            [class.badge-danger]="oferta.estado === 'Inactivo'"
+            [class.badge-warning]="oferta.estado === 'Lleno'"
           >
-            {{ oferta.estado }}
+            {{ oferta.estado | uppercase }}
           </span>
         </div>
 
@@ -61,15 +60,19 @@
         <div class="card-details">
           <div class="detail-row">
             <span class="detail-icon">👨‍🏫</span>
-            <span>{{ oferta.profesorNombre }}</span>
+            <span>{{ getNombreProfesor(oferta.idProfesor) }}</span>
           </div>
-          <div class="detail-row" *ngFor="let dh of oferta.diasHorarios">
+          <div class="detail-row" *ngFor="let linea of formatDiasHorarios(oferta.diasHorarios)">
             <span class="detail-icon">🕐</span>
-            <span>{{ dh.dia }}: {{ dh.horaInicio }} - {{ dh.horaFin }}</span>
+            <span>{{ linea }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-icon">🏫</span>
-            <span>{{ oferta.aula }}</span>
+            <span>{{ getNombreAula(oferta.idAula) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon">💰</span>
+            <span class="precio-text">{{ formatPrecio(oferta.precio) }}</span>
           </div>
         </div>
 
@@ -92,11 +95,11 @@
         <div class="card-actions">
           <button
             class="btn-action"
-            [class.btn-deactivate]="oferta.estado === 'activo'"
-            [class.btn-activate]="oferta.estado !== 'activo'"
+            [class.btn-deactivate]="oferta.estado === 'Activo'"
+            [class.btn-activate]="oferta.estado !== 'Activo'"
             (click)="toggleEstado(oferta)"
           >
-            {{ oferta.estado === 'activo' ? '⏸ Desactivar' : '▶ Activar' }}
+            {{ oferta.estado === 'Activo' ? 'Desactivar' : 'Activar' }}
           </button>
           <button class="btn-action btn-delete" (click)="eliminar(oferta)">
             🗑️
@@ -109,10 +112,8 @@
     <div class="empty-state" *ngIf="ofertasFiltradas.length === 0">
       <div class="empty-icon">📋</div>
       <p class="empty-text">No hay cursos habilitados para este período</p>
-      <p class="empty-sub">Hacé click en "Habilitar Curso" para agregar uno</p>
+      <p class="empty-sub">Haga click en "Habilitar Curso" para agregar uno</p>
     </div>
-
-
 
     <!-- Footer count -->
     <div class="list-footer" *ngIf="ofertasFiltradas.length > 0">
@@ -120,7 +121,7 @@
         {{ ofertasFiltradas.length }} curso{{ ofertasFiltradas.length !== 1 ? 's' : '' }} habilitado{{ ofertasFiltradas.length !== 1 ? 's' : '' }}
       </span>
     </div>
-    
+
   </div>
 
 </div>

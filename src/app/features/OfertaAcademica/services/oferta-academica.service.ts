@@ -48,7 +48,7 @@ export class OfertaAcademicaService {
   }
 
   toggleEstado(id: number, estadoActual: string): Observable<Respuesta<number>> {
-    const nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
+    const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
     return this.http.patch<Respuesta<number>>(`${this.apiUrl}/CambiarEstado/${id}`, { estado: nuevoEstado })
       .pipe(tap(() => this.cargarOfertas()));
   }

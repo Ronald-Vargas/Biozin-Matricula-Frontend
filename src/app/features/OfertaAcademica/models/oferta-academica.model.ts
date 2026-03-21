@@ -6,19 +6,15 @@ export interface DiaHorario {
 
 export interface OfertaAcademica {
   idOferta: number;
-  codigo: string;
   idPeriodo: number;
-  periodoNombre: string;
   idCurso: number;
-  cursoNombre: string;
-  cursoCodigo: string;
   idProfesor: number;
-  profesorNombre: string;
   idAula: number;
-  aula: string;
   cupoMaximo: number;
   matriculados: number;
-  estado: 'activo' | 'inactivo' | 'lleno';
+  precio: number;
+  estado: 'Activo' | 'Inactivo' | 'Lleno';
+  fechaCreacion: string;
   diasHorarios: DiaHorario[];
 }
 
