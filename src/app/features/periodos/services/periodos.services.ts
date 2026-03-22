@@ -61,7 +61,8 @@ export class PeriodoService {
     }
   }
 
-  getPeriodosActivos(): Periodo[] {
-    return this.periodosSubject.getValue().filter(c => c.estadoMatricula === true);
+  getPeriodosActivos():  Observable<Periodo[]> {
+    return this.periodos$.pipe(map(periodos => periodos.filter(p => p.estadoMatricula)));
   }
+
 }

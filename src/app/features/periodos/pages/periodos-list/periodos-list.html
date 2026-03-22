@@ -1,15 +1,19 @@
 <div class="estudiantes-container">
-  <div class="section">
 
-    <!-- Header -->
-    <div class="section-header">
-      <h1 class="page-title">📅 Períodos Academicos</h1>
-      <button class="btn btn-primary"
-      (click)="toggleFormulario()">
-      <span *ngIf="!mostrarFormulario">➕ Nuevo Periodo</span>
-      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+  <div class="module-banner">
+    <div class="module-banner-content">
+      <div>
+        <h1 class="module-title">📅 Gestión de Períodos</h1>
+        <p class="module-subtitle">Administra los períodos académicos y sus fechas de matrícula</p>
+      </div>
+      <button class="btn btn-primary banner-btn" (click)="toggleFormulario()">
+        <span *ngIf="!mostrarFormulario">➕ Nuevo Periodo</span>
+        <span *ngIf="mostrarFormulario">❌ Cancelar</span>
       </button>
     </div>
+  </div>
+
+  <div class="section">
 
 
     <!-- Formulario nuevo periodo -->

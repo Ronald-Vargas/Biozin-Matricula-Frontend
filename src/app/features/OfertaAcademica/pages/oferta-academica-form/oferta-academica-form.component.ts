@@ -60,11 +60,12 @@ export class OfertaAcademicaFormComponent implements OnInit {
   ngOnInit(): void {
     this.cursoService.getCursosActivos().subscribe(cursos => this.cursos = cursos);
     this.profesorService.getProfesoresActivos().subscribe(profesores => this.profesores = profesores);
-    this.periodoService.getPeriodos().subscribe(periodos => this.periodos = periodos);
+    this.periodoService.getPeriodosActivos().subscribe(periodos => this.periodos = periodos);
     this.aulaService.getAulasActivas().subscribe(aulas => {
       this.aulas = aulas;
     });
   }
+
 
   onCursoChange(): void {
     const id = Number(this.oferta.idCurso);
