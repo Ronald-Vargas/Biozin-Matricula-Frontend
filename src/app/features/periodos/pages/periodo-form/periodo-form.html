@@ -4,7 +4,7 @@
   <div class="success-message" *ngIf="mensajeExito">
     ✓ Periodo {{ periodoEditar ? 'actualizado' : 'creado' }} exitosamente
   </div>
-
+  
 
   <form [formGroup]="periodoForm" (ngSubmit)="onSubmit()">
     <div class="form-row">

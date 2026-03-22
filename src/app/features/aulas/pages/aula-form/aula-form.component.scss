@@ -24,13 +24,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.form-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0 0 1.25rem;
-}
-
 .success-message {
   background: rgba(16, 185, 129, 0.1);
   color: var(--success);
@@ -62,7 +55,7 @@
   label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-light);
+    color: var(--text);
   }
 
   input[type="text"],

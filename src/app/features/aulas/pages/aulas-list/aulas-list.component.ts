@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Aula } from '../../models/aula.model';
 import { AulaService } from '../../services/aula.service';
 import { AulaFormComponent } from '../aula-form/aula-form.component';
@@ -14,16 +14,42 @@ import { AulaFormComponent } from '../aula-form/aula-form.component';
   templateUrl: './aulas-list.component.html',
   styleUrls: ['./aulas-list.component.scss'],
 })
-export class AulasListComponent implements OnInit {
+export class AulasListComponent implements OnInit, OnDestroy {
 
-  aulas$!: Observable<Aula[]>;
+  aulas: Aula[] = [];
   mostrarFormulario = false;
   aulaSeleccionada: Aula | null = null;
+  filtroNumero = '';
+  filtroEstado = 'todos';
+
+  private sub?: Subscription;
 
   constructor(private aulaService: AulaService) {}
 
   ngOnInit(): void {
-    this.aulas$ = this.aulaService.getAulas();
+    this.sub = this.aulaService.getAulas().subscribe(aulas => {
+      this.aulas = aulas;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  get aulasFiltradas(): Aula[] {
+    return this.aulas.filter(a => {
+      const term = this.filtroNumero.toLowerCase();
+      const matchNumero = !term || a.numeroAula.toLowerCase().includes(term);
+      const matchEstado =
+        this.filtroEstado === 'todos' ||
+        (this.filtroEstado === 'activo' && a.activo === true) ||
+        (this.filtroEstado === 'inactivo' && a.activo === false);
+      return matchNumero && matchEstado;
+    });
+  }
+
+  filtrar(estado: string): void {
+    this.filtroEstado = estado;
   }
 
   toggleFormulario(): void {

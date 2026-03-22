@@ -6,6 +6,7 @@
         <h1 class="module-title">📅 Gestión de Períodos</h1>
         <p class="module-subtitle">Administra los períodos académicos y sus fechas de matrícula</p>
       </div>
+      
       <button class="btn btn-primary banner-btn" (click)="toggleFormulario()">
         <span *ngIf="!mostrarFormulario">➕ Nuevo Periodo</span>
         <span *ngIf="mostrarFormulario">❌ Cancelar</span>
@@ -13,16 +14,35 @@
     </div>
   </div>
 
+  <app-periodo-form
+    *ngIf="mostrarFormulario"
+    [periodoEditar]="periodoEditarSeleccionado"
+    (periodoCreado)="onPeriodoGuardado()"
+    (periodoActualizado)="onPeriodoGuardado()">
+  </app-periodo-form>
+
   <div class="section">
 
+    <!-- Buscador -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar por nombre"
+        [(ngModel)]="filtroNombre">
+    </div>
 
-    <!-- Formulario nuevo periodo -->
-    <app-periodo-form
-      *ngIf="mostrarFormulario"
-      [periodoEditar]="periodoSeleccionado"
-      (periodoCreado)="onPeriodoCreado()"
-      (periodoActualizado)="onPeriodoActualizado()">
-    </app-periodo-form>
+
+    
+    <!-- Filtros -->
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtrar('activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
+    </div>
+
+
 
     <!-- Tabla -->
     <div class="table-container">
@@ -39,12 +59,17 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngIf="periodos$ | async as periodos">
+           <tr *ngIf="periodosFiltrados.length === 0">
+            <td colspan="7" class="empty-state">
+              <div class="empty-icon">📭</div>
+              <p>No se encontraron periodos</p>
+            </td>
+          </tr>
 
-          <tr *ngFor="let per of periodos; let i = index"
-              class="table-row"
-              [style.animation-delay]="(i * 0.05) + 's'">
+           <tr *ngFor="let per of periodosFiltrados; let i = index"
+              class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
+              
             <td><strong class="periodo-name">{{ per.nombre }}</strong></td>
 
             <td>{{ per.fechaInicio | date:'dd/MM/yyyy' }}</td>
@@ -64,7 +89,7 @@
               <div class="action-buttons">
                 <button 
                   class="btn-icon btn-edit"
-                  (click)="editarPeriodo(per)"
+                  (click)="editarPeriodo(per.idPeriodo)"
                   title="Editar">
                   ✏️
                 </button>
@@ -81,8 +106,6 @@
             </td>
 
           </tr>
-
-          </ng-container>
         </tbody>
 
       </table>
@@ -90,12 +113,11 @@
   </div>
 
 
-   <div class="no-data" *ngIf="(periodos$ | async)?.length === 0">
-    <div class="no-data-icon">📅</div>
-    <p>No hay peridodos registrados</p>
-    <button class="btn btn-primary" (click)="toggleFormulario()">
-      Crear Primer Periodo
-    </button>
-  </div>
+     <!-- Footer -->
+    <div class="table-footer">
+      <span class="results-count">
+        Mostrando {{ periodosFiltrados.length }} de {{ periodos.length }} periodos
+      </span>
+    </div>
 
 </div>

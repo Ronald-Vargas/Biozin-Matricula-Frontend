@@ -1,16 +1,11 @@
 <div class="profesores-container">
-  <div class="section">
 
-
-    <!-- Header -->
-    <div class="module-banner">
-      <div class="module-banner-content">
-        <div>
-          <h1 class="module-title">👨‍🏫 Gestión de Profesores</h1>
-          <p class="module-subtitle">
-            Administra el personal académico y sus asignaciones
-          </p>
-        </div>
+  <div class="module-banner">
+    <div class="module-banner-content">
+      <div>
+        <h1 class="module-title">👨‍🏫 Gestión de Profesores</h1>
+        <p class="module-subtitle">Administra el personal académico y sus asignaciones</p>
+      </div>
 
         <button class="btn btn-primary" routerLink="nuevo">
           ➕ Nuevo Profesor
@@ -21,6 +16,8 @@
 
   <div class="section">
 
+
+    
     <!-- Buscador -->
     <div class="search-box">
       <span class="search-icon">🔍</span>
@@ -31,12 +28,18 @@
         [(ngModel)]="filtroNombre">
     </div>
 
+
+
+
     <!-- Filtros -->
     <div class="filter-buttons">
       <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
       <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtrar('activo')">Activos</button>
       <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
     </div>
+
+
+
 
     <!-- Tabla -->
     <div class="table-container">
@@ -133,4 +136,3 @@
       </span>
     </div>
   </div>
-</div>
