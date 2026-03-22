@@ -58,16 +58,21 @@
 
             <td>
               <div class="action-buttons">
-                <button class="btn-icon btn-view"
-                        (click)="verDetalles(per.idPeriodo)"
-                        title="Ver detalles">👁️</button>
+                <button 
+                  class="btn-icon btn-edit"
+                  (click)="editarPeriodo(per)"
+                  title="Editar">
+                  ✏️
+                </button>
 
-                <button class="btn-icon btn-edit"
-                        (click)="editarPeriodo(per)"
-                        title="Editar">✏️</button>
-
-                <button class="btn-icon btn-delete"
-                        title="Eliminar">🗑️</button>
+                <button
+                  class="btn-icon"
+                  [class.btn-danger]="per.estadoMatricula === true"
+                  [class.btn-success]="per.estadoMatricula === false"
+                  [title]="getToggleButtonConfig(per.estadoMatricula).tooltip"
+                  (click)="toggleEstado(per.idPeriodo)">
+                  {{ getToggleButtonConfig(per.estadoMatricula).icon }}
+                </button>
               </div>
             </td>
 

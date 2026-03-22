@@ -39,10 +39,6 @@ export class PeriodosListComponent implements OnInit {
     }
   }
 
-  verDetalles(id: number): void {
-    this.router.navigate(['/periodos', id]);
-  }
-
   editarPeriodo(per: Periodo): void {
     this.periodoSeleccionado = per;
     this.mostrarFormulario = true;
@@ -63,5 +59,14 @@ export class PeriodosListComponent implements OnInit {
     this.periodoSeleccionado = null;
   }
 
+   getEstadoClass(estado: boolean): string {
+    return estado ? 'badge-active' : 'badge-inactive';
+  }
+
+   getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️', tooltip: 'Desactivar' }
+      : { icon: '✅', tooltip: 'Activar' };
+  }
 
 }

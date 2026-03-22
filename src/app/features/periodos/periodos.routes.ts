@@ -18,11 +18,5 @@ export const PERIODOS_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/periodo-form/periodo-form.component')
           .then(m => m.PeriodoFormComponent),
-  },
-  { 
-    path: ':id', 
-    loadComponent: () => 
-      import('./pages/periodo-detail/periodo-detail.component') 
-        .then(m => m.PeriodoDetailComponent)
   }
 ];
