@@ -61,8 +61,8 @@ export class ProfesorService {
     }
   }
 
-  getProfesoresActivos(): Profesor[] {
-    return this.profesoresSubject.getValue().filter(c => c.estado === true);
+  getProfesoresActivos(): Observable<Profesor[]> {
+    return this.profesores$.pipe(map(profesores => profesores.filter(c => c.estado === true)));
   }
 
 }

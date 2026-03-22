@@ -81,7 +81,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subCarreras = this.carreraService.getCarreras().subscribe(c => {
+    this.subCarreras = this.carreraService.getCarrerasActivas().subscribe(c => {
       this.carreras = c;
     });
 

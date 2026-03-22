@@ -35,8 +35,8 @@ export class AsignarCursosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.carreras$ = this.carreraService.getCarreras();
-    this.cursos$ = this.cursoService.getCursos();
+    this.carreras$ = this.carreraService.getCarrerasActivas();
+    this.cursos$ = this.cursoService.getCursosActivos();
   }
 
   onCarreraSeleccionada(event: any): void {

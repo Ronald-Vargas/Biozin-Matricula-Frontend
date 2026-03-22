@@ -27,7 +27,7 @@ export class MallaCurricularComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.carreras$ = this.carreraService.getCarreras();
+    this.carreras$ = this.carreraService.getCarrerasActivas();
   }
 
   onCarreraSeleccionada(event: any): void {

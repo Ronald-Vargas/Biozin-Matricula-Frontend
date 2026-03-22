@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { Aula, CreateAulaDto, Respuesta } from '../models/aula.model';
 import { environment } from '../../../environments/environment';
 
@@ -26,6 +26,10 @@ export class AulaService {
 
   getAulas(): Observable<Aula[]> {
     return this.aulas$;
+  }
+
+  getAulasActivas(): Observable<Aula[]> {
+    return this.aulas$.pipe(map(aulas => aulas.filter(a => a.activo)));
   }
 
   createAula(dto: CreateAulaDto): Observable<Respuesta<number>> {

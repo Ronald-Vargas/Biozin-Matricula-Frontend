@@ -60,7 +60,7 @@ export class CarreraService {
     }
   }
 
-  getCarrerasActivas(): Carrera[] {
-    return this.carrerasSubject.getValue().filter(c => c.estado === true);
+  getCarrerasActivas(): Observable<Carrera[]> {
+    return this.carreras$.pipe(map(carreras => carreras.filter(c => c.estado === true)));
   }
 }

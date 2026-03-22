@@ -61,7 +61,7 @@ export class CursoService {
     }
   }
 
-  getCursosActivos(): Curso[] {
-    return this.cursosSubject.getValue().filter(c => c.estado === true);
+  getCursosActivos(): Observable<Curso[]> {
+    return this.cursos$.pipe(map(cursos => cursos.filter(c => c.estado === true)));
   }
 }
