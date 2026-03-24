@@ -37,8 +37,7 @@
       <div
         class="oferta-card"
         *ngFor="let oferta of ofertasFiltradas"
-        [class.card-inactive]="oferta.estado === 'Inactivo'"
-        [class.card-full]="oferta.estado === 'Lleno'"
+        [class.card-inactive]="oferta.estado === false"
       >
         <!-- Card header -->
         <div class="card-top">
@@ -48,11 +47,10 @@
           </div>
           <span
             class="badge"
-            [class.badge-success]="oferta.estado === 'Activo'"
-            [class.badge-danger]="oferta.estado === 'Inactivo'"
-            [class.badge-warning]="oferta.estado === 'Lleno'"
+            [class.badge-success]="oferta.estado === true"
+            [class.badge-danger]="oferta.estado === false"
           >
-            {{ oferta.estado | uppercase }}
+            {{ oferta.estado ? 'Activo' : 'Inactivo' }}
           </span>
         </div>
 
@@ -94,14 +92,16 @@
         <!-- Actions -->
         <div class="card-actions">
           <button
-            class="btn-action"
-            [class.btn-deactivate]="oferta.estado === 'Activo'"
-            [class.btn-activate]="oferta.estado !== 'Activo'"
-            (click)="toggleEstado(oferta)"
-          >
-            {{ oferta.estado === 'Activo' ? 'Desactivar' : 'Activar' }}
+            class="btn btn-sm"
+            [class.btn-danger]="oferta.estado === true"
+            [class.btn-success]="oferta.estado === false"
+            [title]="getToggleButtonConfig(oferta.estado).tooltip"
+            (click)="toggleEstado(oferta.idOferta)">
+            {{ getToggleButtonConfig(oferta.estado).label }}
           </button>
-          <button class="btn-action btn-delete" (click)="eliminar(oferta)">
+          <button 
+            class="btn-action btn-delete"
+            (click)="eliminar(oferta)">
             🗑️
           </button>
         </div>

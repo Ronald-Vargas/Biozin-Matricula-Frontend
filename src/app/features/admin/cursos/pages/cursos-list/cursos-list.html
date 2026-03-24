@@ -42,16 +42,16 @@
     <div class="filter-group">
       <span class="filter-icon">📋</span>
       <select class="filter-select" [(ngModel)]="filtroEstado">
-        <option value="todos">Todos los estados</option>
         <option value="activo">Activo</option>
         <option value="inactivo">Inactivo</option>
+        <option value="todos">Todos los estados</option>
       </select>
     </div>
 
     <button
       class="btn-clear-filters"
       (click)="limpiarFiltros()"
-      *ngIf="filtroNombre || filtroEstado !== 'todos'">
+      *ngIf="filtroNombre || filtroEstado !== 'activo'">
       ✕ Limpiar filtros
     </button>
 

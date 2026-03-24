@@ -21,7 +21,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
 
   estudiantes: Estudiante[] = [];
   filtroNombre = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
 
   private sub?: Subscription;
 

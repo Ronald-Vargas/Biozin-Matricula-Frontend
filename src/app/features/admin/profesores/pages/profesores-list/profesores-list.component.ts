@@ -18,7 +18,7 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
 
   profesores: Profesor[] = [];
   filtroNombre = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
 
   private sub?: Subscription;
 

@@ -13,7 +13,7 @@ export interface OfertaAcademica {
   cupoMaximo: number;
   matriculados: number;
   precio: number;
-  estado: 'Activo' | 'Inactivo' | 'Lleno';
+  estado: boolean;
   fechaCreacion: string;
   diasHorarios: DiaHorario[];
 }

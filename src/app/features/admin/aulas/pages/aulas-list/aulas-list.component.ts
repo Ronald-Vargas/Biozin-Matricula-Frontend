@@ -20,7 +20,7 @@ export class AulasListComponent implements OnInit, OnDestroy {
   mostrarFormulario = false;
   aulaSeleccionada: Aula | null = null;
   filtroNumero = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
 
   private sub?: Subscription;
 

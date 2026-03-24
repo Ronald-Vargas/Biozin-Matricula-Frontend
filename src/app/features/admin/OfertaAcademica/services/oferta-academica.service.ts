@@ -37,19 +37,25 @@ export class OfertaAcademicaService {
       .pipe(tap(() => this.cargarOfertas()));
   }
 
-  actualizar(dto: UpdateOfertaDto): Observable<Respuesta<number>> {
-    return this.http.put<Respuesta<number>>(`${this.apiUrl}/Modificar`, dto)
-      .pipe(tap(() => this.cargarOfertas()));
-  }
+  updateOferta(oferta: OfertaAcademica): Observable<Respuesta<number>> {
+      return this.http.put<Respuesta<number>>(`${this.apiUrl}/Modificar`, oferta)
+        .pipe(tap(() => this.cargarOfertas()));
+    }
+
 
   eliminar(id: number): Observable<Respuesta<boolean>> {
     return this.http.delete<Respuesta<boolean>>(`${this.apiUrl}/Eliminar/${id}`)
       .pipe(tap(() => this.cargarOfertas()));
   }
 
-  toggleEstado(id: number, estadoActual: string): Observable<Respuesta<number>> {
-    const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
-    return this.http.patch<Respuesta<number>>(`${this.apiUrl}/CambiarEstado/${id}`, { estado: nuevoEstado })
-      .pipe(tap(() => this.cargarOfertas()));
+  toggleEstado(id: number): void {
+    const ofertas = this.ofertasSubject.getValue();
+    const oferta = ofertas.find(c => c.idOferta === id);
+    if (oferta) {
+      const updated = { ...oferta, estado: !oferta.estado };
+      this.updateOferta(updated).subscribe();
+    }
   }
+
 }
+

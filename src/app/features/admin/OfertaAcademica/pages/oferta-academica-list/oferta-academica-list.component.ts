@@ -120,9 +120,18 @@ export class OfertaAcademicaListComponent implements OnInit {
     return '₡' + precio.toLocaleString('es-CR');
   }
 
-  toggleEstado(oferta: OfertaAcademica): void {
-    this.ofertaService.toggleEstado(oferta.idOferta, oferta.estado).subscribe();
+  toggleEstado(idOferta: number): void {
+    this.ofertaService.toggleEstado(idOferta);
   }
+
+   getToggleButtonConfig(estado: boolean): { label: string; tooltip: string } {
+    return estado
+      ? { label: 'Desactivar', tooltip: 'Desactivar' }
+      : { label: 'Activar', tooltip: 'Activar' };
+  }
+
+
+
 
   eliminar(oferta: OfertaAcademica): void {
     const nombre = this.getNombreCurso(oferta.idCurso);

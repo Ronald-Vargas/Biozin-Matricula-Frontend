@@ -21,7 +21,7 @@ export class CursosListComponent implements OnInit, OnDestroy {
   mostrarFormulario = false;
   cursoEditandoId: number | null = null;
   filtroNombre = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
   private sub!: Subscription;
 
   constructor(
@@ -53,7 +53,7 @@ export class CursosListComponent implements OnInit, OnDestroy {
 
   limpiarFiltros(): void {
     this.filtroNombre = '';
-    this.filtroEstado = 'todos';
+    this.filtroEstado = 'activo';
   }
 
   toggleFormulario(): void {

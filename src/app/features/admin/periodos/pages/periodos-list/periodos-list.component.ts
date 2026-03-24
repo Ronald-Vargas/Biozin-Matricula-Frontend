@@ -20,7 +20,7 @@ export class PeriodosListComponent implements OnInit {
 
   periodos: Periodo[] = [];
   filtroNombre = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
   mostrarFormulario = false;
   periodoEditarSeleccionado: Periodo | null = null;
 

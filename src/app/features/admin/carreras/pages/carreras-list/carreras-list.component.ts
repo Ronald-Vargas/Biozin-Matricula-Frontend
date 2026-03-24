@@ -23,7 +23,7 @@ export class CarrerasListComponent implements OnInit, OnDestroy {
   mostrarFormulario = false;
   carreraEditandoId: number | null = null;
   filtroNombre = '';
-  filtroEstado = 'todos';
+  filtroEstado = 'activo';
   private sub!: Subscription;
 
   constructor(
@@ -55,7 +55,7 @@ export class CarrerasListComponent implements OnInit, OnDestroy {
 
   limpiarFiltros(): void {
     this.filtroNombre = '';
-    this.filtroEstado = 'todos';
+    this.filtroEstado = 'activo';
   }
 
   toggleFormulario(): void {
