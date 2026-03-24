@@ -1,0 +1,100 @@
+<div class="historial-container">
+
+  <!-- Banner -->
+  <div class="page-banner">
+    <div class="banner-content">
+      <h1 class="banner-title">Historial Académico</h1>
+      <p class="banner-subtitle">Registro completo de cursos y calificaciones por semestre</p>
+    </div>
+    <div class="banner-decoration">
+      <div class="decoration-circle circle-1"></div>
+      <div class="decoration-circle circle-2"></div>
+    </div>
+  </div>
+
+  <!-- Resumen general -->
+  <div class="resumen-grid">
+    <div class="resumen-card" style="--r-color: #06b6d4">
+      <div class="resumen-icon">📊</div>
+      <div class="resumen-info">
+        <span class="resumen-value">{{ promedioGeneral }}</span>
+        <span class="resumen-label">Promedio General</span>
+      </div>
+    </div>
+    <div class="resumen-card" style="--r-color: #10b981">
+      <div class="resumen-icon">✅</div>
+      <div class="resumen-info">
+        <span class="resumen-value">{{ totalCursosAprobados }}</span>
+        <span class="resumen-label">Cursos Aprobados</span>
+      </div>
+    </div>
+    <div class="resumen-card" style="--r-color: #8b5cf6">
+      <div class="resumen-icon">🎯</div>
+      <div class="resumen-info">
+        <span class="resumen-value">{{ totalCreditosAprobados }}</span>
+        <span class="resumen-label">Créditos Aprobados</span>
+      </div>
+    </div>
+    <div class="resumen-card" style="--r-color: #f59e0b">
+      <div class="resumen-icon">🗓️</div>
+      <div class="resumen-info">
+        <span class="resumen-value">{{ semestres.length }}</span>
+        <span class="resumen-label">Semestres Cursados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semestres -->
+  <div class="semestres-list">
+    <div
+      class="semestre-block"
+      *ngFor="let sem of semestres; let i = index"
+      [style.animation-delay]="(i * 0.1) + 's'"
+    >
+      <div class="semestre-header">
+        <div class="semestre-titulo">
+          <span class="semestre-icon">📅</span>
+          <div>
+            <span class="semestre-label">{{ sem.label }}</span>
+            <span class="semestre-periodo">{{ sem.periodo }}</span>
+          </div>
+        </div>
+        <div class="semestre-promedio" *ngIf="sem.promedio !== null">
+          <span class="promedio-valor">{{ sem.promedio }}</span>
+          <span class="promedio-label">Promedio</span>
+        </div>
+        <div class="semestre-promedio en-curso" *ngIf="sem.promedio === null">
+          <span class="en-curso-badge">En curso</span>
+        </div>
+      </div>
+
+      <div class="cursos-tabla">
+        <div class="tabla-header">
+          <span>Código</span>
+          <span>Nombre</span>
+          <span>Créditos</span>
+          <span>Nota</span>
+          <span>Estado</span>
+        </div>
+        <div
+          class="tabla-fila"
+          *ngFor="let curso of sem.cursos"
+          [ngClass]="'fila-' + curso.estado"
+        >
+          <span class="col-codigo">{{ curso.codigo }}</span>
+          <span class="col-nombre">{{ curso.nombre }}</span>
+          <span class="col-creditos">{{ curso.creditos }}</span>
+          <span class="col-nota" [ngClass]="getNotaClass(curso)">
+            {{ curso.nota !== null ? curso.nota : '—' }}
+          </span>
+          <span class="col-estado">
+            <span class="estado-badge" [ngClass]="'badge-' + curso.estado">
+              {{ getEstadoLabel(curso.estado) }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

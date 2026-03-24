@@ -1,0 +1,119 @@
+<div class="matricular-container">
+
+  <!-- Banner -->
+  <div class="page-banner">
+    <div class="banner-content">
+      <h1 class="banner-title">Matricular Cursos</h1>
+      <p class="banner-subtitle">
+        {{ periodo.nombre }} &middot; Cierre de matrícula: {{ periodo.fechaCierreMatricula | date:'d MMM yyyy' }}
+      </p>
+    </div>
+    <div class="banner-decoration">
+      <div class="decoration-circle circle-1"></div>
+      <div class="decoration-circle circle-2"></div>
+    </div>
+  </div>
+
+  <!-- Buscador -->
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Buscar por nombre, código o profesor..."
+      [(ngModel)]="filtroBusqueda"
+    />
+    <span class="search-count">{{ ofertaFiltrada.length }} curso(s)</span>
+  </div>
+
+  <!-- Lista de oferta -->
+  <div class="oferta-grid">
+    <div
+      class="curso-card"
+      *ngFor="let curso of ofertaFiltrada; let i = index"
+      [class.matriculado]="curso.matriculado"
+      [style.--curso-color]="curso.color"
+      [style.animation-delay]="(i * 0.08) + 's'"
+    >
+      <div class="curso-color-bar"></div>
+
+      <div class="curso-body">
+        <div class="curso-top">
+          <div class="curso-header-left">
+            <span class="curso-codigo">{{ curso.codigo }}</span>
+            <span class="curso-creditos">{{ curso.creditos }} cr.</span>
+          </div>
+          <span class="matriculado-badge" *ngIf="curso.matriculado">✓ Matriculado</span>
+        </div>
+
+        <h3 class="curso-nombre">{{ curso.nombre }}</h3>
+
+        <div class="curso-detalles">
+          <span class="curso-detail"><span>👨‍🏫</span> {{ curso.profesor }}</span>
+          <span class="curso-detail"><span>🏫</span> {{ curso.aula }}</span>
+          <span class="curso-detail"><span>🕐</span> {{ curso.horario }}</span>
+          <span class="curso-detail"><span>💰</span> ₡{{ curso.precio | number }}</span>
+        </div>
+
+        <div class="cupo-section">
+          <div class="cupo-info">
+            <span class="cupo-label">Cupo</span>
+            <span class="cupo-valor" [ngClass]="getCupoClass(curso)">
+              {{ getCuposRestantes(curso) > 0 ? getCuposRestantes(curso) + ' disponibles' : 'Sin cupo' }}
+            </span>
+          </div>
+          <div class="cupo-bar-track">
+            <div
+              class="cupo-bar-fill"
+              [style.width.%]="getCupoPercent(curso)"
+              [ngClass]="getCupoClass(curso)"
+            ></div>
+          </div>
+          <span class="cupo-numbers">{{ curso.matriculados }} / {{ curso.cupoMaximo }}</span>
+        </div>
+      </div>
+
+      <div class="curso-footer">
+        <button
+          class="btn-matricular"
+          [disabled]="curso.matriculado || getCuposRestantes(curso) <= 0"
+          (click)="abrirConfirmacion(curso)"
+        >
+          <span *ngIf="!curso.matriculado && getCuposRestantes(curso) > 0">📝 Matricular</span>
+          <span *ngIf="curso.matriculado">✓ Ya matriculado</span>
+          <span *ngIf="!curso.matriculado && getCuposRestantes(curso) <= 0">Sin cupo disponible</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin resultados -->
+  <div class="empty-state" *ngIf="ofertaFiltrada.length === 0">
+    <span class="empty-icon">🔍</span>
+    <p>No se encontraron cursos para "{{ filtroBusqueda }}"</p>
+  </div>
+
+  <!-- Modal de confirmación -->
+  <div class="modal-overlay" *ngIf="confirmando" (click)="cancelarConfirmacion()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Confirmar Matrícula</h2>
+      </div>
+      <div class="modal-body">
+        <p class="modal-pregunta">¿Deseas matricularte en el siguiente curso?</p>
+        <div class="modal-curso-info">
+          <div class="modal-codigo" [style.color]="confirmando.color">{{ confirmando.codigo }}</div>
+          <div class="modal-nombre">{{ confirmando.nombre }}</div>
+          <div class="modal-detalle">{{ confirmando.profesor }}</div>
+          <div class="modal-detalle">{{ confirmando.horario }}</div>
+          <div class="modal-precio">₡{{ confirmando.precio | number }} — {{ confirmando.creditos }} créditos</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="cancelarConfirmacion()">Cancelar</button>
+        <button class="btn-confirmar" (click)="confirmarMatricula()">Confirmar Matrícula</button>
+      </div>
+    </div>
+  </div>
+
+</div>

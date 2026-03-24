@@ -69,6 +69,11 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/admin/aulas/aulas.routes').then((m) => m.AULAS_ROUTES),
       },
+      {
+        path: 'portal',
+        loadChildren: () =>
+          import('./features/estudiante/portal.routes').then((m) => m.PORTAL_ROUTES),
+      },
     ],
   },
 

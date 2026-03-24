@@ -1,0 +1,151 @@
+<div class="pagos-container">
+
+  <!-- Banner -->
+  <div class="page-banner">
+    <div class="banner-content">
+      <h1 class="banner-title">Mis Pagos</h1>
+      <p class="banner-subtitle">Consulta y cancela tus cuotas de matrícula y aranceles</p>
+    </div>
+    <div class="banner-decoration">
+      <div class="decoration-circle circle-1"></div>
+      <div class="decoration-circle circle-2"></div>
+    </div>
+  </div>
+
+  <!-- Resumen -->
+  <div class="resumen-grid">
+    <div class="resumen-card pendiente">
+      <div class="resumen-icon">⏳</div>
+      <div class="resumen-info">
+        <span class="resumen-value">₡{{ totalPendiente | number }}</span>
+        <span class="resumen-label">Saldo Pendiente</span>
+      </div>
+    </div>
+    <div class="resumen-card pagado">
+      <div class="resumen-icon">✅</div>
+      <div class="resumen-info">
+        <span class="resumen-value">₡{{ totalPagado | number }}</span>
+        <span class="resumen-label">Total Pagado</span>
+      </div>
+    </div>
+    <div class="resumen-card info">
+      <div class="resumen-icon">📋</div>
+      <div class="resumen-info">
+        <span class="resumen-value">{{ pagosPendientes.length }}</span>
+        <span class="resumen-label">Cuotas Pendientes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagos pendientes -->
+  <div class="section" *ngIf="pagosPendientes.length > 0">
+    <h2 class="section-title">
+      <span>⏳</span>
+      Pagos Pendientes
+    </h2>
+    <div class="pagos-list">
+      <div
+        class="pago-card pago-pendiente"
+        *ngFor="let p of pagosPendientes; let i = index"
+        [style.animation-delay]="(i * 0.08) + 's'"
+      >
+        <div class="pago-left">
+          <div class="pago-indicador pendiente"></div>
+          <div class="pago-info">
+            <span class="pago-concepto">{{ p.concepto }}</span>
+            <span class="pago-vencimiento">Vence: {{ p.fechaVencimiento | date:'d MMM yyyy' }}</span>
+          </div>
+        </div>
+        <div class="pago-right">
+          <span class="pago-monto">₡{{ p.monto | number }}</span>
+          <button class="btn-pagar" (click)="abrirPago(p)">Pagar ahora</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin pendientes -->
+  <div class="al-dia-card" *ngIf="pagosPendientes.length === 0">
+    <span class="al-dia-icon">🎉</span>
+    <div>
+      <p class="al-dia-title">¡Estás al día!</p>
+      <p class="al-dia-sub">No tienes pagos pendientes en este momento.</p>
+    </div>
+  </div>
+
+  <!-- Historial de pagos -->
+  <div class="section" *ngIf="pagosRealizados.length > 0" style="margin-top: 1.5rem">
+    <h2 class="section-title">
+      <span>📜</span>
+      Historial de Pagos
+    </h2>
+    <div class="pagos-list">
+      <div
+        class="pago-card pago-realizado"
+        *ngFor="let p of pagosRealizados; let i = index"
+        [style.animation-delay]="(i * 0.06) + 's'"
+      >
+        <div class="pago-left">
+          <div class="pago-indicador pagado"></div>
+          <div class="pago-info">
+            <span class="pago-concepto">{{ p.concepto }}</span>
+            <span class="pago-fecha-pago">Pagado el {{ p.fechaPago | date:'d MMM yyyy' }}</span>
+          </div>
+        </div>
+        <div class="pago-right">
+          <span class="pago-monto pagado">₡{{ p.monto | number }}</span>
+          <span class="badge-pagado">✓ Pagado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de pago -->
+  <div class="modal-overlay" *ngIf="pagoSeleccionado" (click)="cancelarPago()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <!-- Confirmado -->
+      <div class="modal-exito" *ngIf="pagoConfirmado">
+        <div class="exito-icon">✅</div>
+        <h2 class="exito-titulo">Pago Procesado</h2>
+        <p class="exito-mensaje">
+          Tu pago de <strong>₡{{ pagoSeleccionado.monto | number }}</strong> ha sido procesado exitosamente.
+        </p>
+        <button class="btn-cerrar" (click)="cerrarModal()">Cerrar</button>
+      </div>
+
+      <!-- Formulario de pago -->
+      <ng-container *ngIf="!pagoConfirmado">
+        <div class="modal-header">
+          <h2 class="modal-title">Realizar Pago</h2>
+        </div>
+        <div class="modal-body">
+          <div class="pago-resumen">
+            <p class="pago-concepto-modal">{{ pagoSeleccionado.concepto }}</p>
+            <p class="pago-monto-modal">₡{{ pagoSeleccionado.monto | number }}</p>
+            <p class="pago-vence-modal">Fecha de vencimiento: {{ pagoSeleccionado.fechaVencimiento | date:'d MMMM yyyy' }}</p>
+          </div>
+          <div class="metodo-pago">
+            <p class="metodo-label">Método de pago</p>
+            <div class="metodo-opciones">
+              <label class="metodo-opcion selected">
+                <span>💳</span> Tarjeta de crédito/débito
+              </label>
+              <label class="metodo-opcion">
+                <span>🏦</span> Transferencia bancaria
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancelar" (click)="cancelarPago()">Cancelar</button>
+          <button class="btn-confirmar" (click)="procesarPago()">
+            Pagar ₡{{ pagoSeleccionado.monto | number }}
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>

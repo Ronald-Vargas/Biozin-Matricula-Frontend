@@ -1,0 +1,306 @@
+:host {
+  display: block;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #8b5cf6;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --text-light: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+.historial-container {
+  padding: 0;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== BANNER ========== */
+.page-banner {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0891b2 100%);
+  color: white;
+  padding: 2rem 2.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(8, 145, 178, 0.25);
+}
+
+.banner-content { position: relative; z-index: 2; }
+
+.banner-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.5px;
+}
+
+.banner-subtitle { font-size: 0.9rem; opacity: 0.8; }
+
+.banner-decoration {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 40%;
+  pointer-events: none;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.circle-1 {
+  width: 240px; height: 240px;
+  top: -60px; right: -40px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+}
+
+.circle-2 {
+  width: 140px; height: 140px;
+  bottom: -30px; right: 90px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+}
+
+/* ========== RESUMEN ========== */
+.resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.resumen-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.resumen-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--r-color, var(--accent));
+}
+
+.resumen-icon { font-size: 1.6rem; }
+
+.resumen-info { display: flex; flex-direction: column; }
+
+.resumen-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--r-color, var(--accent));
+  line-height: 1;
+}
+
+.resumen-label {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 0.3rem;
+}
+
+/* ========== SEMESTRES ========== */
+.semestres-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.semestre-block {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.4s ease-out both;
+}
+
+.semestre-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.semestre-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.semestre-icon { font-size: 1.2rem; }
+
+.semestre-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.semestre-periodo {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+
+.semestre-promedio {
+  text-align: right;
+}
+
+.promedio-valor {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.promedio-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+
+.en-curso-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+/* ========== TABLA ========== */
+.cursos-tabla {
+  padding: 0.5rem 0;
+}
+
+.tabla-header {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px 70px 110px;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-fila {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px 70px 110px;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  transition: background 0.2s ease;
+}
+
+.tabla-fila:hover { background: var(--bg); }
+
+.col-codigo {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.col-nombre {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.col-creditos {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.col-nota {
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.nota-alta { color: var(--success); }
+.nota-media { color: var(--warning); }
+.nota-baja { color: var(--danger); }
+.nota-en-curso { color: var(--text-muted); }
+
+.col-estado { text-align: center; }
+
+.estado-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+}
+
+.badge-aprobado {
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.badge-reprobado {
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.badge-en_curso {
+  color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .tabla-header,
+  .tabla-fila {
+    grid-template-columns: 80px 1fr 55px 55px 90px;
+    gap: 0.3rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.78rem;
+  }
+
+  .col-nombre { font-size: 0.78rem; }
+}
+
+@media (max-width: 560px) {
+  .tabla-header { display: none; }
+
+  .tabla-fila {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .col-codigo { font-size: 0.72rem; }
+  .col-nombre { font-size: 0.9rem; font-weight: 700; }
+  .col-creditos, .col-nota { align-self: flex-start; }
+}
