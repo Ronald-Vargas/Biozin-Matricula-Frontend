@@ -1,17 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateEstudianteDto, Estudiante } from '../../models/estudiantes.model';
 import { EstudianteService } from '../../services/estudiantes.services';
 import { Carrera } from '../../../carreras/models/carrera.model';
 import { CarreraService } from '../../../carreras/services/carrera.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-estudiante-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './estudiante-form.html',
   styleUrl: './estudiante-form.scss',
 })
@@ -22,58 +22,14 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   titulo: string = '📝 Nuevo Estudiante';
 
   estudianteOriginal?: Estudiante;
-
-  form = {
-    // ── Información Personal ──
-    cedula: '',
-    nombre: '',
-    apellidoPaterno: '',
-    apellidoMaterno: '',
-    fechaNacimiento: '',
-    genero: '',
-    nacionalidad: '',
-    discapacidad: false,
-    tipoDiscapacidad: '',
-    necesitaAsistencia: false,
-
-    // ── Contacto ──
-    emailPersonal: '',
-    telefonoMovil: '',
-    telefonoEmergencia: '',
-    nombreContactoEmergencia: '',
-
-    // ── Académico ──
-    idCarrera: 0,
-    condicionSocioeconomica: '',
-    tipoBeca: 'Ninguna',
-    trabaja: false,
-
-    // ── Colegio de Procedencia ──
-    colegioProcedencia: '',
-    tipoColegio: '',
-    anioGraduacionColegio: null as number | null,
-
-    // ── Dirección ──
-    provincia: '',
-    canton: '',
-    distrito: '',
-    direccionExacta: '',
-
-    // ── Observaciones ──
-    observaciones: '',
-
-    // ── Campos automáticos (solo lectura en edición) ──
-    carnet: 0,
-    emailInstitucional: '',
-    semestreActual: 1,
-    fechaIngreso: '',
-    estadoEstudiante: true,
-  };
+  estudianteForm!: FormGroup;
 
   carreras: Carrera[] = [];
   private subCarreras?: Subscription;
+  private subDiscapacidad?: Subscription;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private estudianteService: EstudianteService,
@@ -81,8 +37,18 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.buildForm();
+
     this.subCarreras = this.carreraService.getCarrerasActivas().subscribe(c => {
       this.carreras = c;
+    });
+
+    // Cuando discapacidad cambia, limpiar campos dependientes
+    this.subDiscapacidad = this.estudianteForm.get('discapacidad')!.valueChanges.subscribe(val => {
+      if (!val) {
+        this.estudianteForm.get('tipoDiscapacidad')!.setValue('');
+        this.estudianteForm.get('necesitaAsistencia')!.setValue(false);
+      }
     });
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -96,13 +62,76 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subCarreras?.unsubscribe();
+    this.subDiscapacidad?.unsubscribe();
+  }
+
+  private buildForm(): void {
+    this.estudianteForm = this.fb.group({
+      // ── Información Personal ──
+      cedula:             ['', [Validators.required, Validators.maxLength(20)]],
+      nombre:             ['', [Validators.required, Validators.maxLength(40)]],
+      apellidoPaterno:    ['', [Validators.required, Validators.maxLength(40)]],
+      apellidoMaterno:    ['', [Validators.maxLength(40)]],
+      fechaNacimiento:    ['', [Validators.required]],
+      genero:             ['', [Validators.maxLength(15)]],
+      nacionalidad:       ['', [Validators.maxLength(50)]],
+      discapacidad:       [false],
+      tipoDiscapacidad:   ['', [Validators.maxLength(100)]],
+      necesitaAsistencia: [false],
+
+      // ── Contacto ──
+      emailPersonal:            ['', [Validators.maxLength(100), Validators.email]],
+      telefonoMovil:            ['', [Validators.required, Validators.maxLength(20)]],
+      telefonoEmergencia:       ['', [Validators.maxLength(20)]],
+      nombreContactoEmergencia: ['', [Validators.maxLength(100)]],
+
+      // ── Académico ──
+      idCarrera:               [0, [Validators.required, Validators.min(1)]],
+      condicionSocioeconomica: ['', [Validators.maxLength(30)]],
+      tipoBeca:                ['Ninguna', [Validators.maxLength(20)]],
+      trabaja:                 [false],
+
+      // ── Colegio ──
+      colegioProcedencia:    ['', [Validators.maxLength(150)]],
+      tipoColegio:           [''],
+      anioGraduacionColegio: [null],
+
+      // ── Dirección ──
+      provincia:       ['', [Validators.maxLength(50)]],
+      canton:          ['', [Validators.maxLength(50)]],
+      distrito:        ['', [Validators.maxLength(50)]],
+      direccionExacta: [''],
+
+      // ── Observaciones ──
+      observaciones: [''],
+
+      // ── Campos del sistema (solo lectura) ──
+      carnet:             [0],
+      emailInstitucional: [''],
+      semestreActual:     [1],
+      fechaIngreso:       [''],
+      estadoEstudiante:   [true],
+    });
+  }
+
+  get discapacidad(): boolean {
+    return this.estudianteForm.get('discapacidad')!.value;
+  }
+
+  f(name: string): AbstractControl {
+    return this.estudianteForm.get(name)!;
+  }
+
+  isInvalid(name: string): boolean {
+    const ctrl = this.f(name);
+    return ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 
   cargarEstudiante(id: number): void {
     this.estudianteService.getEstudianteById(id).subscribe(est => {
       if (!est) return;
       this.estudianteOriginal = est;
-      this.form = {
+      this.estudianteForm.patchValue({
         cedula: est.cedula,
         nombre: est.nombre,
         apellidoPaterno: est.apellidoPaterno,
@@ -134,17 +163,17 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         semestreActual: est.semestreActual,
         fechaIngreso: est.fechaIngreso ? est.fechaIngreso.split('T')[0] : '',
         estadoEstudiante: est.estadoEstudiante,
-      };
+      });
     });
   }
 
   guardar(): void {
-    if (!this.form.cedula || !this.form.nombre || !this.form.apellidoPaterno || !this.form.idCarrera) {
-      alert('⚠️ Por favor complete los campos obligatorios');
-      return;
-    }
+    this.estudianteForm.markAllAsTouched();
+    if (this.estudianteForm.invalid) return;
 
-    const carreraSeleccionada = this.carreras.find(c => c.idCarrera === this.form.idCarrera);
+    const v = this.estudianteForm.value;
+
+    const carreraSeleccionada = this.carreras.find(c => c.idCarrera === v.idCarrera);
     if (!carreraSeleccionada) {
       alert('⚠️ Por favor seleccione una carrera válida');
       return;
@@ -153,32 +182,32 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     if (this.esEdicion && this.estudianteOriginal) {
       const updated: Estudiante = {
         ...this.estudianteOriginal,
-        cedula: this.form.cedula,
-        nombre: this.form.nombre,
-        apellidoPaterno: this.form.apellidoPaterno,
-        apellidoMaterno: this.form.apellidoMaterno || undefined,
-        fechaNacimiento: this.form.fechaNacimiento,
-        genero: this.form.genero,
-        nacionalidad: this.form.nacionalidad || undefined,
-        discapacidad: this.form.discapacidad,
-        tipoDiscapacidad: this.form.tipoDiscapacidad || undefined,
-        necesitaAsistencia: this.form.necesitaAsistencia,
-        emailPersonal: this.form.emailPersonal,
-        telefonoMovil: this.form.telefonoMovil,
-        telefonoEmergencia: this.form.telefonoEmergencia || undefined,
-        nombreContactoEmergencia: this.form.nombreContactoEmergencia || undefined,
+        cedula: v.cedula,
+        nombre: v.nombre,
+        apellidoPaterno: v.apellidoPaterno,
+        apellidoMaterno: v.apellidoMaterno || undefined,
+        fechaNacimiento: v.fechaNacimiento,
+        genero: v.genero,
+        nacionalidad: v.nacionalidad || undefined,
+        discapacidad: v.discapacidad,
+        tipoDiscapacidad: v.tipoDiscapacidad || undefined,
+        necesitaAsistencia: v.necesitaAsistencia,
+        emailPersonal: v.emailPersonal,
+        telefonoMovil: v.telefonoMovil,
+        telefonoEmergencia: v.telefonoEmergencia || undefined,
+        nombreContactoEmergencia: v.nombreContactoEmergencia || undefined,
         idCarrera: carreraSeleccionada.idCarrera,
-        condicionSocioeconomica: this.form.condicionSocioeconomica || undefined,
-        tipoBeca: this.form.tipoBeca,
-        trabaja: this.form.trabaja,
-        colegioProcedencia: this.form.colegioProcedencia || undefined,
-        tipoColegio: this.form.tipoColegio || undefined,
-        anioGraduacionColegio: this.form.anioGraduacionColegio || undefined,
-        provincia: this.form.provincia || undefined,
-        canton: this.form.canton || undefined,
-        distrito: this.form.distrito || undefined,
-        direccionExacta: this.form.direccionExacta || undefined,
-        observaciones: this.form.observaciones || undefined,
+        condicionSocioeconomica: v.condicionSocioeconomica || undefined,
+        tipoBeca: v.tipoBeca,
+        trabaja: v.trabaja,
+        colegioProcedencia: v.colegioProcedencia || undefined,
+        tipoColegio: v.tipoColegio || undefined,
+        anioGraduacionColegio: v.anioGraduacionColegio || undefined,
+        provincia: v.provincia || undefined,
+        canton: v.canton || undefined,
+        distrito: v.distrito || undefined,
+        direccionExacta: v.direccionExacta || undefined,
+        observaciones: v.observaciones || undefined,
       };
 
       this.estudianteService.updateEstudiante(updated).subscribe(res => {
@@ -191,33 +220,33 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
       });
     } else {
       const dto: CreateEstudianteDto = {
-        cedula: this.form.cedula,
-        nombre: this.form.nombre,
-        apellidoPaterno: this.form.apellidoPaterno,
-        apellidoMaterno: this.form.apellidoMaterno || undefined,
-        fechaNacimiento: this.form.fechaNacimiento,
-        genero: this.form.genero,
-        nacionalidad: this.form.nacionalidad || undefined,
-        discapacidad: this.form.discapacidad,
-        tipoDiscapacidad: this.form.tipoDiscapacidad || undefined,
-        necesitaAsistencia: this.form.necesitaAsistencia,
-        emailPersonal: this.form.emailPersonal,
-        telefonoMovil: this.form.telefonoMovil,
-        telefonoEmergencia: this.form.telefonoEmergencia || undefined,
-        nombreContactoEmergencia: this.form.nombreContactoEmergencia || undefined,
+        cedula: v.cedula,
+        nombre: v.nombre,
+        apellidoPaterno: v.apellidoPaterno,
+        apellidoMaterno: v.apellidoMaterno || undefined,
+        fechaNacimiento: v.fechaNacimiento,
+        genero: v.genero,
+        nacionalidad: v.nacionalidad || undefined,
+        discapacidad: v.discapacidad,
+        tipoDiscapacidad: v.tipoDiscapacidad || undefined,
+        necesitaAsistencia: v.necesitaAsistencia,
+        emailPersonal: v.emailPersonal,
+        telefonoMovil: v.telefonoMovil,
+        telefonoEmergencia: v.telefonoEmergencia || undefined,
+        nombreContactoEmergencia: v.nombreContactoEmergencia || undefined,
         idCarrera: carreraSeleccionada.idCarrera,
-        estadoEstudiante: this.form.estadoEstudiante,
-        tipoBeca: this.form.tipoBeca,
-        condicionSocioeconomica: this.form.condicionSocioeconomica || undefined,
-        trabaja: this.form.trabaja,
-        colegioProcedencia: this.form.colegioProcedencia || undefined,
-        tipoColegio: this.form.tipoColegio || undefined,
-        anioGraduacionColegio: this.form.anioGraduacionColegio || undefined,
-        provincia: this.form.provincia || undefined,
-        canton: this.form.canton || undefined,
-        distrito: this.form.distrito || undefined,
-        direccionExacta: this.form.direccionExacta || undefined,
-        observaciones: this.form.observaciones || undefined,
+        estadoEstudiante: v.estadoEstudiante,
+        tipoBeca: v.tipoBeca,
+        condicionSocioeconomica: v.condicionSocioeconomica || undefined,
+        trabaja: v.trabaja,
+        colegioProcedencia: v.colegioProcedencia || undefined,
+        tipoColegio: v.tipoColegio || undefined,
+        anioGraduacionColegio: v.anioGraduacionColegio || undefined,
+        provincia: v.provincia || undefined,
+        canton: v.canton || undefined,
+        distrito: v.distrito || undefined,
+        direccionExacta: v.direccionExacta || undefined,
+        observaciones: v.observaciones || undefined,
       };
 
       this.estudianteService.createEstudiante(dto).subscribe(res => {

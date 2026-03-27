@@ -17,36 +17,68 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Cédula *</label>
-          <input type="text" formControlName="cedula" placeholder="1-0123-0456" />
+          <input type="text" formControlName="cedula" placeholder="1-0123-0456"
+            [class.invalid]="cedula?.invalid && cedula?.touched" />
+          <div class="error-message" *ngIf="cedula?.invalid && cedula?.touched">
+            <span *ngIf="cedula?.errors?.['required']">La cédula es requerida</span>
+            <span *ngIf="cedula?.errors?.['maxlength']">Máximo 11 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Nombres *</label>
-          <input type="text" formControlName="nombre" placeholder="Carlos" />
+          <input type="text" formControlName="nombre" placeholder="Carlos"
+            [class.invalid]="nombre?.invalid && nombre?.touched" />
+          <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+            <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+            <span *ngIf="nombre?.errors?.['minlength']">Mínimo 2 caracteres</span>
+            <span *ngIf="nombre?.errors?.['maxlength']">Máximo 50 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Primer Apellido *</label>
-          <input type="text" formControlName="apellidoPaterno" placeholder="Ramírez" />
+          <input type="text" formControlName="apellidoPaterno" placeholder="Ramírez"
+            [class.invalid]="apellidoPaterno?.invalid && apellidoPaterno?.touched" />
+          <div class="error-message" *ngIf="apellidoPaterno?.invalid && apellidoPaterno?.touched">
+            <span *ngIf="apellidoPaterno?.errors?.['required']">El primer apellido es requerido</span>
+            <span *ngIf="apellidoPaterno?.errors?.['maxlength']">Máximo 30 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Segundo Apellido</label>
-          <input type="text" formControlName="apellidoMaterno" placeholder="López" />
+          <input type="text" formControlName="apellidoMaterno" placeholder="López"
+            [class.invalid]="apellidoMaterno?.invalid && apellidoMaterno?.touched" />
+          <div class="error-message" *ngIf="apellidoMaterno?.errors?.['maxlength'] && apellidoMaterno?.touched">
+            <span>Máximo 30 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Fecha de Nacimiento *</label>
-          <input type="date" formControlName="fechaNacimiento" />
+          <input type="date" formControlName="fechaNacimiento"
+            [class.invalid]="fechaNacimiento?.invalid && fechaNacimiento?.touched" />
+          <div class="error-message" *ngIf="fechaNacimiento?.errors?.['required'] && fechaNacimiento?.touched">
+            <span>La fecha de nacimiento es requerida</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Género *</label>
-          <select formControlName="genero">
+          <select formControlName="genero"
+            [class.invalid]="genero?.invalid && genero?.touched">
             <option value="">Seleccionar...</option>
             <option value="M">Masculino</option>
             <option value="F">Femenino</option>
             <option value="Otro">Otro</option>
           </select>
+          <div class="error-message" *ngIf="genero?.errors?.['required'] && genero?.touched">
+            <span>El género es requerido</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Nacionalidad</label>
-          <input type="text" formControlName="nacionalidad" placeholder="Costarricense" />
+          <input type="text" formControlName="nacionalidad" placeholder="Costarricense"
+            [class.invalid]="nacionalidad?.invalid && nacionalidad?.touched" />
+          <div class="error-message" *ngIf="nacionalidad?.errors?.['maxlength'] && nacionalidad?.touched">
+            <span>Máximo 50 caracteres</span>
+          </div>
         </div>
       </div>
 
@@ -60,11 +92,22 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Email Personal *</label>
-          <input type="email" formControlName="emailPersonal" placeholder="carlos&#64;gmail.com" />
+          <input type="email" formControlName="emailPersonal" placeholder="carlos&#64;gmail.com"
+            [class.invalid]="emailPersonal?.invalid && emailPersonal?.touched" />
+          <div class="error-message" *ngIf="emailPersonal?.invalid && emailPersonal?.touched">
+            <span *ngIf="emailPersonal?.errors?.['required']">El email es requerido</span>
+            <span *ngIf="emailPersonal?.errors?.['email']">Ingrese un email válido</span>
+            <span *ngIf="emailPersonal?.errors?.['maxlength']">Máximo 70 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Teléfono *</label>
-          <input type="tel" formControlName="telefono" placeholder="8812-3456" />
+          <input type="tel" formControlName="telefono" placeholder="8812-3456"
+            [class.invalid]="telefono?.invalid && telefono?.touched" />
+          <div class="error-message" *ngIf="telefono?.invalid && telefono?.touched">
+            <span *ngIf="telefono?.errors?.['required']">El teléfono es requerido</span>
+            <span *ngIf="telefono?.errors?.['maxlength']">Máximo 20 caracteres</span>
+          </div>
         </div>
       </div>
 
@@ -80,11 +123,21 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Título Académico *</label>
-          <input type="text" formControlName="titulo" placeholder="Máster en Ciencias de la Computación" />
+          <input type="text" formControlName="titulo" placeholder="Máster en Ciencias de la Computación"
+            [class.invalid]="titulo?.invalid && titulo?.touched" />
+          <div class="error-message" *ngIf="titulo?.invalid && titulo?.touched">
+            <span *ngIf="titulo?.errors?.['required']">El título es requerido</span>
+            <span *ngIf="titulo?.errors?.['maxlength']">Máximo 60 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Especialidad *</label>
-          <input type="text" formControlName="especialidad" placeholder="Ingeniería de Software" />
+          <input type="text" formControlName="especialidad" placeholder="Ingeniería de Software"
+            [class.invalid]="especialidad?.invalid && especialidad?.touched" />
+          <div class="error-message" *ngIf="especialidad?.invalid && especialidad?.touched">
+            <span *ngIf="especialidad?.errors?.['required']">La especialidad es requerida</span>
+            <span *ngIf="especialidad?.errors?.['maxlength']">Máximo 60 caracteres</span>
+          </div>
         </div>
       </div>
 
@@ -98,15 +151,27 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Provincia</label>
-          <input type="text" formControlName="provincia" placeholder="San José" />
+          <input type="text" formControlName="provincia" placeholder="San José"
+            [class.invalid]="provincia?.invalid && provincia?.touched" />
+          <div class="error-message" *ngIf="provincia?.errors?.['maxlength'] && provincia?.touched">
+            <span>Máximo 10 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Cantón</label>
-          <input type="text" formControlName="canton" placeholder="Central" />
+          <input type="text" formControlName="canton" placeholder="Central"
+            [class.invalid]="canton?.invalid && canton?.touched" />
+          <div class="error-message" *ngIf="canton?.errors?.['maxlength'] && canton?.touched">
+            <span>Máximo 40 caracteres</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Distrito</label>
-          <input type="text" formControlName="distrito" placeholder="Catedral" />
+          <input type="text" formControlName="distrito" placeholder="Catedral"
+            [class.invalid]="distrito?.invalid && distrito?.touched" />
+          <div class="error-message" *ngIf="distrito?.errors?.['maxlength'] && distrito?.touched">
+            <span>Máximo 40 caracteres</span>
+          </div>
         </div>
         <div class="form-group form-group-full">
           <label>Dirección</label>

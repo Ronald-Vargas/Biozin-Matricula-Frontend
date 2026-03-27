@@ -28,22 +28,21 @@ export class ProfesorFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.profesorForm = this.fb.group({
-      cedula: ['', Validators.required],
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellidoPaterno: ['', Validators.required],
-      apellidoMaterno: [''],
+      cedula: ['', [Validators.required, Validators.maxLength(11)]],
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      apellidoPaterno: ['', [Validators.required, Validators.maxLength(30)]],
+      apellidoMaterno: ['', [Validators.maxLength(30)]],
       fechaNacimiento: ['', Validators.required],
-      genero: ['', Validators.required],
-      nacionalidad: [''],
-      emailPersonal: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required],
-      titulo: ['', Validators.required],
-      especialidad: ['', Validators.required],
-      provincia: [''],
-      canton: [''],
-      distrito: [''],
+      genero: ['', [Validators.required, Validators.maxLength(9)]],
+      nacionalidad: ['', [Validators.maxLength(50)]],
+      emailPersonal: ['', [Validators.required, Validators.email, Validators.maxLength(70)]],
+      telefono: ['', [Validators.required, Validators.maxLength(20)]],
+      titulo: ['', [Validators.required, Validators.maxLength(60)]],
+      especialidad: ['', [Validators.required, Validators.maxLength(60)]],
+      provincia: ['', [Validators.maxLength(10)]],
+      canton: ['', [Validators.maxLength(40)]],
+      distrito: ['', [Validators.maxLength(40)]],
       direccion: [''],
-      
     });
   }
 
@@ -90,6 +89,21 @@ export class ProfesorFormComponent implements OnInit {
   cancelar(): void {
     this.router.navigate(['/profesores']);
   }
+
+  get cedula() { return this.profesorForm.get('cedula'); }
+  get nombre() { return this.profesorForm.get('nombre'); }
+  get apellidoPaterno() { return this.profesorForm.get('apellidoPaterno'); }
+  get apellidoMaterno() { return this.profesorForm.get('apellidoMaterno'); }
+  get fechaNacimiento() { return this.profesorForm.get('fechaNacimiento'); }
+  get genero() { return this.profesorForm.get('genero'); }
+  get nacionalidad() { return this.profesorForm.get('nacionalidad'); }
+  get emailPersonal() { return this.profesorForm.get('emailPersonal'); }
+  get telefono() { return this.profesorForm.get('telefono'); }
+  get titulo() { return this.profesorForm.get('titulo'); }
+  get especialidad() { return this.profesorForm.get('especialidad'); }
+  get provincia() { return this.profesorForm.get('provincia'); }
+  get canton() { return this.profesorForm.get('canton'); }
+  get distrito() { return this.profesorForm.get('distrito'); }
 
 
 

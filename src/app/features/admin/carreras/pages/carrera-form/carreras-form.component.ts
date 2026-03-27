@@ -27,8 +27,8 @@ export class CarreraFormComponent implements OnInit {
     private router: Router
   ) {
     this.carreraForm = this.fb.group({
-      codigo: ['', [Validators.required, Validators.minLength(3)]],
-      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       descripcion: ['', Validators.required],
       duracion: ['', [Validators.required, Validators.min(1), Validators.max(15)]]
     });

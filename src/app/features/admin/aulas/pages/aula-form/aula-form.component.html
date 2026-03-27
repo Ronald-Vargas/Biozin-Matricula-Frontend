@@ -15,8 +15,11 @@
           formControlName="numeroAula"
           placeholder="Ej: A-101"
           [class.input-error]="numeroAula?.invalid && numeroAula?.touched">
-        <span class="error-text" *ngIf="numeroAula?.invalid && numeroAula?.touched">
-          El numero del aula es requerido.
+        <span class="error-text" *ngIf="numeroAula?.errors?.['required'] && numeroAula?.touched">
+          El número del aula es requerido.
+        </span>
+        <span class="error-text" *ngIf="numeroAula?.errors?.['maxlength'] && numeroAula?.touched">
+          Máximo 7 caracteres.
         </span>
       </div>
 

@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CreateAjustesDto } from '../model/ajustes.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AjustesService } from '../services/ajustes.services';
 
 @Component({
   selector: 'app-ajustes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './ajustes.component.html',
   styleUrls: ['./ajustes.component.scss'],
 })
@@ -16,18 +15,7 @@ export class AjustesComponent implements OnInit {
   guardando = false;
   private idAjuste: number | null = null;
 
-  form: CreateAjustesDto = {
-    nombreUniversidad: '',
-    sitioWeb: '',
-    correoInstitucional: '',
-    telefono: '',
-    direccion: '',
-    provincia: '',
-    canton: '',
-    distrito: '',
-  };
-
-  private originalForm: CreateAjustesDto = { ...this.form };
+  ajustesForm: FormGroup;
 
   provincias = [
     'San José',
@@ -39,7 +27,18 @@ export class AjustesComponent implements OnInit {
     'Limón',
   ];
 
-  constructor(private ajustesService: AjustesService) {}
+  constructor(private ajustesService: AjustesService, private fb: FormBuilder) {
+    this.ajustesForm = this.fb.group({
+      nombreUniversidad: ['', [Validators.required, Validators.maxLength(100)]],
+      sitioWeb: ['', [Validators.maxLength(100)]],
+      correoInstitucional: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      telefono: ['', [Validators.maxLength(20)]],
+      direccion: [''],
+      provincia: ['', [Validators.maxLength(10)]],
+      canton: ['', [Validators.maxLength(50)]],
+      distrito: ['', [Validators.maxLength(50)]],
+    });
+  }
 
   ngOnInit(): void {
     this.ajustesService.cargasAjustes().subscribe({
@@ -47,8 +46,7 @@ export class AjustesComponent implements OnInit {
         if (!res.blnError && res.valorRetorno) {
           const { idAjuste, ...datos } = res.valorRetorno;
           this.idAjuste = idAjuste;
-          this.form = { ...datos };
-          this.originalForm = { ...datos };
+          this.ajustesForm.patchValue(datos);
         }
         this.cargando = false;
       },
@@ -59,22 +57,21 @@ export class AjustesComponent implements OnInit {
   }
 
   descartar(): void {
-    this.form = { ...this.originalForm };
+    this.ajustesForm.reset();
+    this.ngOnInit();
   }
 
-  
   guardar(): void {
+    if (this.ajustesForm.invalid) return;
     this.guardando = true;
+    const datos = this.ajustesForm.value;
     const operacion$ = this.idAjuste === null
-      ? this.ajustesService.crearAjustes(this.form)
-      : this.ajustesService.updateAjustes({ idAjuste: this.idAjuste, ...this.form });
+      ? this.ajustesService.crearAjustes(datos)
+      : this.ajustesService.updateAjustes({ idAjuste: this.idAjuste, ...datos });
 
     operacion$.subscribe({
       next: (res) => {
-        if (!res.blnError) {
-          this.originalForm = { ...this.form };
-          if (res.valorRetorno) this.idAjuste = res.valorRetorno;
-        }
+        if (!res.blnError && res.valorRetorno) this.idAjuste = res.valorRetorno;
         this.guardando = false;
       },
       error: () => {
@@ -82,4 +79,12 @@ export class AjustesComponent implements OnInit {
       },
     });
   }
+
+  get nombreUniversidad() { return this.ajustesForm.get('nombreUniversidad'); }
+  get sitioWeb() { return this.ajustesForm.get('sitioWeb'); }
+  get correoInstitucional() { return this.ajustesForm.get('correoInstitucional'); }
+  get telefono() { return this.ajustesForm.get('telefono'); }
+  get provincia() { return this.ajustesForm.get('provincia'); }
+  get canton() { return this.ajustesForm.get('canton'); }
+  get distrito() { return this.ajustesForm.get('distrito'); }
 }

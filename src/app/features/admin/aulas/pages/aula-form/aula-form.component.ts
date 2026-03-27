@@ -26,7 +26,7 @@ export class AulaFormComponent implements OnChanges {
 
   constructor(private fb: FormBuilder, private aulaService: AulaService) {
     this.aulaForm = this.fb.group({
-      numeroAula: ['', [Validators.required, Validators.maxLength(20)]],
+      numeroAula: ['', [Validators.required, Validators.maxLength(7)]],
       capacidad: [null, [Validators.required, Validators.min(1)]],
       esLaboratorio: [false],
       descripcion: [''],

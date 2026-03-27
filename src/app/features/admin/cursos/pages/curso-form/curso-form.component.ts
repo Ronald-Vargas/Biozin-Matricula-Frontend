@@ -29,8 +29,8 @@ export class CursoFormComponent implements OnInit {
     private router: Router
   ) {
     this.cursoForm = this.fb.group({
-      codigo: ['', [Validators.required, Validators.minLength(3)]],
-      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       descripcion: ['', Validators.required],
       creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]],
       precio: ['', [Validators.required, Validators.min(0)]],

@@ -5,17 +5,25 @@
   </div>
 
   <div class="card" *ngIf="!cargando">
+    <form [formGroup]="ajustesForm" (ngSubmit)="guardar()">
     <div class="form-grid">
 
       <!-- Nombre -->
       <div class="form-group full">
-        <label class="form-label">Nombre de la Universidad</label>
+        <label class="form-label">Nombre de la Universidad *</label>
         <input
           class="form-input"
           type="text"
           placeholder="Ej. Universidad Tecnológica de Biozin"
-          [(ngModel)]="form.nombreUniversidad"
+          formControlName="nombreUniversidad"
+          [class.input-error]="nombreUniversidad?.invalid && nombreUniversidad?.touched"
         />
+        <span class="error-text" *ngIf="nombreUniversidad?.errors?.['required'] && nombreUniversidad?.touched">
+          El nombre es requerido.
+        </span>
+        <span class="error-text" *ngIf="nombreUniversidad?.errors?.['maxlength'] && nombreUniversidad?.touched">
+          Máximo 100 caracteres.
+        </span>
       </div>
 
       <!-- Sitio Web -->
@@ -27,23 +35,37 @@
             class="form-input with-icon"
             type="url"
             placeholder="https://www.ejemplo.edu"
-            [(ngModel)]="form.sitioWeb"
+            formControlName="sitioWeb"
+            [class.input-error]="sitioWeb?.invalid && sitioWeb?.touched"
           />
         </div>
+        <span class="error-text" *ngIf="sitioWeb?.errors?.['maxlength'] && sitioWeb?.touched">
+          Máximo 100 caracteres.
+        </span>
       </div>
 
       <!-- Correo Institucional -->
       <div class="form-group">
-        <label class="form-label">Correo Institucional</label>
+        <label class="form-label">Correo Institucional *</label>
         <div class="input-icon-wrapper">
           <span class="input-icon">✉️</span>
           <input
             class="form-input with-icon"
             type="email"
             placeholder="contacto@universidad.edu"
-            [(ngModel)]="form.correoInstitucional"
+            formControlName="correoInstitucional"
+            [class.input-error]="correoInstitucional?.invalid && correoInstitucional?.touched"
           />
         </div>
+        <span class="error-text" *ngIf="correoInstitucional?.errors?.['required'] && correoInstitucional?.touched">
+          El correo es requerido.
+        </span>
+        <span class="error-text" *ngIf="correoInstitucional?.errors?.['email'] && correoInstitucional?.touched">
+          Ingrese un correo válido.
+        </span>
+        <span class="error-text" *ngIf="correoInstitucional?.errors?.['maxlength'] && correoInstitucional?.touched">
+          Máximo 100 caracteres.
+        </span>
       </div>
 
       <!-- Teléfono -->
@@ -53,8 +75,12 @@
           class="form-input"
           type="tel"
           placeholder="+506 0000-0000"
-          [(ngModel)]="form.telefono"
+          formControlName="telefono"
+          [class.input-error]="telefono?.invalid && telefono?.touched"
         />
+        <span class="error-text" *ngIf="telefono?.errors?.['maxlength'] && telefono?.touched">
+          Máximo 20 caracteres.
+        </span>
       </div>
 
       <!-- Dirección -->
@@ -64,7 +90,7 @@
           class="form-input"
           type="text"
           placeholder="Calle, número de edificio, oficina"
-          [(ngModel)]="form.direccion"
+          formControlName="direccion"
         />
       </div>
 
@@ -76,10 +102,14 @@
       <!-- Provincia -->
       <div class="form-group provincia">
         <label class="form-label">Provincia</label>
-        <select class="form-select" [(ngModel)]="form.provincia">
+        <select class="form-select" formControlName="provincia"
+          [class.input-error]="provincia?.invalid && provincia?.touched">
           <option value="">Seleccione...</option>
           <option *ngFor="let p of provincias" [value]="p">{{ p }}</option>
         </select>
+        <span class="error-text" *ngIf="provincia?.errors?.['maxlength'] && provincia?.touched">
+          Máximo 10 caracteres.
+        </span>
       </div>
 
       <!-- Cantón -->
@@ -89,8 +119,12 @@
           class="form-input"
           type="text"
           placeholder="Ej. Cantón Central"
-          [(ngModel)]="form.canton"
+          formControlName="canton"
+          [class.input-error]="canton?.invalid && canton?.touched"
         />
+        <span class="error-text" *ngIf="canton?.errors?.['maxlength'] && canton?.touched">
+          Máximo 50 caracteres.
+        </span>
       </div>
 
       <!-- Distrito -->
@@ -100,19 +134,24 @@
           class="form-input"
           type="text"
           placeholder="Ej. Distrito Primero"
-          [(ngModel)]="form.distrito"
+          formControlName="distrito"
+          [class.input-error]="distrito?.invalid && distrito?.touched"
         />
+        <span class="error-text" *ngIf="distrito?.errors?.['maxlength'] && distrito?.touched">
+          Máximo 50 caracteres.
+        </span>
       </div>
 
     </div>
 
     <!-- Footer -->
     <div class="card-footer">
-      <button class="btn-discard" (click)="descartar()" [disabled]="guardando">Descartar</button>
-      <button class="btn-save" (click)="guardar()" [disabled]="guardando">
+      <button type="button" class="btn-discard" (click)="descartar()" [disabled]="guardando">Descartar</button>
+      <button type="submit" class="btn-save" [disabled]="ajustesForm.invalid || guardando">
         {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
       </button>
     </div>
+    </form>
   </div>
 
   <!-- Loader -->

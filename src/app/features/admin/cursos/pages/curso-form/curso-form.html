@@ -19,6 +19,7 @@
         <div class="error-message" *ngIf="codigo?.invalid && codigo?.touched">
           <span *ngIf="codigo?.errors?.['required']">El código es requerido</span>
           <span *ngIf="codigo?.errors?.['minlength']">Mínimo 3 caracteres</span>
+          <span *ngIf="codigo?.errors?.['maxlength']">Máximo 10 caracteres</span>
         </div>
       </div>
 
@@ -30,7 +31,7 @@
           formControlName="creditos"
           placeholder="Ej: 4"
           min="1"
-          max="10"
+          max="15"
           [class.invalid]="creditos?.invalid && creditos?.touched">
         <div class="error-message" *ngIf="creditos?.invalid && creditos?.touched">
           <span *ngIf="creditos?.errors?.['required']">Los créditos son requeridos</span>
@@ -52,6 +53,7 @@
       <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
         <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
         <span *ngIf="nombre?.errors?.['minlength']">Mínimo 5 caracteres</span>
+        <span *ngIf="nombre?.errors?.['maxlength']">Máximo 30 caracteres</span>
       </div>
     </div>
 
