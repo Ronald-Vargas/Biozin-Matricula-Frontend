@@ -4,6 +4,6 @@ export const AJUSTES_ROUTES: Routes = [
      {
     path: '',
     loadComponent: () =>
-      import('./pages/ajustes.component').then((m) => m.AjustesComponent),
+      import('./pages/ajustes/ajustes.component').then((m) => m.AjustesComponent),
   },
 ];

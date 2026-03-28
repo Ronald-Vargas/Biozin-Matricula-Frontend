@@ -1,18 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AjustesService } from '../services/ajustes.services';
+import { AjustesService } from '../../services/ajustes.services';
+import { AdministradoresComponent } from '../administradores/administradores.component';
 
 @Component({
   selector: 'app-ajustes',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AdministradoresComponent],
   templateUrl: './ajustes.component.html',
   styleUrls: ['./ajustes.component.scss'],
 })
 export class AjustesComponent implements OnInit {
   cargando = true;
   guardando = false;
+  mostrarAdministradores = false;
   private idAjuste: number | null = null;
 
   ajustesForm: FormGroup;

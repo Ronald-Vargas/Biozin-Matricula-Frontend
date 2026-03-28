@@ -198,6 +198,61 @@
   }
 }
 
+/* ── Accion item ── */
+.accion-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  box-shadow: var(--shadow-sm);
+
+  &:hover {
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.accion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.accion-texto {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.15rem;
+}
+
+.accion-titulo {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.accion-desc {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.accion-arrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
 /* ── Loader ── */
 .loading-state {
   display: flex;
