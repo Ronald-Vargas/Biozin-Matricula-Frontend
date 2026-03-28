@@ -29,8 +29,22 @@ export class AdministradorService {
       .pipe(tap(() => this.cargarAdministradores()));
   }
 
+  modificar(admin: Administrador): Observable<Respuesta<number>> {
+    return this.http.put<Respuesta<number>>(`${this.apiUrl}/Modificar`, admin)
+      .pipe(tap(() => this.cargarAdministradores()));
+  }
+
   eliminar(id: number): Observable<Respuesta<number>> {
     return this.http.delete<Respuesta<number>>(`${this.apiUrl}/Eliminar/${id}`)
       .pipe(tap(() => this.cargarAdministradores()));
+  }
+
+  toggleEstado(id: number): void {
+    const admins = this.administradoresSubject.getValue();
+    const admin = admins.find(a => a.idAdministrador === id);
+    if (admin) {
+      const updated = { ...admin, activo: !admin.activo };
+      this.modificar(updated).subscribe();
+    }
   }
 }

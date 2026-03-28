@@ -17,6 +17,7 @@ export class AdministradoresComponent implements OnInit {
   @Output() cerrar = new EventEmitter<void>();
 
   busqueda = '';
+  filtroEstado = 'activo';
   mostrandoFormulario = false;
   guardando = false;
   adminAEliminar: Administrador | null = null;
@@ -50,13 +51,35 @@ export class AdministradoresComponent implements OnInit {
 
   get adminsFiltrados(): Administrador[] {
     const term = this.busqueda.toLowerCase();
-    if (!term) return this.admins;
-    return this.admins.filter(
-      (a) =>
+    return this.admins.filter(a => {
+      const matchBusqueda = !term ||
         a.nombreCompleto.toLowerCase().includes(term) ||
         a.usuario.toLowerCase().includes(term) ||
-        a.correo.toLowerCase().includes(term)
-    );
+        a.correo.toLowerCase().includes(term);
+      const matchEstado =
+        this.filtroEstado === 'todos' ||
+        (this.filtroEstado === 'activo' && a.activo === true) ||
+        (this.filtroEstado === 'inactivo' && a.activo === false);
+      return matchBusqueda && matchEstado;
+    });
+  }
+
+  filtrar(estado: string): void {
+    this.filtroEstado = estado;
+  }
+
+  toggleEstado(id: number): void {
+    this.adminService.toggleEstado(id);
+  }
+
+  getEstadoClass(activo: boolean): string {
+    return activo ? 'badge-active' : 'badge-inactive';
+  }
+
+  getToggleButtonConfig(activo: boolean): { icon: string; tooltip: string } {
+    return activo
+      ? { icon: '🗑️', tooltip: 'Desactivar' }
+      : { icon: '✅', tooltip: 'Activar' };
   }
 
   abrirFormulario(): void {
@@ -91,23 +114,6 @@ export class AdministradoresComponent implements OnInit {
         this.guardando = false;
       }
     });
-  }
-
-  confirmarEliminar(admin: Administrador): void {
-    this.adminAEliminar = admin;
-  }
-
-  eliminar(): void {
-    if (!this.adminAEliminar) return;
-    this.adminService.eliminar(this.adminAEliminar.idAdministrador).subscribe({
-      next: () => {
-        this.adminAEliminar = null;
-      }
-    });
-  }
-
-  cancelarEliminar(): void {
-    this.adminAEliminar = null;
   }
 
   get identificacion() { return this.adminForm.get('identificacion'); }
