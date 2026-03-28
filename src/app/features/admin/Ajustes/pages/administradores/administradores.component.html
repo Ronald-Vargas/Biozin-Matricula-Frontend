@@ -42,7 +42,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let admin of adminsFiltrados">
-          <td class="td-nombre">{{ admin.nombre }}</td>
+          <td class="td-nombre">{{ admin.nombreCompleto }}</td>
           <td class="td-usuario">{{ admin.usuario }}</td>
           <td class="td-correo">{{ admin.correo }}</td>
           <td>{{ admin.telefono }}</td>
@@ -156,7 +156,7 @@
 <!-- Confirmar eliminar -->
 <div class="modal modal-confirm" *ngIf="visible && adminAEliminar">
   <h2 class="modal-title">Eliminar Administrador</h2>
-  <p class="confirm-text">¿Seguro que deseas eliminar a <strong>{{ adminAEliminar?.nombre }}</strong>? Esta acción no se puede deshacer.</p>
+  <p class="confirm-text">¿Seguro que deseas eliminar a <strong>{{ adminAEliminar?.nombreCompleto }}</strong>? Esta acción no se puede deshacer.</p>
   <div class="form-footer">
     <button class="btn-cancel" (click)="cancelarEliminar()">Cancelar</button>
     <button class="btn-danger" (click)="eliminar()">Eliminar</button>

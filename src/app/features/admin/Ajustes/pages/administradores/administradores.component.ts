@@ -1,14 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Administrador } from '../../model/administrados.model';
+import { AdministradorService } from '../../services/administrador.service';
 
-interface Administrador {
-  id: number;
-  nombre: string;
-  usuario: string;
-  correo: string;
-  telefono: string;
-}
 
 @Component({
   selector: 'app-administradores',
@@ -17,7 +12,7 @@ interface Administrador {
   templateUrl: './administradores.component.html',
   styleUrls: ['./administradores.component.scss'],
 })
-export class AdministradoresComponent {
+export class AdministradoresComponent implements OnInit {
   @Input() visible = false;
   @Output() cerrar = new EventEmitter<void>();
 
@@ -27,14 +22,9 @@ export class AdministradoresComponent {
   adminAEliminar: Administrador | null = null;
 
   adminForm: FormGroup;
+  admins: Administrador[] = [];
 
-  admins: Administrador[] = [
-    { id: 1, nombre: 'Administrador General', usuario: '1', correo: 'soporte@biozin.edu', telefono: '87776655' },
-    { id: 2, nombre: 'Juan Delgado', usuario: 'jdelgado_admin', correo: 'juan.delgado@biozin.edu', telefono: '+506 8800-1234' },
-    { id: 3, nombre: 'María Castro', usuario: 'mcastro_admin', correo: 'm.castro@biozin.edu', telefono: '+506 8811-9876' },
-  ];
-
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private adminService: AdministradorService) {
     this.adminForm = this.fb.group({
       identificacion: ['', [Validators.required, Validators.maxLength(20)]],
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
@@ -44,6 +34,12 @@ export class AdministradoresComponent {
       contrasena: ['', [Validators.required, Validators.minLength(6)]],
       confirmarContrasena: ['', [Validators.required]],
     }, { validators: this.contrasenasIguales });
+  }
+
+  ngOnInit(): void {
+    this.adminService.administradores$.subscribe(lista => {
+      this.admins = lista;
+    });
   }
 
   contrasenasIguales(group: FormGroup) {
@@ -57,7 +53,7 @@ export class AdministradoresComponent {
     if (!term) return this.admins;
     return this.admins.filter(
       (a) =>
-        a.nombre.toLowerCase().includes(term) ||
+        a.nombreCompleto.toLowerCase().includes(term) ||
         a.usuario.toLowerCase().includes(term) ||
         a.correo.toLowerCase().includes(term)
     );
@@ -75,17 +71,26 @@ export class AdministradoresComponent {
 
   agregarAdmin(): void {
     if (this.adminForm.invalid) return;
-    const { identificacion, nombre, usuario, correo, telefono } = this.adminForm.value;
-    const nuevoAdmin: Administrador = {
-      id: Date.now(),
-      nombre,
+    const { identificacion, nombre, usuario, correo, telefono, contrasena } = this.adminForm.value;
+
+    this.guardando = true;
+    this.adminService.insertar({
+      identificacion,
+      nombreCompleto: nombre,
       usuario,
-      correo,
+      correo: correo,
       telefono,
-    };
-    this.admins = [...this.admins, nuevoAdmin];
-    this.mostrandoFormulario = false;
-    this.adminForm.reset();
+      Contraseña: contrasena,
+    }).subscribe({
+      next: () => {
+        this.mostrandoFormulario = false;
+        this.adminForm.reset();
+        this.guardando = false;
+      },
+      error: () => {
+        this.guardando = false;
+      }
+    });
   }
 
   confirmarEliminar(admin: Administrador): void {
@@ -94,8 +99,11 @@ export class AdministradoresComponent {
 
   eliminar(): void {
     if (!this.adminAEliminar) return;
-    this.admins = this.admins.filter((a) => a.id !== this.adminAEliminar!.id);
-    this.adminAEliminar = null;
+    this.adminService.eliminar(this.adminAEliminar.idAdministrador).subscribe({
+      next: () => {
+        this.adminAEliminar = null;
+      }
+    });
   }
 
   cancelarEliminar(): void {
@@ -110,3 +118,4 @@ export class AdministradoresComponent {
   get contrasena() { return this.adminForm.get('contrasena'); }
   get confirmarContrasena() { return this.adminForm.get('confirmarContrasena'); }
 }
+
