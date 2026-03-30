@@ -4,9 +4,7 @@
   <div class="page-banner">
     <div class="banner-content">
       <h1 class="banner-title">Matricular Cursos</h1>
-      <p class="banner-subtitle">
-        {{ periodo.nombre }} &middot; Cierre de matrícula: {{ periodo.fechaCierreMatricula | date:'d MMM yyyy' }}
-      </p>
+      <p class="banner-subtitle">Selecciona los cursos disponibles para el período actual</p>
     </div>
     <div class="banner-decoration">
       <div class="decoration-circle circle-1"></div>
@@ -14,8 +12,17 @@
     </div>
   </div>
 
+  <!-- Cargando -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner-large"></span>
+    <p>Cargando oferta académica...</p>
+  </div>
+
+  <!-- Mensaje de éxito -->
+  <div class="alert-success" *ngIf="mensajeExito">{{ mensajeExito }}</div>
+
   <!-- Buscador -->
-  <div class="search-bar">
+  <div class="search-bar" *ngIf="!cargando">
     <span class="search-icon">🔍</span>
     <input
       type="text"
@@ -27,12 +34,11 @@
   </div>
 
   <!-- Lista de oferta -->
-  <div class="oferta-grid">
+  <div class="oferta-grid" *ngIf="!cargando">
     <div
       class="curso-card"
       *ngFor="let curso of ofertaFiltrada; let i = index"
-      [class.matriculado]="curso.matriculado"
-      [style.--curso-color]="curso.color"
+      [class.matriculado]="curso.yaMatriculado"
       [style.animation-delay]="(i * 0.08) + 's'"
     >
       <div class="curso-color-bar"></div>
@@ -40,17 +46,17 @@
       <div class="curso-body">
         <div class="curso-top">
           <div class="curso-header-left">
-            <span class="curso-codigo">{{ curso.codigo }}</span>
+            <span class="curso-codigo">{{ curso.codigoCurso }}</span>
             <span class="curso-creditos">{{ curso.creditos }} cr.</span>
           </div>
-          <span class="matriculado-badge" *ngIf="curso.matriculado">✓ Matriculado</span>
+          <span class="matriculado-badge" *ngIf="curso.yaMatriculado">✓ Matriculado</span>
         </div>
 
-        <h3 class="curso-nombre">{{ curso.nombre }}</h3>
+        <h3 class="curso-nombre">{{ curso.nombreCurso }}</h3>
 
         <div class="curso-detalles">
-          <span class="curso-detail"><span>👨‍🏫</span> {{ curso.profesor }}</span>
-          <span class="curso-detail"><span>🏫</span> {{ curso.aula }}</span>
+          <span class="curso-detail"><span>👨‍🏫</span> {{ curso.nombreProfesor }}</span>
+          <span class="curso-detail"><span>🏫</span> {{ curso.nombreAula }}</span>
           <span class="curso-detail"><span>🕐</span> {{ curso.horario }}</span>
           <span class="curso-detail"><span>💰</span> ₡{{ curso.precio | number }}</span>
         </div>
@@ -76,19 +82,19 @@
       <div class="curso-footer">
         <button
           class="btn-matricular"
-          [disabled]="curso.matriculado || getCuposRestantes(curso) <= 0"
+          [disabled]="curso.yaMatriculado || getCuposRestantes(curso) <= 0"
           (click)="abrirConfirmacion(curso)"
         >
-          <span *ngIf="!curso.matriculado && getCuposRestantes(curso) > 0">📝 Matricular</span>
-          <span *ngIf="curso.matriculado">✓ Ya matriculado</span>
-          <span *ngIf="!curso.matriculado && getCuposRestantes(curso) <= 0">Sin cupo disponible</span>
+          <span *ngIf="!curso.yaMatriculado && getCuposRestantes(curso) > 0">📝 Matricular</span>
+          <span *ngIf="curso.yaMatriculado">✓ Ya matriculado</span>
+          <span *ngIf="!curso.yaMatriculado && getCuposRestantes(curso) <= 0">Sin cupo disponible</span>
         </button>
       </div>
     </div>
   </div>
 
   <!-- Sin resultados -->
-  <div class="empty-state" *ngIf="ofertaFiltrada.length === 0">
+  <div class="empty-state" *ngIf="!cargando && ofertaFiltrada.length === 0">
     <span class="empty-icon">🔍</span>
     <p>No se encontraron cursos para "{{ filtroBusqueda }}"</p>
   </div>
@@ -102,16 +108,20 @@
       <div class="modal-body">
         <p class="modal-pregunta">¿Deseas matricularte en el siguiente curso?</p>
         <div class="modal-curso-info">
-          <div class="modal-codigo" [style.color]="confirmando.color">{{ confirmando.codigo }}</div>
-          <div class="modal-nombre">{{ confirmando.nombre }}</div>
-          <div class="modal-detalle">{{ confirmando.profesor }}</div>
+          <div class="modal-codigo">{{ confirmando.codigoCurso }}</div>
+          <div class="modal-nombre">{{ confirmando.nombreCurso }}</div>
+          <div class="modal-detalle">{{ confirmando.nombreProfesor }}</div>
           <div class="modal-detalle">{{ confirmando.horario }}</div>
           <div class="modal-precio">₡{{ confirmando.precio | number }} — {{ confirmando.creditos }} créditos</div>
         </div>
+        <div class="alert-error" *ngIf="mensajeError">{{ mensajeError }}</div>
       </div>
       <div class="modal-footer">
-        <button class="btn-cancelar" (click)="cancelarConfirmacion()">Cancelar</button>
-        <button class="btn-confirmar" (click)="confirmarMatricula()">Confirmar Matrícula</button>
+        <button class="btn-cancelar" (click)="cancelarConfirmacion()" [disabled]="matriculando">Cancelar</button>
+        <button class="btn-confirmar" (click)="confirmarMatricula()" [disabled]="matriculando">
+          <span *ngIf="!matriculando">Confirmar Matrícula</span>
+          <span *ngIf="matriculando" class="spinner"></span>
+        </button>
       </div>
     </div>
   </div>

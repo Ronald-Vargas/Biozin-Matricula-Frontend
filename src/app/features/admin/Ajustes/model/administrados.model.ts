@@ -3,10 +3,10 @@ export interface Administrador {
     idAdministrador: number,
     identificacion: string,
     nombreCompleto: string,
-    usuario: string,
     correo: string,
+    emailInstitucional: string,
     telefono: string,
-    Contraseña: string,
+    contraseña: string,
     activo: boolean
 }
 
@@ -14,10 +14,10 @@ export interface Administrador {
 export interface CreateAdministradorDto {
     identificacion: string,
     nombreCompleto: string,
-    usuario: string,
     correo: string,
+    emailInstitucional: string,
     telefono: string,
-    Contraseña: string,
+    contraseña: string,
 }
 
 

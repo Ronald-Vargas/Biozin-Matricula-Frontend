@@ -12,8 +12,14 @@
     </div>
   </div>
 
+  <!-- Cargando -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner-large"></span>
+    <p>Cargando historial académico...</p>
+  </div>
+
   <!-- Resumen general -->
-  <div class="resumen-grid">
+  <div class="resumen-grid" *ngIf="!cargando">
     <div class="resumen-card" style="--r-color: #06b6d4">
       <div class="resumen-icon">📊</div>
       <div class="resumen-info">
@@ -45,7 +51,7 @@
   </div>
 
   <!-- Semestres -->
-  <div class="semestres-list">
+  <div class="semestres-list" *ngIf="!cargando">
     <div
       class="semestre-block"
       *ngFor="let sem of semestres; let i = index"
@@ -55,7 +61,7 @@
         <div class="semestre-titulo">
           <span class="semestre-icon">📅</span>
           <div>
-            <span class="semestre-label">{{ sem.label }}</span>
+            <span class="semestre-label">Semestre {{ sem.semestre }}</span>
             <span class="semestre-periodo">{{ sem.periodo }}</span>
           </div>
         </div>
@@ -81,8 +87,8 @@
           *ngFor="let curso of sem.cursos"
           [ngClass]="'fila-' + curso.estado"
         >
-          <span class="col-codigo">{{ curso.codigo }}</span>
-          <span class="col-nombre">{{ curso.nombre }}</span>
+          <span class="col-codigo">{{ curso.codigoCurso }}</span>
+          <span class="col-nombre">{{ curso.nombreCurso }}</span>
           <span class="col-creditos">{{ curso.creditos }}</span>
           <span class="col-nota" [ngClass]="getNotaClass(curso)">
             {{ curso.nota !== null ? curso.nota : '—' }}

@@ -43,7 +43,7 @@ export class AdministradorService {
     const admins = this.administradoresSubject.getValue();
     const admin = admins.find(a => a.idAdministrador === id);
     if (admin) {
-      const updated = { ...admin, activo: !admin.activo };
+      const updated = { ...admin, activo: !admin.activo, contraseña: '' };
       this.modificar(updated).subscribe();
     }
   }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../features/estudiante/services/auth.service';
 
 
 interface MenuItem {
@@ -28,7 +29,7 @@ export class MainLayoutComponent {
   sidebarCollapsed = false;
   today = new Date();
   currentPageTitle = 'Dashboard';
-  currentView: 'admin' | 'student' = 'admin';
+  currentView: 'admin' | 'student';
 
   adminSections: MenuSection[] = [
     {
@@ -85,7 +86,10 @@ export class MainLayoutComponent {
   }
 
   get userName(): string {
-    return this.currentView === 'admin' ? 'Admin' : 'Juan Pérez';
+    if (this.currentView === 'student') {
+      return this.authService.getPerfil()?.nombreCompleto || 'Estudiante';
+    }
+    return this.authService.getAdminPerfil()?.nombreCompleto || 'Administrador';
   }
 
   get userRole(): string {
@@ -96,13 +100,17 @@ export class MainLayoutComponent {
     return this.menuSections.flatMap((s) => s.items);
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
+    this.currentView = this.authService.getRole() === 'estudiante' ? 'student' : 'admin';
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
         const all = [...this.adminSections, ...this.studentSections].flatMap((s) => s.items);
         const match = all.find((item) => event.urlAfterRedirects.startsWith(item.path));
         this.currentPageTitle = match ? match.label : 'Dashboard';
+        if (event.urlAfterRedirects.startsWith('/portal')) {
+          this.currentView = 'student';
+        }
       });
   }
 

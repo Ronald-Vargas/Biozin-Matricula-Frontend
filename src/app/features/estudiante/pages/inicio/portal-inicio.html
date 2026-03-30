@@ -1,140 +1,142 @@
 <div class="portal-container">
 
-  <!-- Banner de bienvenida -->
-  <div class="welcome-banner">
-    <div class="welcome-content">
-      <div class="student-avatar">{{ estudiante.nombre.charAt(0) }}{{ estudiante.apellido.charAt(0) }}</div>
-      <div class="welcome-text">
-        <h1 class="welcome-title">Bienvenido, {{ estudiante.nombre }}!</h1>
-        <p class="welcome-subtitle">{{ estudiante.carrera }} &middot; Carnet {{ estudiante.carnet }}</p>
-        <p class="welcome-date">{{ currentDate }}</p>
-      </div>
-    </div>
-    <div class="welcome-decoration">
-      <div class="decoration-circle circle-1"></div>
-      <div class="decoration-circle circle-2"></div>
-    </div>
+  <!-- Cargando -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner-large"></span>
+    <p>Cargando información del estudiante...</p>
   </div>
 
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div
-      class="stat-card"
-      *ngFor="let stat of stats; let i = index"
-      [style.--accent-color]="stat.color"
-      [style.animation-delay]="(i * 0.1) + 's'"
-    >
-      <div class="stat-header">
-        <div class="stat-info">
-          <span class="stat-value">{{ stat.value }}</span>
-          <span class="stat-label">{{ stat.label }}</span>
-        </div>
-        <div class="stat-icon-wrapper">
-          <span class="stat-icon">{{ stat.icon }}</span>
+  <ng-container *ngIf="!cargando && estudiante">
+
+    <!-- Banner de bienvenida -->
+    <div class="welcome-banner">
+      <div class="welcome-content">
+        <div class="student-avatar">{{ iniciales }}</div>
+        <div class="welcome-text">
+          <h1 class="welcome-title">Bienvenido, {{ primerNombre }}!</h1>
+          <p class="welcome-subtitle">{{ estudiante.carrera }} &middot; Carnet {{ estudiante.carnet }}</p>
+          <p class="welcome-date">{{ currentDate }}</p>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Progreso de carrera -->
-  <div class="progress-card">
-    <div class="progress-header">
-      <div class="progress-title">
-        <span class="progress-icon">🎓</span>
-        Progreso de Carrera
+      <div class="welcome-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
       </div>
-      <span class="progress-percent">{{ progresoCreditos }}%</span>
     </div>
-    <div class="progress-bar-track">
-      <div class="progress-bar-fill" [style.width.%]="progresoCreditos"></div>
-    </div>
-    <p class="progress-detail">
-      {{ estudiante.creditosAprobados }} de {{ estudiante.creditosTotales }} créditos aprobados
-    </p>
-  </div>
 
-  <!-- Layout principal -->
-  <div class="main-grid">
-
-    <!-- Materias matriculadas -->
-    <div class="section materias-section">
-      <h2 class="section-title">
-        <span class="section-icon">📚</span>
-        Materias Matriculadas — Período 2026-1
-      </h2>
-      <div class="materias-list">
-        <div
-          class="materia-card"
-          *ngFor="let m of materiasMatriculadas; let i = index"
-          [style.--materia-color]="m.color"
-          [style.animation-delay]="(i * 0.1) + 's'"
-        >
-          <div class="materia-color-bar"></div>
-          <div class="materia-body">
-            <div class="materia-top">
-              <span class="materia-codigo">{{ m.codigo }}</span>
-              <span class="materia-creditos">{{ m.creditos }} créditos</span>
-            </div>
-            <h3 class="materia-nombre">{{ m.nombre }}</h3>
-            <div class="materia-info">
-              <span class="materia-detail"><span class="detail-icon">👨‍🏫</span> {{ m.profesor }}</span>
-              <span class="materia-detail"><span class="detail-icon">🏫</span> {{ m.aula }}</span>
-              <span class="materia-detail"><span class="detail-icon">🕐</span> {{ m.horario }}</span>
-            </div>
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card" style="--accent-color: #10b981">
+        <div class="stat-header">
+          <div class="stat-info">
+            <span class="stat-value">{{ estudiante.promedio }}</span>
+            <span class="stat-label">Promedio General</span>
           </div>
+          <div class="stat-icon-wrapper"><span class="stat-icon">🎯</span></div>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent-color: #f59e0b">
+        <div class="stat-header">
+          <div class="stat-info">
+            <span class="stat-value">{{ estudiante.creditosAprobados }} / {{ estudiante.creditosTotales }}</span>
+            <span class="stat-label">Créditos Aprobados</span>
+          </div>
+          <div class="stat-icon-wrapper"><span class="stat-icon">📊</span></div>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent-color: #8b5cf6">
+        <div class="stat-header">
+          <div class="stat-info">
+            <span class="stat-value">Sem. {{ estudiante.semestre }}</span>
+            <span class="stat-label">Semestre Actual</span>
+          </div>
+          <div class="stat-icon-wrapper"><span class="stat-icon">🗓️</span></div>
+        </div>
+      </div>
+      <div class="stat-card" style="--accent-color: #06b6d4">
+        <div class="stat-header">
+          <div class="stat-info">
+            <span class="stat-value">{{ progresoCreditos }}%</span>
+            <span class="stat-label">Progreso de Carrera</span>
+          </div>
+          <div class="stat-icon-wrapper"><span class="stat-icon">🎓</span></div>
         </div>
       </div>
     </div>
 
-    <!-- Acciones rápidas -->
-    <div class="section acciones-section">
-      <h2 class="section-title">
-        <span class="section-icon">⚡</span>
-        Acciones Rápidas
-      </h2>
-      <div class="acciones-list">
-        <a
-          class="accion-card"
-          *ngFor="let a of accionesRapidas; let i = index"
-          [routerLink]="a.route"
-          [style.--accion-color]="a.color"
-          [style.animation-delay]="(i * 0.1) + 's'"
-        >
-          <div class="accion-icon">{{ a.icon }}</div>
-          <div class="accion-info">
-            <span class="accion-title">{{ a.title }}</span>
-            <span class="accion-desc">{{ a.description }}</span>
-          </div>
-          <span class="accion-arrow">→</span>
-        </a>
+    <!-- Progreso de carrera -->
+    <div class="progress-card">
+      <div class="progress-header">
+        <div class="progress-title">
+          <span class="progress-icon">🎓</span>
+          Progreso de Carrera
+        </div>
+        <span class="progress-percent">{{ progresoCreditos }}%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" [style.width.%]="progresoCreditos"></div>
+      </div>
+      <p class="progress-detail">
+        {{ estudiante.creditosAprobados }} de {{ estudiante.creditosTotales }} créditos aprobados
+      </p>
+    </div>
+
+    <!-- Layout principal -->
+    <div class="main-grid">
+
+      <!-- Acciones rápidas -->
+      <div class="section acciones-section">
+        <h2 class="section-title">
+          <span class="section-icon">⚡</span>
+          Acciones Rápidas
+        </h2>
+        <div class="acciones-list">
+          <a
+            class="accion-card"
+            *ngFor="let a of accionesRapidas; let i = index"
+            [routerLink]="a.route"
+            [style.--accion-color]="a.color"
+            [style.animation-delay]="(i * 0.1) + 's'"
+          >
+            <div class="accion-icon">{{ a.icon }}</div>
+            <div class="accion-info">
+              <span class="accion-title">{{ a.title }}</span>
+              <span class="accion-desc">{{ a.description }}</span>
+            </div>
+            <span class="accion-arrow">→</span>
+          </a>
+        </div>
       </div>
 
       <!-- Info del estudiante -->
-      <div class="student-info-card">
-        <h3 class="info-card-title">
-          <span>👤</span>
-          Mi Información
-        </h3>
-        <div class="info-rows">
-          <div class="info-row">
-            <span class="info-label">Email institucional</span>
-            <span class="info-value">{{ estudiante.emailInstitucional }}</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Carrera</span>
-            <span class="info-value">{{ estudiante.carrera }}</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Semestre actual</span>
-            <span class="info-value">{{ estudiante.semestre }}° semestre</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Promedio general</span>
-            <span class="info-value info-value-highlight">{{ estudiante.promedio }}</span>
+      <div class="section">
+        <div class="student-info-card">
+          <h3 class="info-card-title">
+            <span>👤</span>
+            Mi Información
+          </h3>
+          <div class="info-rows">
+            <div class="info-row">
+              <span class="info-label">Correo institucional</span>
+              <span class="info-value">{{ estudiante.correo }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Carrera</span>
+              <span class="info-value">{{ estudiante.carrera }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Semestre actual</span>
+              <span class="info-value">{{ estudiante.semestre }}° semestre</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Promedio general</span>
+              <span class="info-value info-value-highlight">{{ estudiante.promedio }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-  </div>
+    </div>
+  </ng-container>
+
 </div>

@@ -1,21 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface CursoOferta {
-  idOferta: number;
-  codigo: string;
-  nombre: string;
-  profesor: string;
-  aula: string;
-  horario: string;
-  creditos: number;
-  cupoMaximo: number;
-  matriculados: number;
-  precio: number;
-  color: string;
-  matriculado: boolean;
-}
+import { PortalService } from '../../services/portal.service';
+import { OfertaMatricula } from '../../models/portal.models';
 
 @Component({
   selector: 'app-portal-matricular',
@@ -24,123 +11,64 @@ interface CursoOferta {
   templateUrl: './portal-matricular.html',
   styleUrls: ['./portal-matricular.scss'],
 })
-export class PortalMatricularComponent {
+export class PortalMatricularComponent implements OnInit {
 
   filtroBusqueda = '';
-  confirmando: CursoOferta | null = null;
+  confirmando: OfertaMatricula | null = null;
+  cargando = true;
+  matriculando = false;
+  mensajeExito = '';
+  mensajeError = '';
 
-  periodo = {
-    nombre: 'Período 2026-1',
-    fechaInicio: '2026-02-03',
-    fechaFin: '2026-06-20',
-    fechaCierreMatricula: '2026-02-10',
-  };
+  oferta: OfertaMatricula[] = [];
 
-  oferta: CursoOferta[] = [
-    {
-      idOferta: 1,
-      codigo: 'CS-401',
-      nombre: 'Inteligencia Artificial',
-      profesor: 'Dr. Carlos Méndez',
-      aula: 'Lab. Cómputo 2',
-      horario: 'Lun / Mié 08:00 – 10:00',
-      creditos: 4,
-      cupoMaximo: 30,
-      matriculados: 22,
-      precio: 85000,
-      color: '#06b6d4',
-      matriculado: false,
-    },
-    {
-      idOferta: 2,
-      codigo: 'CS-410',
-      nombre: 'Redes de Computadoras',
-      profesor: 'M.Sc. Patricia Arce',
-      aula: 'Aula B-202',
-      horario: 'Mar / Jue 10:00 – 12:00',
-      creditos: 3,
-      cupoMaximo: 35,
-      matriculados: 35,
-      precio: 70000,
-      color: '#ef4444',
-      matriculado: false,
-    },
-    {
-      idOferta: 3,
-      codigo: 'MAT-301',
-      nombre: 'Probabilidad y Estadística',
-      profesor: 'Dr. Jorge Rojas',
-      aula: 'Aula A-103',
-      horario: 'Vie 07:00 – 10:00',
-      creditos: 3,
-      cupoMaximo: 40,
-      matriculados: 18,
-      precio: 65000,
-      color: '#10b981',
-      matriculado: false,
-    },
-    {
-      idOferta: 4,
-      codigo: 'CS-420',
-      nombre: 'Ingeniería de Software',
-      profesor: 'Ing. Sofía Brenes',
-      aula: 'Lab. Cómputo 4',
-      horario: 'Lun / Mié 14:00 – 16:00',
-      creditos: 4,
-      cupoMaximo: 25,
-      matriculados: 20,
-      precio: 85000,
-      color: '#8b5cf6',
-      matriculado: false,
-    },
-    {
-      idOferta: 5,
-      codigo: 'HUM-201',
-      nombre: 'Ética Profesional',
-      profesor: 'M.Sc. Gabriela Mora',
-      aula: 'Aula C-101',
-      horario: 'Mar 16:00 – 18:00',
-      creditos: 2,
-      cupoMaximo: 50,
-      matriculados: 31,
-      precio: 45000,
-      color: '#f59e0b',
-      matriculado: false,
-    },
-  ];
+  constructor(private portalService: PortalService) {}
 
-  get ofertaFiltrada(): CursoOferta[] {
+  ngOnInit(): void {
+    this.portalService.getOfertas().subscribe({
+      next: (res) => {
+        this.cargando = false;
+        if (!res.blnError) {
+          this.oferta = res.valorRetorno || [];
+        }
+      },
+      error: () => { this.cargando = false; },
+    });
+  }
+
+  get ofertaFiltrada(): OfertaMatricula[] {
     const term = this.filtroBusqueda.toLowerCase();
     if (!term) return this.oferta;
     return this.oferta.filter(
       (c) =>
-        c.nombre.toLowerCase().includes(term) ||
-        c.codigo.toLowerCase().includes(term) ||
-        c.profesor.toLowerCase().includes(term)
+        c.nombreCurso.toLowerCase().includes(term) ||
+        c.codigoCurso.toLowerCase().includes(term) ||
+        c.nombreProfesor.toLowerCase().includes(term)
     );
   }
 
   get cuposDisponibles(): number {
-    return this.oferta.filter((c) => !c.matriculado && this.getCuposRestantes(c) > 0).length;
+    return this.oferta.filter((c) => !c.yaMatriculado && this.getCuposRestantes(c) > 0).length;
   }
 
-  getCuposRestantes(curso: CursoOferta): number {
+  getCuposRestantes(curso: OfertaMatricula): number {
     return curso.cupoMaximo - curso.matriculados;
   }
 
-  getCupoPercent(curso: CursoOferta): number {
+  getCupoPercent(curso: OfertaMatricula): number {
     return Math.round((curso.matriculados / curso.cupoMaximo) * 100);
   }
 
-  getCupoClass(curso: CursoOferta): string {
+  getCupoClass(curso: OfertaMatricula): string {
     const pct = this.getCupoPercent(curso);
     if (pct >= 100) return 'cupo-lleno';
     if (pct >= 80) return 'cupo-critico';
     return 'cupo-ok';
   }
 
-  abrirConfirmacion(curso: CursoOferta): void {
+  abrirConfirmacion(curso: OfertaMatricula): void {
     this.confirmando = curso;
+    this.mensajeError = '';
   }
 
   cancelarConfirmacion(): void {
@@ -149,8 +77,29 @@ export class PortalMatricularComponent {
 
   confirmarMatricula(): void {
     if (!this.confirmando) return;
-    this.confirmando.matriculado = true;
-    this.confirmando.matriculados += 1;
-    this.confirmando = null;
+    this.matriculando = true;
+    const idOferta = this.confirmando.idOferta;
+
+    this.portalService.matricular(idOferta).subscribe({
+      next: (res) => {
+        this.matriculando = false;
+        if (res.blnError) {
+          this.mensajeError = res.strMensajeRespuesta || 'Error al matricular.';
+        } else {
+          const curso = this.oferta.find(c => c.idOferta === idOferta);
+          if (curso) {
+            curso.yaMatriculado = true;
+            curso.matriculados += 1;
+          }
+          this.mensajeExito = `Matriculado exitosamente en ${this.confirmando?.nombreCurso}.`;
+          this.confirmando = null;
+          setTimeout(() => { this.mensajeExito = ''; }, 4000);
+        }
+      },
+      error: () => {
+        this.matriculando = false;
+        this.mensajeError = 'Error al procesar la matrícula.';
+      },
+    });
   }
 }

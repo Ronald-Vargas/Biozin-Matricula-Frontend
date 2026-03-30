@@ -1,166 +1,29 @@
-<div class="overlay" *ngIf="visible" (click)="cerrar.emit()"></div>
+<div class="overlay" *ngIf="visible" (click)="onCerrar()"></div>
 
-<!-- Modal lista -->
-<div class="modal" *ngIf="visible && !mostrandoFormulario && !adminAEliminar">
-  <div class="modal-header">
-    <div class="header-left">
-      <h2 class="modal-title">Usuarios</h2>
-      <span class="badge-total">{{ admins.length }} Total</span>
-    </div>
-    <div class="header-right">
-      <button class="btn-add" (click)="abrirFormulario()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Añadir Usuario
-      </button>
-      <button class="btn-close" (click)="cerrar.emit()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </div>
-  </div>
+<div class="modal" *ngIf="visible"
+     [class.modal-wide]="vista === 'detail'"
+     (click)="$event.stopPropagation()">
 
-  <div class="search-wrapper">
-    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
-    <input class="search-input" type="text" placeholder="Buscar por nombre, correo o nombre de usuario..." [(ngModel)]="busqueda" />
-  </div>
+  <app-administrador-list
+    *ngIf="vista === 'list'"
+    (cerrar)="onCerrar()"
+    (nuevo)="abrirNuevo()"
+    (editar)="abrirEditar($event)"
+    (verDetalle)="abrirDetalle($event)">
+  </app-administrador-list>
 
-  <div class="filter-wrapper">
-    <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtrar('activo')">Activos</button>
-    <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
-    <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
-  </div>
+  <app-administrador-form
+    *ngIf="vista === 'form'"
+    [admin]="adminSeleccionado"
+    (cancelar)="volverALista()"
+    (guardado)="volverALista()">
+  </app-administrador-form>
 
-  <div class="table-wrapper">
-    <table class="tabla">
-      <thead>
-        <tr>
-          <th>NOMBRE</th>
-          <th>USUARIO</th>
-          <th>CORREO</th>
-          <th>TELÉFONO</th>
-          <th>ESTADO</th>
-          <th>ACCIONES</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let admin of adminsFiltrados">
-          <td class="td-nombre">{{ admin.nombreCompleto }}</td>
-          <td class="td-usuario">{{ admin.usuario }}</td>
-          <td class="td-correo">{{ admin.correo }}</td>
-          <td>{{ admin.telefono }}</td>
-          <td>
-            <span class="status-badge" [ngClass]="getEstadoClass(admin.activo)">
-              {{ admin.activo ? 'Activo' : 'Inactivo' }}
-            </span>
-          </td>
-          <td class="td-acciones">
-            <button
-              class="btn-icon btn-edit"  
-              title="Editar">
-              ✏️
-            </button>
-            <button
-              class="btn-icon"
-              [class.btn-danger]="admin.activo === true"
-              [class.btn-success]="admin.activo === false"
-              [title]="getToggleButtonConfig(admin.activo).tooltip"
-              (click)="toggleEstado(admin.idAdministrador)">
-              {{ getToggleButtonConfig(admin.activo).icon }}
-            </button>
-          </td>
-        </tr>
-        <tr *ngIf="adminsFiltrados.length === 0">
-          <td colspan="6" class="td-empty">No se encontraron administradores.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <app-administrador-detail
+    *ngIf="vista === 'detail'"
+    [admin]="adminSeleccionado!"
+    (cerrar)="volverALista()"
+    (editar)="abrirEditar($event)">
+  </app-administrador-detail>
 
-  <div class="modal-footer">
-    <span class="paginacion-info">Mostrando <strong>1–{{ adminsFiltrados.length }}</strong> de <strong>{{ admins.length }}</strong></span>
-  </div>
 </div>
-
-<!-- Modal formulario -->
-<div class="modal modal-form" *ngIf="visible && mostrandoFormulario">
-  <div class="modal-header">
-    <div>
-      <h2 class="modal-title">Añadir Nuevo Usuario</h2>
-      <p class="modal-subtitle">Completa los datos para dar de alta a un nuevo miembro.</p>
-    </div>
-    <button class="btn-close" (click)="cancelarFormulario()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-  </div>
-
-  <form [formGroup]="adminForm" (ngSubmit)="agregarAdmin()">
-    <div class="form-grid">
-
-      <div class="form-group">
-        <label class="form-label">IDENTIFICATION</label>
-        <input class="form-input" type="text" placeholder="Ej: 10928374" formControlName="identificacion"
-          [class.input-error]="identificacion?.invalid && identificacion?.touched" />
-        <span class="error-text" *ngIf="identificacion?.errors?.['required'] && identificacion?.touched">Requerido.</span>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">NOMBRE COMPLETO</label>
-        <input class="form-input" type="text" placeholder="Ej: Ana García" formControlName="nombre"
-          [class.input-error]="nombre?.invalid && nombre?.touched" />
-        <span class="error-text" *ngIf="nombre?.errors?.['required'] && nombre?.touched">Requerido.</span>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">NOMBRE DE USUARIO</label>
-        <div class="input-icon-wrapper">
-          <span class="input-prefix">@</span>
-          <input class="form-input with-prefix" type="text" placeholder="agarcia_dev" formControlName="usuario"
-            [class.input-error]="usuario?.invalid && usuario?.touched" />
-        </div>
-        <span class="error-text" *ngIf="usuario?.errors?.['required'] && usuario?.touched">Requerido.</span>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">CORREO</label>
-        <input class="form-input" type="email" placeholder="ana@empresa.com" formControlName="correo"
-          [class.input-error]="correo?.invalid && correo?.touched" />
-        <span class="error-text" *ngIf="correo?.errors?.['required'] && correo?.touched">Requerido.</span>
-        <span class="error-text" *ngIf="correo?.errors?.['email'] && correo?.touched">Correo inválido.</span>
-      </div>
-
-      <div class="form-group full">
-        <label class="form-label">TELÉFONO</label>
-        <input class="form-input" type="tel" placeholder="+34 000 000 000" formControlName="telefono" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">CONTRASEÑA</label>
-        <input class="form-input" type="password" placeholder="••••••••" formControlName="contrasena"
-          [class.input-error]="contrasena?.invalid && contrasena?.touched" />
-        <span class="error-text" *ngIf="contrasena?.errors?.['required'] && contrasena?.touched">Requerida.</span>
-        <span class="error-text" *ngIf="contrasena?.errors?.['minlength'] && contrasena?.touched">Mínimo 6 caracteres.</span>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">CONFIRMAR CONTRASEÑA</label>
-        <input class="form-input" type="password" placeholder="••••••••" formControlName="confirmarContrasena"
-          [class.input-error]="adminForm.errors?.['noCoinciden'] && confirmarContrasena?.touched" />
-        <span class="error-text" *ngIf="adminForm.errors?.['noCoinciden'] && confirmarContrasena?.touched">Las contraseñas no coinciden.</span>
-      </div>
-
-    </div>
-
-    <div class="form-footer">
-      <button type="button" class="btn-cancel" (click)="cancelarFormulario()">Cancelar</button>
-      <button type="submit" class="btn-submit" [disabled]="adminForm.invalid">Añadir Usuario</button>
-    </div>
-  </form>
-</div>
-

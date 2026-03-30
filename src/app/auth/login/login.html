@@ -1,3 +1,4 @@
+
 <div class="login-container">
 
   <div class="login-card">
@@ -11,20 +12,20 @@
     <!-- Formulario -->
     <div class="card-body">
 
-      <!-- Usuario -->
+      <!-- Email -->
       <div class="field">
-        <label for="username">Usuario</label>
+        <label for="email">Correo electrónico</label>
         <span class="input-wrapper">
           <svg class="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
           </svg>
           <input
-            id="username"
-            type="text"
-            placeholder="Ingrese su usuario"
-            [(ngModel)]="username"
-            autocomplete="username"
+            id="email"
+            type="email"
+            placeholder="Ingrese su correo institucional"
+            [(ngModel)]="email"
+            autocomplete="email"
           />
         </span>
       </div>
@@ -82,6 +83,9 @@
       <div class="forgot-password">
         <a routerLink="/auth/recover-password">¿Olvidaste tu contraseña?</a>
       </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
       <!-- Botón -->
       <button class="login-btn" (click)="onLogin()" [disabled]="isLoading">

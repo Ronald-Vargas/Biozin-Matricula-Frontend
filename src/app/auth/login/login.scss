@@ -256,6 +256,17 @@ input {
 
 
 
+/* ── ERROR ── */
+.error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  margin-bottom: 8px;
+}
+
 /* ── BOTÓN ── */
 .login-btn {
   display: flex;
