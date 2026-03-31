@@ -16,6 +16,9 @@
     </div>
   </div>
 
+
+
+
   <!-- ============================================ -->
   <!--         TARJETAS DE ESTADÍSTICAS             -->
   <!-- ============================================ -->
@@ -41,6 +44,10 @@
       </div>
     </div>
   </div>
+
+
+
+
 
   <!-- ============================================ -->
   <!--         CONTENIDO PRINCIPAL                  -->
@@ -93,34 +100,6 @@
       </div>
     </div>
 
-    <!-- Mejores Estudiantes -->
-    <div class="section top-students-section">
-      <h2 class="section-title">
-        <span class="section-icon">🏆</span>
-        Mejores Promedios
-      </h2>
-      <div class="students-ranking">
-        <div
-          class="ranking-item"
-          *ngFor="let student of topStudents; let i = index"
-          [style.animation-delay]="(i * 0.1) + 's'"
-        >
-          <div class="ranking-position" [ngClass]="'rank-' + (i + 1)">
-            {{ i + 1 }}
-          </div>
-          <div class="ranking-info">
-            <span class="ranking-name">{{ student.name }}</span>
-            <span class="ranking-career">{{ student.career }} · Sem. {{ student.semester }}</span>
-          </div>
-          <div class="ranking-average">
-            <span class="average-value">{{ student.average }}</span>
-            <div class="average-bar">
-              <div class="average-bar-fill" [style.width.%]="student.average"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Distribución por Carrera (mini chart visual) -->
     <div class="section distribution-section">
