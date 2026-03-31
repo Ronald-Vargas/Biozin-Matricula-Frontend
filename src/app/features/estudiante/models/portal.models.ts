@@ -33,6 +33,35 @@ export interface AdminPerfil {
   emailInstitucional: string;
 }
 
+export interface HorarioSlot {
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
+}
+
+export interface OfertaMatriculaRaw {
+  idOferta: number;
+  codigo: string;
+  nombre: string;
+  profesor: string;
+  aula: string;
+  horario: HorarioSlot[];
+  creditos: number;
+  cupoMaximo: number;
+  matriculados: number;
+  precio: number;
+  yaMatriculado?: boolean;
+}
+
+export interface PeriodoOfertas {
+  idPeriodo: number;
+  nombre: string;
+  fechaInicio: string;
+  fechaFin: string;
+  fechaMatriculaFin: string;
+  ofertas: OfertaMatriculaRaw[];
+}
+
 export interface OfertaMatricula {
   idOferta: number;
   codigoCurso: string;

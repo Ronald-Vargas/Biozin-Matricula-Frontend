@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   EstudiantePerfil,
-  OfertaMatricula,
+  PeriodoOfertas,
   SemestreHistorial,
   Pago,
   Respuesta,
 } from '../models/portal.models';
+
 
 @Injectable({ providedIn: 'root' })
 export class PortalService {
@@ -21,8 +22,8 @@ export class PortalService {
     return this.http.get<Respuesta<EstudiantePerfil>>(`${this.apiUrl}/Perfil`);
   }
 
-  getOfertas(): Observable<Respuesta<OfertaMatricula[]>> {
-    return this.http.get<Respuesta<OfertaMatricula[]>>(`${this.apiUrl}/Matricular/Ofertas`);
+  getOfertas(): Observable<Respuesta<PeriodoOfertas>> {
+    return this.http.get<Respuesta<PeriodoOfertas>>(`${this.apiUrl}/Matricular/Ofertas`);
   }
 
   matricular(idOferta: number): Observable<Respuesta<number>> {

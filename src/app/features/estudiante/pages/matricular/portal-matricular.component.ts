@@ -29,7 +29,19 @@ export class PortalMatricularComponent implements OnInit {
       next: (res) => {
         this.cargando = false;
         if (!res.blnError) {
-          this.oferta = res.valorRetorno || [];
+          this.oferta = (res.valorRetorno.ofertas ?? []).map(o => ({
+            idOferta: o.idOferta,
+            codigoCurso: o.codigo,
+            nombreCurso: o.nombre,
+            nombreProfesor: o.profesor,
+            nombreAula: o.aula,
+            horario: o.horario.map(h => `${h.dia} ${h.horaInicio}-${h.horaFin}`).join(', '),
+            creditos: o.creditos,
+            cupoMaximo: o.cupoMaximo,
+            matriculados: o.matriculados,
+            precio: o.precio,
+            yaMatriculado: o.yaMatriculado ?? false,
+          }));
         }
       },
       error: () => { this.cargando = false; },
