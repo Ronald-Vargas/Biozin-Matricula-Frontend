@@ -102,18 +102,26 @@ body {
   border: 1px solid var(--border);
 }
 
+
+
+
+
+
+
 /* Buttons */
 .btn {
-  padding: 0.875rem 1.75rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .btn:disabled {
@@ -591,6 +599,12 @@ tr:hover {
   flex-wrap: wrap;
 }
 
+.banner-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
 .module-title {
   font-size: 1.8rem;
   font-weight: 800;
@@ -602,6 +616,30 @@ tr:hover {
   font-size: 0.9rem;
   opacity: 0.85;
 }
+
+
+/* Filter buttons (estado) */
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--border);
+  background: white;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: var(--text-light);
+}
+
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
 
 /* Filter bar */
@@ -695,3 +733,88 @@ tr:hover {
 }
 
 
+
+
+
+
+
+
+/* ============================================
+   PAGE WRAPPERS (sin padding, banner full-width)
+   ============================================ */
+
+.cursos-page,
+.carreras-page,
+.asignar-page,
+.malla-page {
+  display: block;
+}
+
+/* ── Sección de filtros ── */
+.filters-section {
+  margin-bottom: 1.5rem;
+}
+
+.filters-section .search-box {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.filters-section .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.filters-section .search-input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 3rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.25s ease;
+  background: var(--bg);
+}
+
+.filters-section .search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+  background: white;
+}
+
+.filters-section .search-input::placeholder {
+  color: var(--text-muted, #94a3b8);
+}
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filters-row .filter-group {
+  flex: unset;
+  min-width: unset;
+}
+
+.filters-row .filter-count {
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters-row .filter-count {
+    margin-left: 0;
+    text-align: right;
+  }
+}

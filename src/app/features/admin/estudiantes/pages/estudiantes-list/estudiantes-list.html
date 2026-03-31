@@ -1,7 +1,5 @@
 <div class="estudiantes-container">
-  <div class="section">
 
-    <!-- Banner Azul Global -->
   <div class="module-banner">
     <div class="module-banner-content">
       <div>
@@ -10,13 +8,11 @@
           Administra la matrícula y el seguimiento académico de los estudiantes
         </p>
       </div>
-
-      <button class="btn btn-primary" (click)="nuevoEstudiante()">
+      <button class="btn btn-primary banner-btn" (click)="nuevoEstudiante()">
         ➕ Nuevo Estudiante
       </button>
     </div>
   </div>
-
 
   <div class="section">
 
@@ -33,7 +29,7 @@
     <!-- Filtros -->
     <div class="filter-buttons">
       <button class="filter-btn" [class.active]="filtroEstado === 'Activo'" (click)="filtrar('Activo')">Activos</button>
-      <button class="filter-btn" [class.active]="filtroEstado === 'Inactivo'" (click)="filtrar('Inactivo')">Inactivos</button>      
+      <button class="filter-btn" [class.active]="filtroEstado === 'Inactivo'" (click)="filtrar('Inactivo')">Inactivos</button>
       <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
     </div>
 
@@ -80,25 +76,26 @@
             </td>
 
             <td>
-                <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">
+              <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">
                 {{ est.estadoEstudiante ? 'Activo' : 'Inactivo' }}
-              </span>            </td>
+              </span>
+            </td>
 
             <td>
               <div class="action-buttons">
-                <button 
-                  class="btn-icon btn-view" 
-                  (click)="verDetalle(est)" 
+                <button
+                  class="btn-icon btn-view"
+                  (click)="verDetalle(est)"
                   title="Ver detalles">
                   👁️
                 </button>
-                <button 
-                  class="btn-icon btn-edit" 
-                  (click)="editarEstudiante(est)" 
+                <button
+                  class="btn-icon btn-edit"
+                  (click)="editarEstudiante(est)"
                   title="Editar">
                   ✏️
                 </button>
-                <button 
+                <button
                   class="btn-icon"
                   [class.btn-danger]="est.estadoEstudiante === true"
                   [class.btn-success]="est.estadoEstudiante === false"
@@ -115,11 +112,11 @@
 
   </div>
 
-    <!-- Footer -->
-    <div class="table-footer">
-      <span class="results-count">
-        Mostrando {{ estudiantesFiltrados.length }} de {{ estudiantes.length }} estudiantes
-      </span>
-    </div>
+  <!-- Footer -->
+  <div class="table-footer">
+    <span class="results-count">
+      Mostrando {{ estudiantesFiltrados.length }} de {{ estudiantes.length }} estudiantes
+    </span>
   </div>
+
 </div>

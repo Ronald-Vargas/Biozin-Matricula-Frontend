@@ -1,25 +1,21 @@
 
-<div class="container">
-
+<div class="carreras-page">
 
   <div class="module-banner">
-  <div class="module-banner-content">
-    <div>
-      <h1 class="module-title">🎓 Gestión de Carreras</h1>
-      <p class="module-subtitle">
-        Administra y organiza las carreras académicas del sistema
-      </p>
+    <div class="module-banner-content">
+      <div>
+        <h1 class="module-title">🎓 Gestión de Carreras</h1>
+        <p class="module-subtitle">
+          Administra y organiza las carreras académicas del sistema
+        </p>
+      </div>
+
+      <button class="btn btn-primary banner-btn" (click)="toggleFormulario()">
+        <span *ngIf="!mostrarFormulario">➕ Nueva Carrera</span>
+        <span *ngIf="mostrarFormulario">❌ Cancelar</span>
+      </button>
     </div>
-
-    <button class="btn btn-primary banner-btn" (click)="toggleFormulario()">
-      <span *ngIf="!mostrarFormulario">➕ Nueva Carrera</span>
-      <span *ngIf="mostrarFormulario">❌ Cancelar</span>
-    </button>
   </div>
-</div>
-
-
-
 
   <!-- Formulario de creación / edición -->
   <app-carreras-form
@@ -28,37 +24,28 @@
     (carreraCreada)="onCarreraCreada()">
   </app-carreras-form>
 
-
-  <!-- Barra de filtros -->
-  <div class="filter-bar">
-    <div class="filter-group">
-      <span class="filter-icon">🔍</span>
+  <!-- Filtros -->
+  <div class="section filters-section">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
       <input
         type="text"
-        class="filter-input"
+        class="search-input"
         placeholder="Buscar por nombre o código..."
         [(ngModel)]="filtroNombre">
     </div>
 
-    <div class="filter-group">
-      <span class="filter-icon">📋</span>
-      <select class="filter-select" [(ngModel)]="filtroEstado"> 
-        <option value="activo">Activo</option>
-        <option value="inactivo">Inactivo</option>
-        <option value="todos">Todos los estados</option>
-      </select>
+    <div class="filters-row">
+      <div class="filter-buttons">
+        <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtroEstado = 'activo'">Activos</button>
+        <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtroEstado = 'inactivo'">Inactivos</button>
+        <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtroEstado = 'todos'">Todos</button>
+      </div>
+
+      <span class="filter-count">
+        {{ carrerasFiltradas.length }} de {{ carreras.length }} carreras
+      </span>
     </div>
-
-    <button
-      class="btn-clear-filters"
-      (click)="limpiarFiltros()"
-      *ngIf="filtroNombre || filtroEstado !== 'activo'">
-      ✕ Limpiar filtros
-    </button>
-
-    <span class="filter-count">
-      {{ carrerasFiltradas.length }} de {{ carreras.length }} carreras
-    </span>
   </div>
 
 
@@ -98,7 +85,7 @@
           title="Generar Plan de Estudios PDF">
           📄 Plan de Estudios
         </button>
-        <button 
+        <button
           class="btn btn-sm"
           [class.btn-danger]="carrera.estado === true"
           [class.btn-success]="carrera.estado === false"
