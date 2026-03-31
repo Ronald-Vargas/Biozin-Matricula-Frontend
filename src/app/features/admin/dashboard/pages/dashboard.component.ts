@@ -76,20 +76,20 @@ export class DashboardComponent implements OnInit {
       route: '/estudiantes/nuevo'
     },
     {
-      icon: '📋',
-      title: 'Nueva Matrícula',
-      description: 'Matricular estudiante en cursos del período',
-      route: '/matriculas/nueva'
+      icon: '➕',
+      title: 'Nuevo Curso',
+      description: 'Crear un nuevo curso',
+      route: '/cursos/nuevo'
     },
     {
-      icon: '📊',
-      title: 'Ver Reportes',
-      description: 'Estadísticas y análisis del sistema',
-      route: '/reportes'
+      icon: '📋',
+      title: 'Nueva Oferta Academica',
+      description: 'Crear una nueva oferta académica',
+      route: '/oferta-academica'
     },
     {
       icon: '🔗',
-      title: 'Gestionar Malla',
+      title: 'Asignar a Malla',
       description: 'Asignar cursos a carreras universitarias',
       route: '/asignaciones'
     }
@@ -107,18 +107,6 @@ export class DashboardComponent implements OnInit {
       description: 'Nueva carrera "Ciencia de Datos" creada',
       time: 'Hace 30 min',
       type: 'info'
-    },
-    {
-      icon: '⚠️',
-      description: 'María González tiene créditos pendientes',
-      time: 'Hace 1 hora',
-      type: 'warning'
-    },
-    {
-      icon: '✅',
-      description: 'Carlos Ramírez completó el semestre 7',
-      time: 'Hace 2 horas',
-      type: 'success'
     },
     {
       icon: '📝',
