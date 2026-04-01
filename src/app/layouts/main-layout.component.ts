@@ -96,9 +96,6 @@ export class MainLayoutComponent {
     return this.currentView === 'admin' ? 'Administrador' : 'Estudiante';
   }
 
-  private get allItems(): MenuItem[] {
-    return this.menuSections.flatMap((s) => s.items);
-  }
 
   constructor(private router: Router, private authService: AuthService) {
     this.currentView = this.authService.getRole() === 'estudiante' ? 'student' : 'admin';
@@ -118,14 +115,6 @@ export class MainLayoutComponent {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
-  switchView(view: 'admin' | 'student'): void {
-    this.currentView = view;
-    if (view === 'admin') {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.router.navigate(['/portal/inicio']);
-    }
-  }
 }
 
 
