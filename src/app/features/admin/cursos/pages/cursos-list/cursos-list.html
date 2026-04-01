@@ -63,7 +63,7 @@
           class="status-badge"
           [class.active]="curso.estado === true"
           [class.inactive]="curso.estado === false">
-          {{ curso.estado }}
+           {{ curso.estado ? 'Activo' : 'Inactivo' }}
         </span>
       </div>
 

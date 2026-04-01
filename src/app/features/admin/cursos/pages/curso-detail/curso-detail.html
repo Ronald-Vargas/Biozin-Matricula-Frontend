@@ -19,8 +19,10 @@
       </div>
       <div class="detail-item">
         <span class="label">Estado:</span>
-        <span class="status-badge" [class.active]="curso?.estado === true">
-          {{ curso?.estado }}
+        <span class="status-badge" 
+          [class.active]="curso?.estado === true"
+          [class.inactive]="curso?.estado === false">
+          {{ curso?.estado ? 'Activo' : 'Inactivo' }}
         </span>
       </div>
       <div class="detail-item">

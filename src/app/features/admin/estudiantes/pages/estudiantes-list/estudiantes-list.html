@@ -33,6 +33,11 @@
       <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
     </div>
 
+
+
+
+
+    
     <!-- Tabla -->
     <div class="table-container">
       <table class="students-table">
@@ -76,7 +81,9 @@
             </td>
 
             <td>
-              <span class="status-badge" [ngClass]="getEstadoClass(est.estadoEstudiante)">
+              <span class="status-badge"
+                    [class.active]="est.estadoEstudiante"
+                    [class.inactive]="!est.estadoEstudiante">
                 {{ est.estadoEstudiante ? 'Activo' : 'Inactivo' }}
               </span>
             </td>

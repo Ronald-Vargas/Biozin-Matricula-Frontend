@@ -39,6 +39,7 @@
     </div>
 
 
+    
 
 
     <!-- Tabla -->
@@ -90,7 +91,9 @@
             </td>
 
             <td>
-              <span class="status-badge" [ngClass]="getEstadoClass(prof.estado)">
+              <span class="status-badge"   
+                [class.active]="prof.estado"
+                [class.inactive]="!prof.estado">
                 {{ prof.estado ? 'Activo' : 'Inactivo' }}
               </span>
             </td>

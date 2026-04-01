@@ -77,11 +77,10 @@
             <td>{{ per.fechaMatriculaInicio | date:'dd/MM/yyyy' }}</td>
             <td>{{ per.fechaMatriculaFin | date:'dd/MM/yyyy' }}</td>
             <td>
-              <span 
-              class="status-badge"
-              [class.active]="per.estadoMatricula === true"
-              [class.inactive]="per.estadoMatricula === false">
-              {{ per.estadoMatricula }}
+              <span class="status-badge"
+                    [class.active]="per.estadoMatricula"
+                    [class.inactive]="!per.estadoMatricula">
+                {{ per.estadoMatricula ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
 

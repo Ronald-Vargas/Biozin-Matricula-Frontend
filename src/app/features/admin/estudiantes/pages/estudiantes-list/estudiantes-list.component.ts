@@ -56,6 +56,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   }
 
 
+  
 
   get estudiantesFiltrados(): Estudiante[] {
         return this.estudiantes.filter(c => {
