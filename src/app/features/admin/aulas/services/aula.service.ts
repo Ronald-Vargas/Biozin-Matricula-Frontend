@@ -42,8 +42,14 @@ export class AulaService {
       .pipe(tap(() => this.cargarAulas()));
   }
 
-  deleteAula(id: number): Observable<Respuesta<boolean>> {
-    return this.http.delete<Respuesta<boolean>>(`${this.apiUrl}/Eliminar/${id}`)
-      .pipe(tap(() => this.cargarAulas()));
+  
+  toggleEstado(id: number): void {
+    const aulas = this.aulasSubject.getValue();
+    const aula = aulas.find(c => c.idAula === id);
+    if (aula) {
+      const updated = { ...aula, activo: !aula.activo };
+      this.updateAula(updated).subscribe();
+    }
   }
 }
+

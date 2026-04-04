@@ -82,12 +82,20 @@
             </td>
             <td>
               <div class="action-buttons">
-                <button class="btn-icon btn-edit"
-                        (click)="editarAula(aula)"
-                        title="Editar">✏️</button>
-                <button class="btn-icon btn-delete"
-                        (click)="eliminarAula(aula.idAula)"
-                        title="Eliminar">🗑️</button>
+                <button 
+                  class="btn-icon btn-edit"
+                  (click)="editarAula(aula)"
+                  title="Editar">
+                  ✏️
+                </button>
+                <button 
+                  class="btn-icon"
+                  [class.btn-danger]="aula.activo === true"
+                  [class.btn-success]="aula.activo === false"
+                  [title]="getToggleButtonConfig(aula.activo).tooltip"
+                  (click)="toggleEstado(aula.idAula)">
+                  {{ getToggleButtonConfig(aula.activo).icon }}
+                </button>
               </div>
             </td>
           </tr>

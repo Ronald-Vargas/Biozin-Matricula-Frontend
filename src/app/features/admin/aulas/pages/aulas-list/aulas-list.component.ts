@@ -64,11 +64,6 @@ export class AulasListComponent implements OnInit, OnDestroy {
     this.mostrarFormulario = true;
   }
 
-  eliminarAula(id: number): void {
-    if (confirm('¿Desea eliminar esta aula?')) {
-      this.aulaService.deleteAula(id).subscribe();
-    }
-  }
 
   onAulaCreada(): void {
     this.mostrarFormulario = false;
@@ -79,4 +74,16 @@ export class AulasListComponent implements OnInit, OnDestroy {
     this.mostrarFormulario = false;
     this.aulaSeleccionada = null;
   }
+
+   toggleEstado(idAula: number): void {
+    this.aulaService.toggleEstado(idAula);
+  }
+
+  getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {
+    return estado
+      ? { icon: '🗑️', tooltip: 'Desactivar' }
+      : { icon: '✅', tooltip: 'Activar' };
+  }
+
+
 }

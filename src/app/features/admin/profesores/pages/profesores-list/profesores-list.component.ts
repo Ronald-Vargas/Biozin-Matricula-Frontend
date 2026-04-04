@@ -51,7 +51,6 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
     }
 
 
-
   verDetalles(id: number): void {
     this.router.navigate(['/profesores', id]);
   }
@@ -74,10 +73,6 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
 
   filtrar(estado: string): void {
     this.filtroEstado = estado;
-  }
-
-  getEstadoClass(estado: boolean): string {
-    return estado ? 'badge-active' : 'badge-inactive';
   }
 
   getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {
