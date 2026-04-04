@@ -1,13 +1,15 @@
 export interface EstudiantePerfil {
   idEstudiante: number;
-  carnet: string;
-  nombreCompleto: string;
-  correo: string;
-  carrera: string;
-  semestre: number;
-  creditosAprobados: number;
-  creditosTotales: number;
-  promedio: number;
+  nombre: string;
+  apellidoPaterno: string;
+  carnet: number;
+  idCarrera: number;
+  nombreCarrera: string;
+  semestreActual?: number | null;
+  emailInstitucional: string;
+  creditosAprobados?: number;
+  creditosTotales?: number;
+  promedio?: number;
 }
 
 export interface LoginRequest {

@@ -51,16 +51,17 @@ export class PortalInicioComponent implements OnInit {
   ];
 
   get iniciales(): string {
-    const parts = (this.estudiante?.nombreCompleto || '').split(' ');
-    return (parts[0]?.charAt(0) || '') + (parts[1]?.charAt(0) || '');
+    const nombre = this.estudiante?.nombre?.charAt(0) || '';
+    const apellido = this.estudiante?.apellidoPaterno?.charAt(0) || '';
+    return nombre + apellido;
   }
 
   get primerNombre(): string {
-    return this.estudiante?.nombreCompleto?.split(' ')[0] || '';
+    return this.estudiante?.nombre || '';
   }
 
   get progresoCreditos(): number {
-    if (!this.estudiante) return 0;
+    if (!this.estudiante?.creditosAprobados || !this.estudiante?.creditosTotales) return 0;
     return Math.round((this.estudiante.creditosAprobados / this.estudiante.creditosTotales) * 100);
   }
 

@@ -87,7 +87,11 @@ export class MainLayoutComponent {
 
   get userName(): string {
     if (this.currentView === 'student') {
-      return this.authService.getPerfil()?.nombreCompleto || 'Estudiante';
+      const perfil = this.authService.getPerfil();
+      if (perfil?.nombre) {
+        return `${perfil.nombre} ${perfil.apellidoPaterno}`.trim();
+      }
+      return 'Estudiante';
     }
     return this.authService.getAdminPerfil()?.nombreCompleto || 'Administrador';
   }
