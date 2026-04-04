@@ -1,11 +1,20 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { Periodo } from "../../models/periodos.model";
 import { PeriodoService } from "../../services/periodos.services";
 
-
+function fechaFinNoAnterior(inicioKey: string, finKey: string): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const inicio = group.get(inicioKey)?.value;
+    const fin = group.get(finKey)?.value;
+    if (inicio && fin && fin < inicio) {
+      return { [finKey + 'Invalida']: true };
+    }
+    return null;
+  };
+}
 
 @Component({
   selector: 'app-periodo-form',
@@ -35,6 +44,11 @@ export class PeriodoFormComponent implements OnChanges {
       fechaFin: ['', Validators.required],
       fechaMatriculaInicio: ['', Validators.required],
       fechaMatriculaFin: ['', Validators.required]
+    }, {
+      validators: [
+        fechaFinNoAnterior('fechaInicio', 'fechaFin'),
+        fechaFinNoAnterior('fechaMatriculaInicio', 'fechaMatriculaFin')
+      ]
     });
   }
 
@@ -99,4 +113,7 @@ export class PeriodoFormComponent implements OnChanges {
   get fechaFin() { return this.periodoForm.get('fechaFin'); }
   get fechaMatriculaInicio() { return this.periodoForm.get('fechaMatriculaInicio'); }
   get fechaMatriculaFin() { return this.periodoForm.get('fechaMatriculaFin'); }
+
+  get fechaFinInvalida() { return this.periodoForm.hasError('fechaFinInvalida'); }
+  get fechaMatriculaFinInvalida() { return this.periodoForm.hasError('fechaMatriculaFinInvalida'); }
 }

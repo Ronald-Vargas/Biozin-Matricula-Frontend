@@ -28,7 +28,8 @@
     <div class="form-group">
       <div class="form-group">
           <label>Fecha de Fin *</label>
-          <input type="date" formControlName="fechaFin" />
+          <input type="date" formControlName="fechaFin" [min]="fechaInicio?.value" />
+          <small class="error-text" *ngIf="fechaFinInvalida">La fecha de fin no puede ser anterior a la de inicio.</small>
         </div>
     </div>
 
@@ -42,7 +43,8 @@
     <div class="form-group">
       <div class="form-group">
           <label>Cierre de Matricula *</label>
-          <input type="date" formControlName="fechaMatriculaFin" />
+          <input type="date" formControlName="fechaMatriculaFin" [min]="fechaMatriculaInicio?.value" />
+          <small class="error-text" *ngIf="fechaMatriculaFinInvalida">El cierre de matrícula no puede ser anterior al inicio.</small>
         </div>
     </div>
 
