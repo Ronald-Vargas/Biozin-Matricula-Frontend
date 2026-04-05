@@ -10,14 +10,12 @@ export interface Administrador {
     activo: boolean
 }
 
-
 export interface CreateAdministradorDto {
     identificacion: string,
     nombreCompleto: string,
     correo: string,
     emailInstitucional: string,
     telefono: string,
-    contraseña: string,
 }
 
 

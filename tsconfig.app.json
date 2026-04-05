@@ -3,12 +3,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./out-tsc/app",
     "types": []
   },
   "include": [
-    "src/**/*.ts"
-, "src/app/features/OfertaAcademica/pages/oferta-academica-form", "src/app/features/OfertaAcademica/pages/oferta-academica-list"  ],
+    "src/**/*.ts",],
   "exclude": [
     "src/**/*.spec.ts"
   ]
