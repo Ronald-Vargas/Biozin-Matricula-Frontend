@@ -88,7 +88,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
       // ── Académico ──
       idCarrera:               [0, [Validators.required, Validators.min(1)]],
       condicionSocioeconomica: ['', [Validators.maxLength(30)]],
-      tipoBeca:                ['Ninguna', [Validators.maxLength(20)]],
+      tipoBeca:                ['Ninguna'],
       trabaja:                 [false],
 
       // ── Colegio ──
@@ -169,7 +169,11 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
 
   guardar(): void {
     this.estudianteForm.markAllAsTouched();
-    if (this.estudianteForm.invalid) return;
+    if (this.estudianteForm.invalid) {
+      const firstInvalid = document.querySelector<HTMLElement>('.form-panel .ng-invalid');
+      firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
 
     const v = this.estudianteForm.value;
 
