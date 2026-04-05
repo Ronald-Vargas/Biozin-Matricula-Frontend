@@ -103,6 +103,12 @@ export interface Pago {
   periodo: string;
 }
 
+export interface CambiarContrasenaTemporariaRequest {
+  email: string;
+  contrasenaTemporal: string;
+  nuevaContrasena: string;
+}
+
 export interface Respuesta<T> {
   valorRetorno: T;
   strMensajeRespuesta: string;

@@ -79,12 +79,17 @@
         </span>
       </div>
 
-      <!-- Olvidó contraseña -->
+      <!-- Links inferiores -->
       <div class="forgot-password">
         <a routerLink="/auth/recover-password">¿Olvidaste tu contraseña?</a>
+        <span class="separator">·</span>
+        <a (click)="onCambiarContrasenaTemporaria()" class="temp-password-link">Cambiar contraseña temporal</a>
       </div>
 
-      <!-- Error -->
+      <!-- Error email para contraseña temporal -->
+      <div *ngIf="emailErrorForTempPassword" class="error-message">{{ emailErrorForTempPassword }}</div>
+
+      <!-- Error login -->
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
       <!-- Botón -->

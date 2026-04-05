@@ -233,9 +233,13 @@ input {
 
 /* ── OLVIDÓ CONTRASEÑA ── */
 .forgot-password {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   margin-bottom: 24px;
   margin-top: -6px;
+  flex-wrap: wrap;
 
   a {
     font-size: 13.5px;
@@ -243,9 +247,29 @@ input {
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
+    cursor: pointer;
 
     &:hover {
       color: #a67c00;
+      text-decoration: underline;
+    }
+  }
+
+  .separator {
+    font-size: 13px;
+    color: #c4b89e;
+  }
+
+  .temp-password-link {
+    font-size: 13.5px;
+    color: #3b6fe8;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #2451c4;
       text-decoration: underline;
     }
   }

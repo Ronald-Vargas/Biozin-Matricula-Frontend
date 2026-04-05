@@ -2,11 +2,20 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-   // ── Login 
+  // ── Login
   {
-     path: '',
+    path: '',
     loadComponent: () =>
       import('./auth/login/login.component').then((m) => m.LoginComponent),
+  },
+
+  // ── Cambiar contraseña temporal
+  {
+    path: 'cambiar-contrasena-temporal',
+    loadComponent: () =>
+      import('./auth/change-temp-password/change-temp-password.component').then(
+        (m) => m.ChangeTempPasswordComponent
+      ),
   },
 
   // ── App (Main Layout) ──

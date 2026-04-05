@@ -18,11 +18,23 @@ export class LoginComponent {
   showPassword = false;
   isLoading = false;
   errorMessage = '';
+  emailErrorForTempPassword = '';
 
   constructor(private router: Router, private authService: AuthService) {}
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  onCambiarContrasenaTemporaria(): void {
+    this.emailErrorForTempPassword = '';
+    if (!this.email || !this.email.trim()) {
+      this.emailErrorForTempPassword = 'Ingrese su correo antes de cambiar la contraseña temporal.';
+      return;
+    }
+    this.router.navigate(['/cambiar-contrasena-temporal'], {
+      queryParams: { email: this.email.trim() },
+    });
   }
 
   onLogin(): void {

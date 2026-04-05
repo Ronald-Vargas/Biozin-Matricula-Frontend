@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AdminPerfil, AuthRespuesta, EstudiantePerfil, LoginRequest, Respuesta } from '../models/portal.models';
+import { AdminPerfil, AuthRespuesta, CambiarContrasenaTemporariaRequest, EstudiantePerfil, LoginRequest, Respuesta } from '../models/portal.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -70,5 +70,9 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  cambiarContrasenaTemporaria(request: CambiarContrasenaTemporariaRequest): Observable<Respuesta<null>> {
+    return this.http.post<Respuesta<null>>(`${environment.apiUrl}/Auth/CambiarContrasenaTemporaria`, request);
   }
 }
