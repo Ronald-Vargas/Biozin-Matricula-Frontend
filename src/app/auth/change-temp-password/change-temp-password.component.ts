@@ -64,7 +64,7 @@ export class ChangeTempPasswordComponent implements OnInit {
       next: (res) => {
         this.isLoading = false;
         if (res.blnError) {
-          this.errorMessage = res.strMensajeRespuesta || 'Ocurrió un error al cambiar la contraseña.';
+          this.errorMessage = res.strMensajeRespuesta || 'Contraseña actual incorrecta o error al cambiar la contraseña.';
         } else {
           this.successMessage = 'Contraseña actualizada correctamente. Redirigiendo...';
           setTimeout(() => this.router.navigate(['/']), 2000);

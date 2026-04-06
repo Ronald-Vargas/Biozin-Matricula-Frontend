@@ -26,10 +26,10 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-  onCambiarContrasenaTemporaria(): void {
+  onCambiarContrasena(): void {
     this.emailErrorForTempPassword = '';
     if (!this.email || !this.email.trim()) {
-      this.emailErrorForTempPassword = 'Ingrese su correo antes de cambiar la contraseña temporal.';
+      this.emailErrorForTempPassword = 'Ingrese su correo antes de cambiar la contraseña.';
       return;
     }
     this.router.navigate(['/cambiar-contrasena-temporal'], {

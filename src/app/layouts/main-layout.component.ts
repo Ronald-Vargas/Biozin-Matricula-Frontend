@@ -101,6 +101,12 @@ export class MainLayoutComponent {
   }
 
 
+  showSettingsMenu = false;
+
+  get isAdmin(): boolean {
+    return this.currentView === 'admin';
+  }
+
   constructor(private router: Router, private authService: AuthService) {
     this.currentView = this.authService.getRole() === 'estudiante' ? 'student' : 'admin';
     this.router.events
@@ -112,11 +118,21 @@ export class MainLayoutComponent {
         if (event.urlAfterRedirects.startsWith('/portal')) {
           this.currentView = 'student';
         }
+        this.showSettingsMenu = false;
       });
   }
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+
+  toggleSettingsMenu(): void {
+    this.showSettingsMenu = !this.showSettingsMenu;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 
 }

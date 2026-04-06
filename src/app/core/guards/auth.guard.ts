@@ -10,3 +10,17 @@ export const authGuard: CanActivateFn = () => {
   return false;
 };
 
+export const adminGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (!auth.isLoggedIn()) {
+    router.navigate(['/']);
+    return false;
+  }
+  if (auth.getRole() !== 'admin') {
+    router.navigate(['/portal/inicio']);
+    return false;
+  }
+  return true;
+};
+

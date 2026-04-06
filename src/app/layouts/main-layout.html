@@ -72,7 +72,13 @@
       </div>
       <div class="header-right">
         <span class="header-date">{{ today | date:'d \'de\' MMMM, yyyy' }}</span>
-        <a routerLink="/ajustes" class="settings-btn" title="Ajustes">⚙️</a>
+        <div class="settings-wrapper">
+          <button class="settings-btn" (click)="toggleSettingsMenu()" title="Opciones">⚙️</button>
+          <div class="settings-dropdown" *ngIf="showSettingsMenu">
+            <a *ngIf="isAdmin" routerLink="/ajustes" class="dropdown-item">⚙️ Ajustes</a>
+            <button class="dropdown-item dropdown-item--danger" (click)="logout()">🚪 Cerrar sesión</button>
+          </div>
+        </div>
       </div>
     </header>
 
