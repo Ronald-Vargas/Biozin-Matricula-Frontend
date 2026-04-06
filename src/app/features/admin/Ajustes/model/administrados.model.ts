@@ -4,7 +4,6 @@ export interface Administrador {
     identificacion: string,
     nombreCompleto: string,
     correo: string,
-    emailInstitucional: string,
     telefono: string,
     contraseña: string,
     activo: boolean
@@ -14,7 +13,6 @@ export interface CreateAdministradorDto {
     identificacion: string,
     nombreCompleto: string,
     correo: string,
-    emailInstitucional: string,
     telefono: string,
 }
 

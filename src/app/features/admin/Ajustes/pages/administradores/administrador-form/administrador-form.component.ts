@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import * as bcrypt from 'bcryptjs';
 import { Administrador } from '../../../model/administrados.model';
 import { AdministradorService } from '../../../services/administrador.service';
 
@@ -18,8 +17,6 @@ export class AdministradorFormComponent implements OnChanges {
   @Output() guardado = new EventEmitter<void>();
 
   guardando = false;
-  mostrarCambioContrasena = false;
-  errorContrasenaActual = false;
 
   adminForm: FormGroup;
 
@@ -52,10 +49,7 @@ export class AdministradorFormComponent implements OnChanges {
   }
 
   get formInvalido(): boolean {
-    if (this.adminForm.invalid) return true;
-    if (!this.esEdicion ) return true;
-    if (this.esEdicion) return true;
-    return false;
+    return this.adminForm.invalid;
   }
 
   guardar(): void {
@@ -83,7 +77,6 @@ export class AdministradorFormComponent implements OnChanges {
         identificacion,
         nombreCompleto: nombre,
         correo,
-        emailInstitucional: identificacion + '@admin.biozin.edu.cr',
         telefono,
       }).subscribe({
         next: () => { this.guardando = false; this.guardado.emit(); },
