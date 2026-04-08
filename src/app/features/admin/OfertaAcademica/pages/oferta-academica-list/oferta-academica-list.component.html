@@ -1,5 +1,17 @@
+<!-- Vista Detail -->
+<app-oferta-academica-detail
+  *ngIf="vista === 'detail' && ofertaSeleccionada"
+  [oferta]="ofertaSeleccionada"
+  [curso]="getCursoDeOferta(ofertaSeleccionada.idCurso)"
+  [profesor]="getProfesorDeOferta(ofertaSeleccionada.idProfesor)"
+  [aula]="getAulaDeOferta(ofertaSeleccionada.idAula)"
+  [periodo]="getPeriodoDeOferta(ofertaSeleccionada.idPeriodo)"
+  (cerrar)="volverALista()"
+  (editar)="abrirModal()"
+></app-oferta-academica-detail>
 
-<div class="oferta-container">
+<!-- Vista List -->
+<div class="oferta-container" *ngIf="vista === 'list'">
 
   <!-- ══════ HEADER ══════ -->
   <div class="module-banner">
@@ -92,6 +104,11 @@
         <!-- Actions -->
         <div class="card-actions">
           <button
+            class="btn btn-sm btn-secondary"
+            (click)="verDetalle(oferta)">
+            Ver detalles
+          </button>
+          <button
             class="btn btn-sm"
             [class.btn-danger]="oferta.estado === true"
             [class.btn-success]="oferta.estado === false"
@@ -99,7 +116,7 @@
             (click)="toggleEstado(oferta.idOferta)">
             {{ getToggleButtonConfig(oferta.estado).label }}
           </button>
-          <button 
+          <button
             class="btn-action btn-delete"
             (click)="eliminar(oferta)">
             🗑️

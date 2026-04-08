@@ -4,17 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { OfertaAcademicaService } from '../../services/oferta-academica.service';
 import { DiaHorario, OfertaAcademica } from '../../models/oferta-academica.model';
 import { OfertaAcademicaFormComponent } from '../oferta-academica-form/oferta-academica-form.component';
+import { OfertaAcademicaDetailComponent } from '../oferta-academica-detail/oferta-academica-detail.component';
 import { CursoService } from '../../../cursos/services/curso.service';
 import { ProfesorService } from '../../../profesores/services/profesores.services';
 import { AulaService } from '../../../aulas/services/aula.service';
+import { PeriodoService } from '../../../periodos/services/periodos.services';
 import { Curso } from '../../../cursos/models/curso.model';
 import { Profesor } from '../../../profesores/models/profesores.model';
 import { Aula } from '../../../aulas/models/aula.model';
+import { Periodo } from '../../../periodos/models/periodos.model';
+
+type Vista = 'list' | 'detail';
 
 @Component({
   selector: 'app-oferta-academica-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, OfertaAcademicaFormComponent],
+  imports: [CommonModule, FormsModule, OfertaAcademicaFormComponent, OfertaAcademicaDetailComponent],
   templateUrl: './oferta-academica-list.component.html',
   styleUrls: ['./oferta-academica-list.component.scss'],
 })
@@ -25,9 +30,13 @@ export class OfertaAcademicaListComponent implements OnInit {
   busqueda = '';
   mostrarModal = false;
 
+  vista: Vista = 'list';
+  ofertaSeleccionada: OfertaAcademica | null = null;
+
   private cursos: Curso[] = [];
   private profesores: Profesor[] = [];
   private aulas: Aula[] = [];
+  private periodos: Periodo[] = [];
 
   private diasAbrev: Record<string, string> = {
     'Lunes': 'Lun', 'Martes': 'Mar', 'Miércoles': 'Mié',
@@ -39,17 +48,45 @@ export class OfertaAcademicaListComponent implements OnInit {
     private cursoService: CursoService,
     private profesorService: ProfesorService,
     private aulaService: AulaService,
+    private periodoService: PeriodoService,
   ) {}
 
   ngOnInit(): void {
     this.cursoService.getCursos().subscribe(c => this.cursos = c);
     this.profesorService.getProfesores().subscribe(p => this.profesores = p);
     this.aulaService.getAulas().subscribe(a => this.aulas = a);
+    this.periodoService.getPeriodos().subscribe(p => this.periodos = p);
 
     this.ofertaService.getAll().subscribe((ofertas) => {
       this.ofertas = ofertas;
       this.filtrar();
     });
+  }
+
+  verDetalle(oferta: OfertaAcademica): void {
+    this.ofertaSeleccionada = oferta;
+    this.vista = 'detail';
+  }
+
+  volverALista(): void {
+    this.ofertaSeleccionada = null;
+    this.vista = 'list';
+  }
+
+  getCursoDeOferta(idCurso: number): import('../../../cursos/models/curso.model').Curso | null {
+    return this.cursos.find(c => c.idCurso === idCurso) ?? null;
+  }
+
+  getProfesorDeOferta(idProfesor: number): import('../../../profesores/models/profesores.model').Profesor | null {
+    return this.profesores.find(p => p.idProfesor === idProfesor) ?? null;
+  }
+
+  getAulaDeOferta(idAula: number): import('../../../aulas/models/aula.model').Aula | null {
+    return this.aulas.find(a => a.idAula === idAula) ?? null;
+  }
+
+  getPeriodoDeOferta(idPeriodo: number): import('../../../periodos/models/periodos.model').Periodo | null {
+    return this.periodos.find(p => p.idPeriodo === idPeriodo) ?? null;
   }
 
   getNombreCurso(idCurso: number): string {
