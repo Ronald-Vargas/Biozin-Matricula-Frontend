@@ -52,7 +52,7 @@ export class MallaCurricularComponent implements OnInit {
         const semestreMap = new Map<number, CursoMalla[]>();
         for (const asig of asignaciones) {
           const curso = cursosMap.get(asig.idCurso);
-          if (!curso) continue;
+          if (!curso || !curso.estado) continue;
 
           const prerequisitoIds = asig.prerequisitos?.length
             ? asig.prerequisitos

@@ -26,7 +26,7 @@
         </div>
         <div class="form-group">
           <label>Nombres *</label>
-          <input type="text" formControlName="nombre" placeholder="Carlos"
+          <input type="text" formControlName="nombre" placeholder="Carlos" (keypress)="soloLetras($event)"
             [class.invalid]="nombre?.invalid && nombre?.touched" />
           <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
             <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
@@ -36,7 +36,7 @@
         </div>
         <div class="form-group">
           <label>Primer Apellido *</label>
-          <input type="text" formControlName="apellidoPaterno" placeholder="Ramírez"
+          <input type="text" formControlName="apellidoPaterno" placeholder="Ramírez" (keypress)="soloLetras($event)"
             [class.invalid]="apellidoPaterno?.invalid && apellidoPaterno?.touched" />
           <div class="error-message" *ngIf="apellidoPaterno?.invalid && apellidoPaterno?.touched">
             <span *ngIf="apellidoPaterno?.errors?.['required']">El primer apellido es requerido</span>
@@ -45,7 +45,7 @@
         </div>
         <div class="form-group">
           <label>Segundo Apellido</label>
-          <input type="text" formControlName="apellidoMaterno" placeholder="López"
+          <input type="text" formControlName="apellidoMaterno" placeholder="López" (keypress)="soloLetras($event)"
             [class.invalid]="apellidoMaterno?.invalid && apellidoMaterno?.touched" />
           <div class="error-message" *ngIf="apellidoMaterno?.errors?.['maxlength'] && apellidoMaterno?.touched">
             <span>Máximo 30 caracteres</span>
@@ -74,7 +74,7 @@
         </div>
         <div class="form-group">
           <label>Nacionalidad</label>
-          <input type="text" formControlName="nacionalidad" placeholder="Costarricense"
+          <input type="text" formControlName="nacionalidad" placeholder="Costarricense" (keypress)="soloLetras($event)"
             [class.invalid]="nacionalidad?.invalid && nacionalidad?.touched" />
           <div class="error-message" *ngIf="nacionalidad?.errors?.['maxlength'] && nacionalidad?.touched">
             <span>Máximo 50 caracteres</span>
@@ -151,7 +151,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label>Provincia</label>
-          <input type="text" formControlName="provincia" placeholder="San José"
+          <input type="text" formControlName="provincia" placeholder="San José" (keypress)="soloLetras($event)"
             [class.invalid]="provincia?.invalid && provincia?.touched" />
           <div class="error-message" *ngIf="provincia?.errors?.['maxlength'] && provincia?.touched">
             <span>Máximo 10 caracteres</span>

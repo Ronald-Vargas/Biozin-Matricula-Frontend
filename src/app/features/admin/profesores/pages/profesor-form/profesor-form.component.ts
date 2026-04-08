@@ -86,6 +86,10 @@ export class ProfesorFormComponent implements OnInit {
 
 
 
+  soloLetras(event: KeyboardEvent): boolean {
+    return !/\d/.test(event.key);
+  }
+
   cancelar(): void {
     this.router.navigate(['/profesores']);
   }

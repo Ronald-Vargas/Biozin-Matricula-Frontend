@@ -1,3 +1,8 @@
+.malla-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .prereq-badge {
   display: inline-block;
   background-color: var(--primary-light, #e8f0fe);

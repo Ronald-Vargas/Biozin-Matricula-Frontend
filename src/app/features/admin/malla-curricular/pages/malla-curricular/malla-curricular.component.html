@@ -35,7 +35,13 @@
         </div>
 
         <div class="table-container" *ngIf="semestre.cursos.length > 0">
-          <table>
+          <table class="malla-table">
+            <colgroup>
+              <col style="width: 15%">
+              <col style="width: 45%">
+              <col style="width: 10%">
+              <col style="width: 30%">
+            </colgroup>
             <thead>
               <tr>
                 <th>Código</th>

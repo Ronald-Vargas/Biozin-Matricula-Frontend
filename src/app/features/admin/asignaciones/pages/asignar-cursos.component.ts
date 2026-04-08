@@ -21,10 +21,12 @@ export class AsignarCursosComponent implements OnInit {
 
   carreras$!: Observable<Carrera[]>;
   cursos$!: Observable<Curso[]>;
+  cursosList: Curso[] = [];
   carreraSeleccionada?: Carrera;
   cursosConfig: Map<number, { seleccionado: boolean; semestre: number }> = new Map();
   mensajeExito = false;
   mensajeError = false;
+  erroresPrerequisitos: string[] = [];
   cargandoAsignaciones = false;
   guardando = false;
 
@@ -37,6 +39,7 @@ export class AsignarCursosComponent implements OnInit {
   ngOnInit(): void {
     this.carreras$ = this.carreraService.getCarrerasActivas();
     this.cursos$ = this.cursoService.getCursosActivos();
+    this.cursos$.subscribe(cursos => this.cursosList = cursos);
   }
 
   onCarreraSeleccionada(event: any): void {
@@ -98,12 +101,34 @@ export class AsignarCursosComponent implements OnInit {
     const config = this.cursosConfig.get(cursoId);
     if (config) {
       config.semestre = semestre;
+      this.validarPrerequisitos();
+    }
+  }
+
+  validarPrerequisitos(): void {
+    this.erroresPrerequisitos = [];
+    for (const [cursoId, config] of this.cursosConfig.entries()) {
+      const curso = this.cursosList.find(c => c.idCurso === cursoId);
+      if (!curso?.idCursoRequisito) continue;
+
+      const reqConfig = this.cursosConfig.get(curso.idCursoRequisito);
+      if (!reqConfig) continue;
+
+      if (config.semestre <= reqConfig.semestre) {
+        const requisito = this.cursosList.find(c => c.idCurso === curso.idCursoRequisito);
+        this.erroresPrerequisitos.push(
+          `"${curso.nombre}" (semestre ${config.semestre}) debe estar en un semestre posterior a su prerequisito "${requisito?.nombre}" (semestre ${reqConfig.semestre}).`
+        );
+      }
     }
   }
 
 
   guardarAsignaciones(): void {
     if (!this.carreraSeleccionada || this.guardando) return;
+
+    this.validarPrerequisitos();
+    if (this.erroresPrerequisitos.length > 0) return;
 
     const asignaciones: CreateAsignacionDto[] = [];
     this.cursosConfig.forEach((config, cursoId) => {
