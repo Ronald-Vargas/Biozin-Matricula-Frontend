@@ -73,6 +73,7 @@
                   class="form-input time-input"
                   [(ngModel)]="d.horaInicio"
                   [name]="'inicio-' + d.abrev"
+                  (ngModelChange)="onHoraInicioChange(d)"
                 />
                 <span class="time-sep">a</span>
                 <input
@@ -80,6 +81,7 @@
                   class="form-input time-input"
                   [(ngModel)]="d.horaFin"
                   [name]="'fin-' + d.abrev"
+                  [min]="d.horaInicio"
                 />
               </div>
             </div>
@@ -122,6 +124,17 @@
         </div>
 
       </div>
+    </div>
+
+    <!-- Error hora salida -->
+    <div class="error-horario" *ngIf="errorHorario">{{ errorHorario }}</div>
+
+    <!-- Conflictos de disponibilidad -->
+    <div class="error-horario" *ngIf="conflictos.length > 0">
+      <strong>Conflictos de horario:</strong>
+      <ul style="margin: 0.4rem 0 0 1.2rem; padding: 0;">
+        <li *ngFor="let c of conflictos">{{ c }}</li>
+      </ul>
     </div>
 
     <!-- Footer -->

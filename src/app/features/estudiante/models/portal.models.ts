@@ -79,15 +79,15 @@ export interface OfertaMatricula {
 }
 
 export interface CursoHistorial {
-  codigoCurso: string;
-  nombreCurso: string;
+  codigo: string;
+  nombre: string;
   creditos: number;
   nota: number | null;
   estado: 'aprobado' | 'reprobado' | 'en_curso';
 }
 
 export interface SemestreHistorial {
-  semestre: number;
+  label: string;
   periodo: string;
   cursos: CursoHistorial[];
   promedio: number | null;

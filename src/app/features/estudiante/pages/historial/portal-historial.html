@@ -61,7 +61,7 @@
         <div class="semestre-titulo">
           <span class="semestre-icon">📅</span>
           <div>
-            <span class="semestre-label">Semestre {{ sem.semestre }}</span>
+            <span class="semestre-label">{{ sem.label }}</span>
             <span class="semestre-periodo">{{ sem.periodo }}</span>
           </div>
         </div>
@@ -87,8 +87,8 @@
           *ngFor="let curso of sem.cursos"
           [ngClass]="'fila-' + curso.estado"
         >
-          <span class="col-codigo">{{ curso.codigoCurso }}</span>
-          <span class="col-nombre">{{ curso.nombreCurso }}</span>
+          <span class="col-codigo">{{ curso.codigo }}</span>
+          <span class="col-nombre">{{ curso.nombre }}</span>
           <span class="col-creditos">{{ curso.creditos }}</span>
           <span class="col-nota" [ngClass]="getNotaClass(curso)">
             {{ curso.nota !== null ? curso.nota : '—' }}

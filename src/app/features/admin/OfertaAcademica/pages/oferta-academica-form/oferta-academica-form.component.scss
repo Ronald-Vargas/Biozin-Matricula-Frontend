@@ -228,6 +228,18 @@
   white-space: nowrap;
 }
 
+/* ══════════ MENSAJES ══════════ */
+.error-horario {
+  margin: 0 1.5rem 0.75rem;
+  padding: 0.65rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 /* ══════════ RESPONSIVE ══════════ */
 @media (max-width: 600px) {
   .form-grid {

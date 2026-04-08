@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OfertaAcademicaService } from '../../services/oferta-academica.service';
+import { OfertaAcademica } from '../../models/oferta-academica.model';
 import { ProfesorService } from '../../../profesores/services/profesores.services';
 import { Profesor } from '../../../profesores/models/profesores.model';
 import { PeriodoService } from '../../../periodos/services/periodos.services';
@@ -48,6 +49,10 @@ export class OfertaAcademicaFormComponent implements OnInit {
   aulasFiltradas: Aula[] = [];
 
   cursoSeleccionado: Curso | null = null;
+  errorHorario = '';
+  conflictos: string[] = [];
+
+  private todasLasOfertas: OfertaAcademica[] = [];
 
   constructor(
     private profesorService: ProfesorService,
@@ -61,11 +66,52 @@ export class OfertaAcademicaFormComponent implements OnInit {
     this.cursoService.getCursosActivos().subscribe(cursos => this.cursos = cursos);
     this.profesorService.getProfesoresActivos().subscribe(profesores => this.profesores = profesores);
     this.periodoService.getPeriodosActivos().subscribe(periodos => this.periodos = periodos);
-    this.aulaService.getAulasActivas().subscribe(aulas => {
-      this.aulas = aulas;
-    });
+    this.aulaService.getAulasActivas().subscribe(aulas => { this.aulas = aulas; });
+    this.ofertaService.getAll().subscribe(ofertas => this.todasLasOfertas = ofertas);
   }
 
+  private hayTraslape(ini1: string, fin1: string, ini2: string, fin2: string): boolean {
+    return ini1 < fin2 && fin1 > ini2;
+  }
+
+  private verificarConflictos(): string[] {
+    const errores: string[] = [];
+    const seleccionados = this.diasOptions.filter(d => d.seleccionado);
+    const idAula = Number(this.oferta.idAula);
+    const idProfesor = Number(this.oferta.idProfesor);
+    const ofertasActivas = this.todasLasOfertas.filter(o => o.estado);
+
+    for (const dia of seleccionados) {
+      for (const oferta of ofertasActivas) {
+        const diasConTraslape = oferta.diasHorarios.filter(dh =>
+          dh.dia === dia.nombre &&
+          this.hayTraslape(dia.horaInicio, dia.horaFin, dh.horaInicio, dh.horaFin)
+        );
+
+        if (diasConTraslape.length === 0) continue;
+
+        const dh = diasConTraslape[0];
+
+        if (idAula && oferta.idAula === idAula) {
+          errores.push(`El aula ya está ocupada el ${dia.nombre} de ${dh.horaInicio} a ${dh.horaFin}.`);
+        }
+
+        if (idProfesor && oferta.idProfesor === idProfesor) {
+          errores.push(`El profesor ya está ocupado el ${dia.nombre} de ${dh.horaInicio} a ${dh.horaFin}.`);
+        }
+      }
+    }
+
+    return [...new Set(errores)];
+  }
+
+  onHoraInicioChange(dia: { horaInicio: string; horaFin: string }): void {
+    if (dia.horaFin && dia.horaFin <= dia.horaInicio) {
+      dia.horaFin = '';
+    }
+    this.errorHorario = '';
+    this.conflictos = [];
+  }
 
   onCursoChange(): void {
     const id = Number(this.oferta.idCurso);
@@ -86,6 +132,8 @@ export class OfertaAcademicaFormComponent implements OnInit {
   }
 
   guardar(): void {
+    this.errorHorario = '';
+    this.conflictos = [];
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
 
     if (
@@ -99,6 +147,16 @@ export class OfertaAcademicaFormComponent implements OnInit {
     ) {
       return;
     }
+
+    const diasConHorarioInvalido = seleccionados.filter(d => d.horaFin <= d.horaInicio);
+    if (diasConHorarioInvalido.length > 0) {
+      const nombres = diasConHorarioInvalido.map(d => d.nombre).join(', ');
+      this.errorHorario = `La hora de salida debe ser posterior a la hora de entrada en: ${nombres}.`;
+      return;
+    }
+
+    this.conflictos = this.verificarConflictos();
+    if (this.conflictos.length > 0) return;
 
     const dto = {
       idPeriodo: Number(this.oferta.idPeriodo),
@@ -137,6 +195,8 @@ export class OfertaAcademicaFormComponent implements OnInit {
     };
     this.cursoSeleccionado = null;
     this.aulasFiltradas = [];
+    this.conflictos = [];
+    this.errorHorario = '';
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
       d.horaInicio = '';
