@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DashboardService } from '../services/dashboard.service';
 
 interface StatCard {
   icon: string;
@@ -31,105 +32,39 @@ interface RecentActivity {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-
-
 export class DashboardComponent implements OnInit {
 
   currentDate: string = '';
 
   stats: StatCard[] = [
-    {
-      icon: '👨‍🎓',
-      value: '1,234',
-      label: 'Estudiantes Activos',
-      change: '↑ 12% vs mes anterior',
-      color: '#06b6d4'
-    },
-    {
-      icon: '📚',
-      value: '15',
-      label: 'Carreras Disponibles',
-      change: '3 nuevas este año',
-      color: '#10b981'
-    },
-    {
-      icon: '📖',
-      value: '342',
-      label: 'Cursos Activos',
-      change: '↑ 8% vs semestre anterior',
-      color: '#f59e0b'
-    },
-    {
-      icon: '📝',
-      value: '856',
-      label: 'Matrículas Activas',
-      change: 'Período 2026-1',
-      color: '#8b5cf6'
-    }
+    { icon: '👨‍🎓', value: '0', label: 'Estudiantes Activos',  change: '', color: '#06b6d4' },
+    { icon: '📚',   value: '0', label: 'Carreras Disponibles', change: '', color: '#10b981' },
+    { icon: '📖',   value: '0', label: 'Cursos Activos',       change: '', color: '#f59e0b' },
+    { icon: '📝',   value: '0', label: 'Matrículas Activas',   change: '', color: '#8b5cf6' }
   ];
 
   quickActions: QuickAction[] = [
-    {
-      icon: '➕',
-      title: 'Nuevo Estudiante',
-      description: 'Registrar un nuevo estudiante en el sistema',
-      route: '/estudiantes/nuevo'
-    },
-    {
-      icon: '➕',
-      title: 'Nuevo Curso',
-      description: 'Crear un nuevo curso',
-      route: '/cursos/nuevo'
-    },
-    {
-      icon: '📋',
-      title: 'Nueva Oferta Academica',
-      description: 'Crear una nueva oferta académica',
-      route: '/oferta-academica'
-    },
-    {
-      icon: '🔗',
-      title: 'Asignar a Malla',
-      description: 'Asignar cursos a carreras universitarias',
-      route: '/asignaciones'
-    }
+    { icon: '➕', title: 'Nuevo Estudiante',      description: 'Registrar un nuevo estudiante en el sistema', route: '/estudiantes/nuevo' },
+    { icon: '➕', title: 'Nuevo Curso',            description: 'Crear un nuevo curso',                        route: '/cursos/nuevo' },
+    { icon: '📋', title: 'Nueva Oferta Academica', description: 'Crear una nueva oferta académica',            route: '/oferta-academica' },
+    { icon: '🔗', title: 'Asignar a Malla',        description: 'Asignar cursos a carreras universitarias',    route: '/asignaciones' }
   ];
 
-  recentActivities: RecentActivity[] = [
-    {
-      icon: '✅',
-      description: 'Juan Pérez se matriculó en Programación II',
-      time: 'Hace 5 min',
-      type: 'success'
-    },
-    {
-      icon: '📝',
-      description: 'Nueva carrera "Ciencia de Datos" creada',
-      time: 'Hace 30 min',
-      type: 'info'
-    },
-    {
-      icon: '📝',
-      description: 'Se asignó "Cálculo III" a Ing. en Sistemas',
-      time: 'Hace 3 horas',
-      type: 'info'
-    }
-  ];
+  recentActivities: RecentActivity[] = [];
 
-  topStudents = [
-    { name: 'María F. González', career: 'ING-SIS', average: 92.3, semester: 3 },
-    { name: 'Ana P. Vargas', career: 'ADM-EMP', average: 88.7, semester: 8 },
-    { name: 'Juan C. Pérez', career: 'ING-SIS', average: 87.5, semester: 5 },
-    { name: 'Carlos A. Ramírez', career: 'ING-IND', average: 85.0, semester: 7 },
-  ];
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     };
     this.currentDate = new Date().toLocaleDateString('es-CR', options);
+
+    this.dashboardService.getStats().subscribe(data => {
+      this.stats[0].value = data.estudiantesActivos.toLocaleString('es-CR');
+      this.stats[1].value = data.carrerasActivas.toLocaleString('es-CR');
+      this.stats[2].value = data.cursosActivos.toLocaleString('es-CR');
+      this.stats[3].value = data.matriculasActivas.toLocaleString('es-CR');
+    });
   }
 }
