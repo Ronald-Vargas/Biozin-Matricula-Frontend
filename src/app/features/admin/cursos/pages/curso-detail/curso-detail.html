@@ -18,6 +18,10 @@
         <span class="value">{{ curso?.creditos }}</span>
       </div>
       <div class="detail-item">
+        <span class="label">Horas de Duración:</span>
+        <span class="value">{{ curso?.horasDuracion }} h</span>
+      </div>
+      <div class="detail-item">
         <span class="label">Estado:</span>
         <span class="status-badge" 
           [class.active]="curso?.estado === true"

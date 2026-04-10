@@ -32,6 +32,8 @@ export class OfertaAcademicaListComponent implements OnInit {
 
   vista: Vista = 'list';
   ofertaSeleccionada: OfertaAcademica | null = null;
+  ofertaAEditar: OfertaAcademica | null = null;
+  errorEliminar = '';
 
   private cursos: Curso[] = [];
   private profesores: Profesor[] = [];
@@ -172,16 +174,23 @@ export class OfertaAcademicaListComponent implements OnInit {
 
   eliminar(oferta: OfertaAcademica): void {
     const nombre = this.getNombreCurso(oferta.idCurso);
+    this.errorEliminar = '';
     if (confirm(`¿Eliminar la oferta de "${nombre}"?`)) {
-      this.ofertaService.eliminar(oferta.idOferta).subscribe();
+      this.ofertaService.eliminar(oferta.idOferta).subscribe(res => {
+        if (res.blnError) {
+          this.errorEliminar = res.strMensajeRespuesta || 'No se pudo eliminar la oferta.';
+        }
+      });
     }
   }
 
-  abrirModal(): void {
+  abrirModal(oferta?: OfertaAcademica): void {
+    this.ofertaAEditar = oferta ?? null;
     this.mostrarModal = true;
   }
 
   onOfertaCreada(): void {
+    this.ofertaAEditar = null;
     this.filtrar();
   }
 }

@@ -7,7 +7,7 @@
   [aula]="getAulaDeOferta(ofertaSeleccionada.idAula)"
   [periodo]="getPeriodoDeOferta(ofertaSeleccionada.idPeriodo)"
   (cerrar)="volverALista()"
-  (editar)="abrirModal()"
+  (editar)="abrirModal($event)"
 ></app-oferta-academica-detail>
 
 <!-- Vista List -->
@@ -29,6 +29,11 @@
     </div>
   </div>
 
+
+  <!-- Error al eliminar -->
+  <div class="error-banner" *ngIf="errorEliminar" (click)="errorEliminar = ''">
+    ⚠ {{ errorEliminar }} <span class="error-banner-close">✕</span>
+  </div>
 
   <div class="section">
 
@@ -146,5 +151,6 @@
 <!-- Modal -->
 <app-oferta-academica-form
   [(visible)]="mostrarModal"
+  [ofertaEditar]="ofertaAEditar"
   (ofertaCreada)="onOfertaCreada()"
 ></app-oferta-academica-form>

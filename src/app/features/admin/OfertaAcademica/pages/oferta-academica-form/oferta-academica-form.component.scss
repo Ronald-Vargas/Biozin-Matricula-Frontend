@@ -87,13 +87,31 @@
 }
 
 .form-label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
   font-weight: 600;
   color: #475569;
   margin-bottom: 0.4rem;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+}
+
+.horas-contador {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #10b981;
+  background: #d1fae5;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  text-transform: none;
+  letter-spacing: 0;
+
+  &.horas-excedidas {
+    color: #dc2626;
+    background: #fee2e2;
+  }
 }
 
 .form-input,

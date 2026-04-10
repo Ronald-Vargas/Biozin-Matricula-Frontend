@@ -4,7 +4,7 @@
 
     <!-- Header -->
     <div class="modal-header">
-      <h2 class="modal-title">📋 Habilitar Curso para Matrícula</h2>
+      <h2 class="modal-title">{{ modoEdicion ? '✏️ Editar Oferta Académica' : '📋 Habilitar Curso para Matrícula' }}</h2>
       <button class="modal-close" (click)="cerrar()">✕</button>
     </div>
 
@@ -55,7 +55,12 @@
 
         <!-- Días y Horarios -->
         <div class="form-group full">
-          <label class="form-label">Días y Horarios</label>
+          <label class="form-label">
+            Días y Horarios
+            <span *ngIf="horasCurso > 0" class="horas-contador" [class.horas-excedidas]="horasAsignadas > horasCurso">
+              {{ horasAsignadas }} / {{ horasCurso }} h
+            </span>
+          </label>
           <div class="dias-container">
             <div *ngFor="let d of diasOptions" class="dia-row">
               <label class="dia-check-label">
@@ -82,6 +87,7 @@
                   [(ngModel)]="d.horaFin"
                   [name]="'fin-' + d.abrev"
                   [min]="d.horaInicio"
+                  (ngModelChange)="errorHoras = ''"
                 />
               </div>
             </div>
@@ -126,6 +132,9 @@
       </div>
     </div>
 
+    <!-- Error horas excedidas -->
+    <div class="error-horario" *ngIf="errorHoras">{{ errorHoras }}</div>
+
     <!-- Error hora salida -->
     <div class="error-horario" *ngIf="errorHorario">{{ errorHorario }}</div>
 
@@ -143,7 +152,7 @@
     <!-- Footer -->
     <div class="modal-footer">
       <button class="btn-cancel" (click)="cerrar()">Cancelar</button>
-      <button class="btn-save" (click)="guardar()">Habilitar Curso</button>
+      <button class="btn-save" (click)="guardar()">{{ modoEdicion ? 'Guardar Cambios' : 'Habilitar Curso' }}</button>
     </div>
 
   </div>

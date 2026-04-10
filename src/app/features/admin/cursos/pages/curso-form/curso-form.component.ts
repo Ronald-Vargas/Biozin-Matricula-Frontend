@@ -33,6 +33,7 @@ export class CursoFormComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       descripcion: ['', Validators.required],
       creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]],
+      horasDuracion: ['', [Validators.required, Validators.min(1), Validators.max(200)]],
       precio: ['', [Validators.required, Validators.min(0)]],
       tieneLaboratorio: [false],
       precioLaboratorio: [''],
@@ -69,6 +70,7 @@ export class CursoFormComponent implements OnInit {
             nombre: curso.nombre,
             descripcion: curso.descripcion,
             creditos: curso.creditos,
+            horasDuracion: curso.horasDuracion,
             precio: curso.precio,
             tieneLaboratorio: curso.tieneLaboratorio,
             precioLaboratorio: curso.precioLaboratorio ?? '',
@@ -124,6 +126,7 @@ export class CursoFormComponent implements OnInit {
   get nombre() { return this.cursoForm.get('nombre'); }
   get descripcion() { return this.cursoForm.get('descripcion'); }
   get creditos() { return this.cursoForm.get('creditos'); }
+  get horasDuracion() { return this.cursoForm.get('horasDuracion'); }
   get precio() { return this.cursoForm.get('precio'); }
   get tieneLaboratorio() { return this.cursoForm.get('tieneLaboratorio'); }
   get precioLaboratorio() { return this.cursoForm.get('precioLaboratorio'); }

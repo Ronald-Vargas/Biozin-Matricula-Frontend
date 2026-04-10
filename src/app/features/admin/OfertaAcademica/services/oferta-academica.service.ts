@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { OfertaAcademica, CreateOfertaDto, UpdateOfertaDto, Respuesta } from '../models/oferta-academica.model';
+import { OfertaAcademica, CreateOfertaDto, Respuesta } from '../models/oferta-academica.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -45,7 +45,7 @@ export class OfertaAcademicaService {
 
   eliminar(id: number): Observable<Respuesta<boolean>> {
     return this.http.delete<Respuesta<boolean>>(`${this.apiUrl}/Eliminar/${id}`)
-      .pipe(tap(() => this.cargarOfertas()));
+      .pipe(tap(res => { if (!res.blnError) this.cargarOfertas(); }));
   }
 
   toggleEstado(id: number): void {

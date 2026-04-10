@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OfertaAcademicaService } from '../../services/oferta-academica.service';
@@ -19,11 +19,14 @@ import { Aula } from '../../../aulas/models/aula.model';
   templateUrl: './oferta-academica-form.component.html',
   styleUrls: ['./oferta-academica-form.component.scss'],
 })
-export class OfertaAcademicaFormComponent implements OnInit {
+export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
 
   @Input() visible = false;
+  @Input() ofertaEditar: OfertaAcademica | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() ofertaCreada = new EventEmitter<void>();
+
+  modoEdicion = false;
 
   oferta = {
     idPeriodo: 0,
@@ -51,6 +54,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
   cursoSeleccionado: Curso | null = null;
   errorHorario = '';
   errorServidor = '';
+  errorHoras = '';
   conflictos: string[] = [];
 
   private todasLasOfertas: OfertaAcademica[] = [];
@@ -64,11 +68,53 @@ export class OfertaAcademicaFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cursoService.getCursosActivos().subscribe(cursos => this.cursos = cursos);
+    this.cursoService.getCursosActivos().subscribe(cursos => {
+      this.cursos = cursos;
+      if (this.ofertaEditar) this.precargarDatos(this.ofertaEditar);
+    });
     this.profesorService.getProfesoresActivos().subscribe(profesores => this.profesores = profesores);
     this.periodoService.getPeriodosActivos().subscribe(periodos => this.periodos = periodos);
-    this.aulaService.getAulasActivas().subscribe(aulas => { this.aulas = aulas; });
+    this.aulaService.getAulasActivas().subscribe(aulas => {
+      this.aulas = aulas;
+      if (this.ofertaEditar) this.precargarDatos(this.ofertaEditar);
+    });
     this.ofertaService.getAll().subscribe(ofertas => this.todasLasOfertas = ofertas);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible']?.currentValue === true) {
+      if (this.ofertaEditar) {
+        this.modoEdicion = true;
+        this.precargarDatos(this.ofertaEditar);
+      } else {
+        this.modoEdicion = false;
+        this.limpiar();
+      }
+    }
+  }
+
+  private precargarDatos(o: OfertaAcademica): void {
+    this.oferta = {
+      idPeriodo: o.idPeriodo,
+      idCurso: o.idCurso,
+      idProfesor: o.idProfesor,
+      idAula: o.idAula,
+      cupoMaximo: o.cupoMaximo,
+    };
+
+    // Curso y aulas filtradas
+    this.cursoSeleccionado = this.cursos.find(c => c.idCurso === o.idCurso) || null;
+    if (this.cursoSeleccionado) {
+      this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === this.cursoSeleccionado!.tieneLaboratorio);
+    }
+
+    // Días y horarios
+    this.diasOptions.forEach(d => {
+      const dh = o.diasHorarios.find(h => h.dia === d.nombre);
+      d.seleccionado = !!dh;
+      d.horaInicio = dh?.horaInicio ?? '';
+      d.horaFin = dh?.horaFin ?? '';
+    });
   }
 
   private hayTraslape(ini1: string, fin1: string, ini2: string, fin2: string): boolean {
@@ -80,7 +126,8 @@ export class OfertaAcademicaFormComponent implements OnInit {
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
     const idAula = Number(this.oferta.idAula);
     const idProfesor = Number(this.oferta.idProfesor);
-    const ofertasActivas = this.todasLasOfertas.filter(o => o.estado);
+    const idOfertaActual = this.ofertaEditar?.idOferta ?? 0;
+    const ofertasActivas = this.todasLasOfertas.filter(o => o.estado && o.idOferta !== idOfertaActual);
 
     for (const dia of seleccionados) {
       for (const oferta of ofertasActivas) {
@@ -106,11 +153,30 @@ export class OfertaAcademicaFormComponent implements OnInit {
     return [...new Set(errores)];
   }
 
+  private calcularHorasTotales(): number {
+    return this.diasOptions
+      .filter(d => d.seleccionado && d.horaInicio && d.horaFin && d.horaFin > d.horaInicio)
+      .reduce((total, d) => {
+        const [hIni, mIni] = d.horaInicio.split(':').map(Number);
+        const [hFin, mFin] = d.horaFin.split(':').map(Number);
+        return total + (hFin * 60 + mFin - hIni * 60 - mIni) / 60;
+      }, 0);
+  }
+
+  get horasAsignadas(): number {
+    return Math.round(this.calcularHorasTotales() * 10) / 10;
+  }
+
+  get horasCurso(): number {
+    return this.cursoSeleccionado?.horasDuracion ?? 0;
+  }
+
   onHoraInicioChange(dia: { horaInicio: string; horaFin: string }): void {
     if (dia.horaFin && dia.horaFin <= dia.horaInicio) {
       dia.horaFin = '';
     }
     this.errorHorario = '';
+    this.errorHoras = '';
     this.conflictos = [];
   }
 
@@ -134,6 +200,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
 
   guardar(): void {
     this.errorHorario = '';
+    this.errorHoras = '';
     this.conflictos = [];
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
 
@@ -156,32 +223,63 @@ export class OfertaAcademicaFormComponent implements OnInit {
       return;
     }
 
+    if (this.cursoSeleccionado?.horasDuracion) {
+      const totalHoras = this.calcularHorasTotales();
+      if (totalHoras > this.cursoSeleccionado.horasDuracion) {
+        this.errorHoras = `Las horas asignadas (${Math.round(totalHoras * 10) / 10} h) superan las horas del curso (${this.cursoSeleccionado.horasDuracion} h).`;
+        return;
+      }
+    }
+
     this.conflictos = this.verificarConflictos();
     if (this.conflictos.length > 0) return;
 
-    const dto = {
-      idPeriodo: Number(this.oferta.idPeriodo),
-      idCurso: Number(this.oferta.idCurso),
-      idProfesor: Number(this.oferta.idProfesor),
-      idAula: Number(this.oferta.idAula),
-      cupoMaximo: this.oferta.cupoMaximo,
-      diasHorarios: seleccionados.map(d => ({
-        dia: d.nombre,
-        horaInicio: d.horaInicio,
-        horaFin: d.horaFin,
-      })),
-    };
+    const diasHorarios = seleccionados.map(d => ({
+      dia: d.nombre,
+      horaInicio: d.horaInicio,
+      horaFin: d.horaFin,
+    }));
 
     this.errorServidor = '';
-    this.ofertaService.crear(dto).subscribe(res => {
-      if (!res.blnError) {
-        this.ofertaCreada.emit();
-        this.cerrar();
-        this.limpiar();
-      } else {
-        this.errorServidor = res.strMensajeRespuesta;
-      }
-    });
+
+    if (this.modoEdicion && this.ofertaEditar) {
+      const dto = {
+        ...this.ofertaEditar,
+        idPeriodo: Number(this.oferta.idPeriodo),
+        idCurso: Number(this.oferta.idCurso),
+        idProfesor: Number(this.oferta.idProfesor),
+        idAula: Number(this.oferta.idAula),
+        cupoMaximo: this.oferta.cupoMaximo!,
+        diasHorarios,
+      };
+      this.ofertaService.updateOferta(dto).subscribe(res => {
+        if (!res.blnError) {
+          this.ofertaCreada.emit();
+          this.cerrar();
+          this.limpiar();
+        } else {
+          this.errorServidor = res.strMensajeRespuesta;
+        }
+      });
+    } else {
+      const dto = {
+        idPeriodo: Number(this.oferta.idPeriodo),
+        idCurso: Number(this.oferta.idCurso),
+        idProfesor: Number(this.oferta.idProfesor),
+        idAula: Number(this.oferta.idAula),
+        cupoMaximo: this.oferta.cupoMaximo!,
+        diasHorarios,
+      };
+      this.ofertaService.crear(dto).subscribe(res => {
+        if (!res.blnError) {
+          this.ofertaCreada.emit();
+          this.cerrar();
+          this.limpiar();
+        } else {
+          this.errorServidor = res.strMensajeRespuesta;
+        }
+      });
+    }
   }
 
   cerrar(): void {
@@ -201,6 +299,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
     this.aulasFiltradas = [];
     this.conflictos = [];
     this.errorHorario = '';
+    this.errorHoras = '';
     this.errorServidor = '';
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
