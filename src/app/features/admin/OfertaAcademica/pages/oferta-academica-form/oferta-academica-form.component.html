@@ -137,6 +137,9 @@
       </ul>
     </div>
 
+    <!-- Error del servidor -->
+    <div class="error-horario" *ngIf="errorServidor">{{ errorServidor }}</div>
+
     <!-- Footer -->
     <div class="modal-footer">
       <button class="btn-cancel" (click)="cerrar()">Cancelar</button>

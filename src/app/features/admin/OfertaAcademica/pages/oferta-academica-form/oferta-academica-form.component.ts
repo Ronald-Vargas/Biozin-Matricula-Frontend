@@ -50,6 +50,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
 
   cursoSeleccionado: Curso | null = null;
   errorHorario = '';
+  errorServidor = '';
   conflictos: string[] = [];
 
   private todasLasOfertas: OfertaAcademica[] = [];
@@ -171,11 +172,14 @@ export class OfertaAcademicaFormComponent implements OnInit {
       })),
     };
 
+    this.errorServidor = '';
     this.ofertaService.crear(dto).subscribe(res => {
       if (!res.blnError) {
         this.ofertaCreada.emit();
         this.cerrar();
         this.limpiar();
+      } else {
+        this.errorServidor = res.strMensajeRespuesta;
       }
     });
   }
@@ -197,6 +201,7 @@ export class OfertaAcademicaFormComponent implements OnInit {
     this.aulasFiltradas = [];
     this.conflictos = [];
     this.errorHorario = '';
+    this.errorServidor = '';
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
       d.horaInicio = '';
