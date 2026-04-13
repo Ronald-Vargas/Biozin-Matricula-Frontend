@@ -104,40 +104,15 @@
       </h2>
       <div class="distribution-chart">
         <div class="chart-bar-container">
-          <div class="chart-item">
-            <div class="chart-label">Ing. Sistemas</div>
+          <div class="chart-item" *ngFor="let item of distribucion">
+            <div class="chart-label">{{ item.nombre }}</div>
             <div class="chart-bar-wrapper">
-              <div class="chart-bar" style="--bar-width: 75%; --bar-color: #06b6d4;"></div>
+              <div class="chart-bar" [style.--bar-width]="item.porcentaje + '%'" [style.--bar-color]="item.color"></div>
             </div>
-            <div class="chart-value">450</div>
+            <div class="chart-value">{{ item.total }}</div>
           </div>
-          <div class="chart-item">
-            <div class="chart-label">Ing. Industrial</div>
-            <div class="chart-bar-wrapper">
-              <div class="chart-bar" style="--bar-width: 55%; --bar-color: #10b981;"></div>
-            </div>
-            <div class="chart-value">330</div>
-          </div>
-          <div class="chart-item">
-            <div class="chart-label">Administración</div>
-            <div class="chart-bar-wrapper">
-              <div class="chart-bar" style="--bar-width: 45%; --bar-color: #f59e0b;"></div>
-            </div>
-            <div class="chart-value">270</div>
-          </div>
-          <div class="chart-item">
-            <div class="chart-label">Contaduría</div>
-            <div class="chart-bar-wrapper">
-              <div class="chart-bar" style="--bar-width: 25%; --bar-color: #8b5cf6;"></div>
-            </div>
-            <div class="chart-value">120</div>
-          </div>
-          <div class="chart-item">
-            <div class="chart-label">Derecho</div>
-            <div class="chart-bar-wrapper">
-              <div class="chart-bar" style="--bar-width: 15%; --bar-color: #ef4444;"></div>
-            </div>
-            <div class="chart-value">64</div>
+          <div class="empty-state" *ngIf="distribucion.length === 0">
+            <p>Sin datos de distribución</p>
           </div>
         </div>
       </div>

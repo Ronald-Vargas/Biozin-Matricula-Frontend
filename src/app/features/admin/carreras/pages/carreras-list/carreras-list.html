@@ -80,12 +80,6 @@
           👁️ Ver Detalles
         </button>
         <button
-          class="btn btn-success btn-sm"
-          (click)="generarPlanEstudios(carrera)"
-          title="Generar Plan de Estudios PDF">
-          📄 Plan de Estudios
-        </button>
-        <button
           class="btn btn-sm"
           [class.btn-danger]="carrera.estado === true"
           [class.btn-success]="carrera.estado === false"

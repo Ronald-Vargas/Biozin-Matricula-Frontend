@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DashboardService } from '../services/dashboard.service';
+import { DashboardService, ActividadReciente, DistribucionCarrera } from '../services/dashboard.service';
 
 interface StatCard {
   icon: string;
@@ -18,12 +18,20 @@ interface QuickAction {
   route: string;
 }
 
-interface RecentActivity {
+interface ActivityItem {
   icon: string;
   description: string;
   time: string;
   type: 'success' | 'info' | 'warning';
 }
+
+const TIPO_TYPE: Record<string, 'success' | 'info' | 'warning'> = {
+  matricula:  'success',
+  pago:       'success',
+  estudiante: 'info',
+  curso:      'info',
+  carrera:    'warning',
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -35,6 +43,8 @@ interface RecentActivity {
 export class DashboardComponent implements OnInit {
 
   currentDate: string = '';
+  recentActivities: ActivityItem[] = [];
+  distribucion: DistribucionCarrera[] = [];
 
   stats: StatCard[] = [
     { icon: '👨‍🎓', value: '0', label: 'Estudiantes Activos',  change: '', color: '#06b6d4' },
@@ -50,8 +60,6 @@ export class DashboardComponent implements OnInit {
     { icon: '🔗', title: 'Asignar a Malla',        description: 'Asignar cursos a carreras universitarias',    route: '/asignaciones' }
   ];
 
-  recentActivities: RecentActivity[] = [];
-
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
@@ -66,5 +74,28 @@ export class DashboardComponent implements OnInit {
       this.stats[2].value = data.cursosActivos.toLocaleString('es-CR');
       this.stats[3].value = data.matriculasActivas.toLocaleString('es-CR');
     });
+
+    this.dashboardService.getDistribucion().subscribe(d => this.distribucion = d);
+
+    this.dashboardService.getActividadReciente().subscribe(actividades => {
+      this.recentActivities = actividades.map(a => ({
+        icon: a.icono,
+        description: a.descripcion,
+        time: this.tiempoRelativo(a.fecha),
+        type: TIPO_TYPE[a.tipo] ?? 'info',
+      }));
+    });
+  }
+
+  private tiempoRelativo(fechaStr: string): string {
+    const diff = Date.now() - new Date(fechaStr).getTime();
+    const min  = Math.floor(diff / 60000);
+    if (min < 1)   return 'Justo ahora';
+    if (min < 60)  return `Hace ${min} min`;
+    const hrs = Math.floor(min / 60);
+    if (hrs < 24)  return `Hace ${hrs} h`;
+    const dias = Math.floor(hrs / 24);
+    if (dias < 7)  return `Hace ${dias} día${dias > 1 ? 's' : ''}`;
+    return new Date(fechaStr).toLocaleDateString('es-CR');
   }
 }

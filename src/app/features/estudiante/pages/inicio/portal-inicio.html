@@ -30,18 +30,9 @@
         <div class="stat-header">
           <div class="stat-info">
             <span class="stat-value">{{ estudiante.creditosAprobados }} / {{ estudiante.creditosTotales }}</span>
-            <span class="stat-label">Créditos Aprobados</span>
+            <span class="stat-label">Créditos Matriculados</span>
           </div>
           <div class="stat-icon-wrapper"><span class="stat-icon">📊</span></div>
-        </div>
-      </div>
-      <div class="stat-card" style="--accent-color: #8b5cf6">
-        <div class="stat-header">
-          <div class="stat-info">
-            <span class="stat-value">Sem. {{ estudiante.semestreActual }}</span>
-            <span class="stat-label">Semestre Actual</span>
-          </div>
-          <div class="stat-icon-wrapper"><span class="stat-icon">🗓️</span></div>
         </div>
       </div>
       <div class="stat-card" style="--accent-color: #06b6d4">
@@ -116,8 +107,8 @@
               <span class="info-value">{{ estudiante.nombreCarrera }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">Semestre actual</span>
-              <span class="info-value">{{ estudiante.semestreActual }}° semestre</span>
+              <span class="info-label">Créditos en curso</span>
+              <span class="info-value">{{ estudiante.creditosEnCurso ?? 0 }} crédito(s)</span>
             </div>
           </div>
         </div>

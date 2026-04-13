@@ -91,25 +91,4 @@ export class CarrerasListComponent implements OnInit, OnDestroy {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  async generarPlanEstudios(carrera: Carrera): Promise<void> {
-    /*const malla = await this.asignacionService.getMallaCurricular(carrera.idCarrera);
-    if (malla) {
-      this.pdfService.generarPlanEstudios(carrera, malla);
-    } else {
-      alert('No hay cursos asignados a esta carrera para generar el plan de estudios.');
-    }
-      */
-  }
 }
