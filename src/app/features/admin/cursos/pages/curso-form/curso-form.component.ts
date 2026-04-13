@@ -30,7 +30,7 @@ export class CursoFormComponent implements OnInit {
   ) {
     this.cursoForm = this.fb.group({
       codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
       descripcion: ['', Validators.required],
       creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]],
       horasDuracion: ['', [Validators.required, Validators.min(1), Validators.max(200)]],

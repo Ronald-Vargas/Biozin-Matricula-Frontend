@@ -128,19 +128,43 @@
           <div class="metodo-pago">
             <p class="metodo-label">Método de pago</p>
             <div class="metodo-opciones">
-              <label class="metodo-opcion selected">
+              <label
+                class="metodo-opcion"
+                [class.selected]="metodoPago === 'tarjeta'"
+                (click)="seleccionarMetodo('tarjeta')"
+              >
                 <span>💳</span> Tarjeta de crédito/débito
               </label>
-              <label class="metodo-opcion">
+              <label
+                class="metodo-opcion"
+                [class.selected]="metodoPago === 'transferencia'"
+                (click)="seleccionarMetodo('transferencia')"
+              >
                 <span>🏦</span> Transferencia bancaria
               </label>
+            </div>
+
+            <div class="metodo-detalle" *ngIf="metodoPago === 'tarjeta'">
+              <p class="simulador-nota">💳 Simulador — ingresa cualquier dato para procesar el pago</p>
+              <div class="sim-field"><label>Número de tarjeta</label><input type="text" placeholder="**** **** **** ****" maxlength="19" disabled /></div>
+              <div class="sim-row">
+                <div class="sim-field"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" disabled /></div>
+                <div class="sim-field"><label>CVV</label><input type="text" placeholder="***" maxlength="3" disabled /></div>
+              </div>
+            </div>
+
+            <div class="metodo-detalle" *ngIf="metodoPago === 'transferencia'">
+              <p class="simulador-nota">🏦 Simulador — el pago se procesará automáticamente</p>
+              <div class="sim-field"><label>Banco origen</label><input type="text" placeholder="Ej. Banco Nacional" disabled /></div>
+              <div class="sim-field"><label>Número de cuenta</label><input type="text" placeholder="IBAN CR00 0000 0000 0000 0000 00" disabled /></div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn-cancelar" (click)="cancelarPago()">Cancelar</button>
-          <button class="btn-confirmar" (click)="procesarPago()">
-            Pagar ₡{{ pagoSeleccionado.monto | number }}
+          <button class="btn-cancelar" (click)="cancelarPago()" [disabled]="procesando">Cancelar</button>
+          <button class="btn-confirmar" (click)="procesarPago()" [disabled]="procesando">
+            <span *ngIf="!procesando">Pagar ₡{{ pagoSeleccionado.monto | number }}</span>
+            <span *ngIf="procesando" class="spinner"></span>
           </button>
         </div>
       </ng-container>

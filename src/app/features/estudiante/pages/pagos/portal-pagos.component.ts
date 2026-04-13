@@ -16,6 +16,7 @@ export class PortalPagosComponent implements OnInit {
   pagoSeleccionado: Pago | null = null;
   pagoConfirmado = false;
   procesando = false;
+  metodoPago: 'tarjeta' | 'transferencia' = 'tarjeta';
 
   pagos: Pago[] = [];
 
@@ -57,6 +58,11 @@ export class PortalPagosComponent implements OnInit {
   abrirPago(pago: Pago): void {
     this.pagoSeleccionado = pago;
     this.pagoConfirmado = false;
+    this.metodoPago = 'tarjeta';
+  }
+
+  seleccionarMetodo(metodo: 'tarjeta' | 'transferencia'): void {
+    this.metodoPago = metodo;
   }
 
   cancelarPago(): void {
