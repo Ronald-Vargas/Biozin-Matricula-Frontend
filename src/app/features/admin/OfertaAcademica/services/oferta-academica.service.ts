@@ -17,9 +17,14 @@ export class OfertaAcademicaService {
 
   private cargarOfertas(): void {
     this.http.get<Respuesta<OfertaAcademica[]>>(`${this.apiUrl}/Listar`)
-      .subscribe(res => {
-        if (!res.blnError) {
-          this.ofertasSubject.next(res.valorRetorno || []);
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.ofertasSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.ofertasSubject.next([]);
         }
       });
   }
@@ -53,7 +58,12 @@ export class OfertaAcademicaService {
     const oferta = ofertas.find(c => c.idOferta === id);
     if (oferta) {
       const updated = { ...oferta, estado: !oferta.estado };
-      this.updateOferta(updated).subscribe();
+      this.updateOferta(updated).subscribe({
+        error: () => {
+          // Revertir el cambio local si el servidor falla
+          this.cargarOfertas();
+        }
+      });
     }
   }
 

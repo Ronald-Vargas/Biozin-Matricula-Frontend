@@ -21,13 +21,18 @@ export class CursoService {
 
 
   private cargarCursos(): void {
-  this.http.get<Respuesta<Curso[]>>(`${this.apiUrl}/Listar`)  
-    .subscribe(res => {
-      if (!res.blnError) {
-        this.cursosSubject.next(res.valorRetorno || []);
-      }
-    });
-}
+    this.http.get<Respuesta<Curso[]>>(`${this.apiUrl}/Listar`)
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.cursosSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.cursosSubject.next([]);
+        }
+      });
+  }
 
 
   getCursos(): Observable<Curso[]> {
@@ -57,7 +62,11 @@ export class CursoService {
     const curso = cursos.find(c => c.idCurso === id);
     if (curso) {
       const updated = { ...curso, estado: !curso.estado };
-      this.updateCurso(updated).subscribe();
+      this.updateCurso(updated).subscribe({
+        error: () => {
+          this.cargarCursos();
+        }
+      });
     }
   }
 

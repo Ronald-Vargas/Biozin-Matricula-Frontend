@@ -17,9 +17,14 @@ export class AdministradorService {
 
   cargarAdministradores(): void {
     this.http.get<Respuesta<Administrador[]>>(`${this.apiUrl}/Listar`)
-      .subscribe(res => {
-        if (!res.blnError) {
-          this.administradoresSubject.next(res.valorRetorno || []);
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.administradoresSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.administradoresSubject.next([]);
         }
       });
   }
@@ -43,8 +48,12 @@ export class AdministradorService {
     const admins = this.administradoresSubject.getValue();
     const admin = admins.find(a => a.idAdministrador === id);
     if (admin) {
-      const updated = { ...admin, activo: !admin.activo, contraseña: '' };
-      this.modificar(updated).subscribe();
+      const updated = { ...admin, activo: !admin.activo };
+      this.modificar(updated).subscribe({
+        error: () => {
+          this.cargarAdministradores();
+        }
+      });
     }
   }
 }

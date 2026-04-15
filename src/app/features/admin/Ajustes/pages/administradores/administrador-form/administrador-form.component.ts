@@ -1,6 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { Administrador } from '../../../model/administrados.model';
 import { AdministradorService } from '../../../services/administrador.service';
 
@@ -17,6 +24,7 @@ export class AdministradorFormComponent implements OnChanges {
   @Output() guardado = new EventEmitter<void>();
 
   guardando = false;
+  mensajeError = '';
 
   adminForm: FormGroup;
 
@@ -26,9 +34,9 @@ export class AdministradorFormComponent implements OnChanges {
 
   constructor(private fb: FormBuilder, private adminService: AdministradorService) {
     this.adminForm = this.fb.group({
-      identificacion: ['', [Validators.required, Validators.maxLength(20)]],
-      nombre: ['', [Validators.required, Validators.maxLength(100)]],
-      correo: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      identificacion: ['', [Validators.required, noSoloEspacios, Validators.maxLength(20)]],
+      nombre: ['', [Validators.required, noSoloEspacios, Validators.maxLength(100)]],
+      correo: ['', [Validators.required, noSoloEspacios, Validators.email, Validators.maxLength(100)]],
       telefono: ['', [Validators.maxLength(20)]],
     });
   }
@@ -55,11 +63,11 @@ export class AdministradorFormComponent implements OnChanges {
   guardar(): void {
     if (this.formInvalido) return;
     this.guardando = true;
+    this.mensajeError = '';
 
     const { identificacion, nombre, correo, telefono } = this.adminForm.value;
 
     if (this.esEdicion && this.admin) {
-
       const updated: Administrador = {
         ...this.admin,
         identificacion,
@@ -69,8 +77,18 @@ export class AdministradorFormComponent implements OnChanges {
       };
 
       this.adminService.modificar(updated).subscribe({
-        next: () => { this.guardando = false; this.guardado.emit(); },
-        error: () => { this.guardando = false; },
+        next: (res) => {
+          this.guardando = false;
+          if (!res.blnError) {
+            this.guardado.emit();
+          } else {
+            this.mensajeError = res.strMensajeRespuesta;
+          }
+        },
+        error: () => {
+          this.guardando = false;
+          this.mensajeError = 'Error de conexión al actualizar el administrador. Intente nuevamente.';
+        },
       });
     } else {
       this.adminService.insertar({
@@ -79,8 +97,18 @@ export class AdministradorFormComponent implements OnChanges {
         correo,
         telefono,
       }).subscribe({
-        next: () => { this.guardando = false; this.guardado.emit(); },
-        error: () => { this.guardando = false; },
+        next: (res) => {
+          this.guardando = false;
+          if (!res.blnError) {
+            this.guardado.emit();
+          } else {
+            this.mensajeError = res.strMensajeRespuesta;
+          }
+        },
+        error: () => {
+          this.guardando = false;
+          this.mensajeError = 'Error de conexión al crear el administrador. Intente nuevamente.';
+        },
       });
     }
   }

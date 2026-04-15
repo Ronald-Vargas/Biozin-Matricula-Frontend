@@ -17,9 +17,14 @@ export class AulaService {
 
   private cargarAulas(): void {
     this.http.get<Respuesta<Aula[]>>(`${this.apiUrl}/Listar`)
-      .subscribe(res => {
-        if (!res.blnError) {
-          this.aulasSubject.next(res.valorRetorno || []);
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.aulasSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.aulasSubject.next([]);
         }
       });
   }
@@ -48,7 +53,11 @@ export class AulaService {
     const aula = aulas.find(c => c.idAula === id);
     if (aula) {
       const updated = { ...aula, activo: !aula.activo };
-      this.updateAula(updated).subscribe();
+      this.updateAula(updated).subscribe({
+        error: () => {
+          this.cargarAulas();
+        }
+      });
     }
   }
 }

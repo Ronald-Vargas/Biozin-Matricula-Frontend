@@ -6,6 +6,10 @@
     ✓ Carrera creada exitosamente
   </div>
 
+  <div class="error-message" *ngIf="mensajeError">
+    ❌ {{ mensajeError }}
+  </div>
+
   <form [formGroup]="carreraForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
       <div class="form-group">

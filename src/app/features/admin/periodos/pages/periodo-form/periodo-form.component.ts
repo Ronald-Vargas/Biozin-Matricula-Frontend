@@ -1,6 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { RouterModule } from "@angular/router";
 import { Periodo } from "../../models/periodos.model";
 import { PeriodoService } from "../../services/periodos.services";
@@ -11,6 +18,21 @@ function fechaFinNoAnterior(inicioKey: string, finKey: string): ValidatorFn {
     const fin = group.get(finKey)?.value;
     if (inicio && fin && fin < inicio) {
       return { [finKey + 'Invalida']: true };
+    }
+    return null;
+  };
+}
+
+function matriculaEnRangoPeriodo(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const inicioPeriodo = group.get('fechaInicio')?.value;
+    const finPeriodo = group.get('fechaFin')?.value;
+    const inicioMatricula = group.get('fechaMatriculaInicio')?.value;
+    const finMatricula = group.get('fechaMatriculaFin')?.value;
+    if (inicioPeriodo && finPeriodo && inicioMatricula && finMatricula) {
+      if (inicioMatricula < inicioPeriodo || finMatricula > finPeriodo) {
+        return { matriculaFueraDeRango: true };
+      }
     }
     return null;
   };
@@ -33,13 +55,14 @@ export class PeriodoFormComponent implements OnChanges {
 
   periodoForm: FormGroup;
   mensajeExito = false;
+  mensajeError = '';
 
   constructor(
     private fb: FormBuilder,
     private periodoService: PeriodoService
   ) {
     this.periodoForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      nombre: ['', [Validators.required, noSoloEspacios, Validators.minLength(5), Validators.maxLength(100)]],
       fechaInicio: ['', Validators.required],
       fechaFin: ['', Validators.required],
       fechaMatriculaInicio: ['', Validators.required],
@@ -47,7 +70,8 @@ export class PeriodoFormComponent implements OnChanges {
     }, {
       validators: [
         fechaFinNoAnterior('fechaInicio', 'fechaFin'),
-        fechaFinNoAnterior('fechaMatriculaInicio', 'fechaMatriculaFin')
+        fechaFinNoAnterior('fechaMatriculaInicio', 'fechaMatriculaFin'),
+        matriculaEnRangoPeriodo()
       ]
     });
   }
@@ -72,6 +96,7 @@ export class PeriodoFormComponent implements OnChanges {
   }
 
   onSubmit(): void {
+    this.mensajeError = '';
     if (this.periodoForm.valid) {
       if (this.periodoEditar) {
         const periodoActualizado: Periodo = {
@@ -86,9 +111,11 @@ export class PeriodoFormComponent implements OnChanges {
                 this.mensajeExito = false;
                 this.periodoActualizado.emit();
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al actualizar periodo:', err)
+          error: () => { this.mensajeError = 'Error de conexión al actualizar el periodo. Intente nuevamente.'; }
         });
       } else {
         this.periodoService.createPeriodo(this.periodoForm.value).subscribe({
@@ -100,9 +127,11 @@ export class PeriodoFormComponent implements OnChanges {
                 this.periodoForm.reset();
                 this.periodoCreado.emit();
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al crear periodo:', err)
+          error: () => { this.mensajeError = 'Error de conexión al crear el periodo. Intente nuevamente.'; }
         });
       }
     }
@@ -116,4 +145,5 @@ export class PeriodoFormComponent implements OnChanges {
 
   get fechaFinInvalida() { return this.periodoForm.hasError('fechaFinInvalida'); }
   get fechaMatriculaFinInvalida() { return this.periodoForm.hasError('fechaMatriculaFinInvalida'); }
+  get matriculaFueraDeRango() { return this.periodoForm.hasError('matriculaFueraDeRango'); }
 }

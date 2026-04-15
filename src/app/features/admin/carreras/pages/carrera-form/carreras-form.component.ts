@@ -1,5 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarreraService } from '../../services/carrera.service';
@@ -17,6 +24,7 @@ export class CarreraFormComponent implements OnInit {
 
   carreraForm: FormGroup;
   mensajeExito = false;
+  mensajeError = '';
   modoEdicion = false;
   idCarrera: number | null = null;
 
@@ -27,9 +35,9 @@ export class CarreraFormComponent implements OnInit {
     private router: Router
   ) {
     this.carreraForm = this.fb.group({
-      codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
-      descripcion: ['', Validators.required],
+      codigo: ['', [Validators.required, noSoloEspacios, Validators.minLength(3), Validators.maxLength(10)]],
+      nombre: ['', [Validators.required, noSoloEspacios, Validators.minLength(5), Validators.maxLength(100)]],
+      descripcion: ['', [Validators.required, noSoloEspacios]],
       duracion: ['', [Validators.required, Validators.min(1), Validators.max(15)]]
     });
   }
@@ -55,6 +63,7 @@ export class CarreraFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.mensajeError = '';
     if (this.carreraForm.valid) {
       if (this.modoEdicion && this.idCarrera !== null) {
         const carreraActualizada = { idCarrera: this.idCarrera, ...this.carreraForm.value, estado: true };
@@ -70,9 +79,11 @@ export class CarreraFormComponent implements OnInit {
                   this.router.navigate(['/carreras']);
                 }
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al actualizar carrera:', err)
+          error: () => { this.mensajeError = 'Error de conexión al actualizar la carrera. Intente nuevamente.'; }
         });
       } else {
         this.carreraService.createCarrera(this.carreraForm.value).subscribe({
@@ -84,9 +95,11 @@ export class CarreraFormComponent implements OnInit {
                 this.carreraForm.reset();
                 this.carreraCreada.emit();
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al crear carrera:', err)
+          error: () => { this.mensajeError = 'Error de conexión al crear la carrera. Intente nuevamente.'; }
         });
       }
     }

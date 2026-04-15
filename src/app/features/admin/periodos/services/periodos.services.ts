@@ -23,13 +23,18 @@ export class PeriodoService {
 
 
   private cargarPeriodos(): void {
-  this.http.get<Respuesta<Periodo[]>>(`${this.apiUrl}/Listar`)  
-    .subscribe(res => {
-      if (!res.blnError) {
-        this.periodosSubject.next(res.valorRetorno || []);
-      }
-    });
-}
+    this.http.get<Respuesta<Periodo[]>>(`${this.apiUrl}/Listar`)
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.periodosSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.periodosSubject.next([]);
+        }
+      });
+  }
 
 
   getPeriodos(): Observable<Periodo[]> {
@@ -57,7 +62,11 @@ export class PeriodoService {
     const periodo = periodos.find(c => c.idPeriodo === id);
     if (periodo) {
       const updated = { ...periodo, estadoMatricula: !periodo.estadoMatricula };
-      this.updatePeriodo(updated).subscribe();
+      this.updatePeriodo(updated).subscribe({
+        error: () => {
+          this.cargarPeriodos();
+        }
+      });
     }
   }
 

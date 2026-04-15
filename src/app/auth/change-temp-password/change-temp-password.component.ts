@@ -33,7 +33,12 @@ export class ChangeTempPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.email = this.route.snapshot.queryParamMap.get('email') ?? '';
+    const raw = this.route.snapshot.queryParamMap.get('email') ?? '';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.email = emailRegex.test(raw) ? raw : '';
+    if (!this.email) {
+      this.errorMessage = 'Enlace inválido. Por favor inicie sesión nuevamente.';
+    }
   }
 
   toggleTempPassword(): void { this.showTempPassword = !this.showTempPassword; }

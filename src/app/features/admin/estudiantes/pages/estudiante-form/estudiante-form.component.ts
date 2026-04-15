@@ -1,6 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { CreateEstudianteDto, Estudiante } from '../../models/estudiantes.model';
 import { EstudianteService } from '../../services/estudiantes.services';
 import { Carrera } from '../../../carreras/models/carrera.model';
@@ -20,6 +27,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   esEdicion: boolean = false;
   estudianteId: number | null = null;
   titulo: string = '📝 Nuevo Estudiante';
+  readonly hoy = new Date().toISOString().split('T')[0];
 
   estudianteOriginal?: Estudiante;
   estudianteForm!: FormGroup;
@@ -68,9 +76,9 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   private buildForm(): void {
     this.estudianteForm = this.fb.group({
       // ── Información Personal ──
-      cedula:             ['', [Validators.required, Validators.maxLength(20)]],
-      nombre:             ['', [Validators.required, Validators.maxLength(40)]],
-      apellidoPaterno:    ['', [Validators.required, Validators.maxLength(40)]],
+      cedula:             ['', [Validators.required, noSoloEspacios, Validators.maxLength(20)]],
+      nombre:             ['', [Validators.required, noSoloEspacios, Validators.maxLength(40)]],
+      apellidoPaterno:    ['', [Validators.required, noSoloEspacios, Validators.maxLength(40)]],
       apellidoMaterno:    ['', [Validators.maxLength(40)]],
       fechaNacimiento:    ['', [Validators.required]],
       genero:             ['', [Validators.maxLength(15)]],
@@ -94,7 +102,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
       // ── Colegio ──
       colegioProcedencia:    ['', [Validators.maxLength(150)]],
       tipoColegio:           [''],
-      anioGraduacionColegio: [null],
+      anioGraduacionColegio: [null, [Validators.min(1950), Validators.max(2030)]],
 
       // ── Dirección ──
       provincia:       ['', [Validators.maxLength(50)]],
@@ -214,13 +222,16 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         observaciones: v.observaciones || undefined,
       };
 
-      this.estudianteService.updateEstudiante(updated).subscribe(res => {
-        if (!res.blnError) {
-          alert('✅ Estudiante actualizado exitosamente');
-          this.cancelar();
-        } else {
-          alert('❌ ' + res.strMensajeRespuesta);
-        }
+      this.estudianteService.updateEstudiante(updated).subscribe({
+        next: res => {
+          if (!res.blnError) {
+            alert('✅ Estudiante actualizado exitosamente');
+            this.cancelar();
+          } else {
+            alert('❌ ' + res.strMensajeRespuesta);
+          }
+        },
+        error: () => alert('❌ Error de conexión al actualizar el estudiante. Intente nuevamente.')
       });
     } else {
       const dto: CreateEstudianteDto = {
@@ -253,13 +264,16 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         observaciones: v.observaciones || undefined,
       };
 
-      this.estudianteService.createEstudiante(dto).subscribe(res => {
-        if (!res.blnError) {
-          alert('✅ Estudiante creado exitosamente');
-          this.cancelar();
-        } else {
-          alert('❌ ' + res.strMensajeRespuesta);
-        }
+      this.estudianteService.createEstudiante(dto).subscribe({
+        next: res => {
+          if (!res.blnError) {
+            alert('✅ Estudiante creado exitosamente');
+            this.cancelar();
+          } else {
+            alert('❌ ' + res.strMensajeRespuesta);
+          }
+        },
+        error: () => alert('❌ Error de conexión al crear el estudiante. Intente nuevamente.')
       });
     }
   }

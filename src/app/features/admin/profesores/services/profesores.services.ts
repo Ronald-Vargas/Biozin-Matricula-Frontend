@@ -23,13 +23,18 @@ export class ProfesorService {
 
 
   private cargarProfesores(): void {
-  this.http.get<Respuesta<Profesor[]>>(`${this.apiUrl}/Listar`)  
-    .subscribe(res => {
-      if (!res.blnError) {
-        this.profesoresSubject.next(res.valorRetorno || []);
-      }
-    });
-}
+    this.http.get<Respuesta<Profesor[]>>(`${this.apiUrl}/Listar`)
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.profesoresSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.profesoresSubject.next([]);
+        }
+      });
+  }
 
 
   getProfesores(): Observable<Profesor[]> {
@@ -57,7 +62,12 @@ export class ProfesorService {
     const profesor = profesores.find(c => c.idProfesor === id);
     if (profesor) {
       const updated = { ...profesor, estado: !profesor.estado };
-      this.updateProfesor(updated).subscribe();
+      this.updateProfesor(updated).subscribe({
+        error: () => {
+          // Revertir el cambio local si el servidor falla
+          this.cargarProfesores();
+        }
+      });
     }
   }
 

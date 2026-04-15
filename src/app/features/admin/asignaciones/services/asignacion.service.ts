@@ -21,9 +21,14 @@ export class AsignacionService {
 
   private cargarAsignaciones(): void {
     this.http.get<Respuesta<Asignacion[]>>(`${this.apiUrl}/Listar`)
-      .subscribe(res => {
-        if (!res.blnError) {
-          this.asignacionesSubject.next(res.valorRetorno || []);
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.asignacionesSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.asignacionesSubject.next([]);
         }
       });
   }

@@ -54,7 +54,8 @@
         <div class="form-group">
           <label>Fecha de Nacimiento *</label>
           <input type="date" formControlName="fechaNacimiento"
-            [class.invalid]="fechaNacimiento?.invalid && fechaNacimiento?.touched" />
+            [class.invalid]="fechaNacimiento?.invalid && fechaNacimiento?.touched"
+            [max]="hoy" />
           <div class="error-message" *ngIf="fechaNacimiento?.errors?.['required'] && fechaNacimiento?.touched">
             <span>La fecha de nacimiento es requerida</span>
           </div>

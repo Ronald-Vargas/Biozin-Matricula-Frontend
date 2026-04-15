@@ -22,6 +22,7 @@ export class AulaFormComponent implements OnChanges {
 
   aulaForm: FormGroup;
   mensajeExito = false;
+  mensajeError = '';
   guardando = false;
 
   constructor(private fb: FormBuilder, private aulaService: AulaService) {
@@ -51,6 +52,7 @@ export class AulaFormComponent implements OnChanges {
   onSubmit(): void {
     if (this.aulaForm.invalid) return;
     this.guardando = true;
+    this.mensajeError = '';
 
     if (this.aulaEditar) {
       const aulaActualizada: Aula = { ...this.aulaEditar, ...this.aulaForm.value };
@@ -62,10 +64,15 @@ export class AulaFormComponent implements OnChanges {
               this.mensajeExito = false;
               this.aulaActualizada.emit();
             }, 2000);
+          } else {
+            this.mensajeError = res.strMensajeRespuesta;
           }
           this.guardando = false;
         },
-        error: () => { this.guardando = false; }
+        error: () => {
+          this.mensajeError = 'Error de conexión al actualizar el aula. Intente nuevamente.';
+          this.guardando = false;
+        }
       });
     } else {
       this.aulaService.createAula(this.aulaForm.value).subscribe({
@@ -74,13 +81,18 @@ export class AulaFormComponent implements OnChanges {
             this.mensajeExito = true;
             setTimeout(() => {
               this.mensajeExito = false;
-              this.aulaForm.reset({ esLaboratorio: false, estado: true });
+              this.aulaForm.reset({ esLaboratorio: false, activo: true });
               this.aulaCreada.emit();
             }, 2000);
+          } else {
+            this.mensajeError = res.strMensajeRespuesta;
           }
           this.guardando = false;
         },
-        error: () => { this.guardando = false; }
+        error: () => {
+          this.mensajeError = 'Error de conexión al crear el aula. Intente nuevamente.';
+          this.guardando = false;
+        }
       });
     }
   }

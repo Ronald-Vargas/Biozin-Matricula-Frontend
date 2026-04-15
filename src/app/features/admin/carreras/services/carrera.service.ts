@@ -21,13 +21,18 @@ export class CarreraService {
 
 
   private cargarCarreras(): void {
-  this.http.get<Respuesta<Carrera[]>>(`${this.apiUrl}/Listar`)  
-    .subscribe(res => {
-      if (!res.blnError) {
-        this.carrerasSubject.next(res.valorRetorno || []);
-      }
-    });
-}
+    this.http.get<Respuesta<Carrera[]>>(`${this.apiUrl}/Listar`)
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.carrerasSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.carrerasSubject.next([]);
+        }
+      });
+  }
 
 
   getCarreras(): Observable<Carrera[]> {
@@ -56,7 +61,11 @@ export class CarreraService {
     const carrera = carreras.find(c => c.idCarrera === id);
     if (carrera) {
       const updated = { ...carrera, estado: !carrera.estado };
-      this.updateCarrera(updated).subscribe();
+      this.updateCarrera(updated).subscribe({
+        error: () => {
+          this.cargarCarreras();
+        }
+      });
     }
   }
 

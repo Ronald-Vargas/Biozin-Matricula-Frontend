@@ -59,7 +59,18 @@ export class AdministradorListComponent implements OnInit {
   eliminar(): void {
     if (!this.adminAEliminar) return;
     this.adminService.eliminar(this.adminAEliminar.idAdministrador).subscribe({
-      next: () => { this.adminAEliminar = null; }
+      next: (res) => {
+        if (!res.blnError) {
+          this.adminAEliminar = null;
+        } else {
+          alert('❌ ' + res.strMensajeRespuesta);
+          this.adminAEliminar = null;
+        }
+      },
+      error: () => {
+        alert('❌ Error de conexión al eliminar el administrador. Intente nuevamente.');
+        this.adminAEliminar = null;
+      }
     });
   }
 

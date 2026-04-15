@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { combineLatest } from 'rxjs';
 import { OfertaAcademicaService } from '../../services/oferta-academica.service';
 import { OfertaAcademica } from '../../models/oferta-academica.model';
 import { ProfesorService } from '../../../profesores/services/profesores.services';
@@ -68,17 +69,20 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.cursoService.getCursosActivos().subscribe(cursos => {
+    combineLatest([
+      this.cursoService.getCursosActivos(),
+      this.profesorService.getProfesoresActivos(),
+      this.periodoService.getPeriodosActivos(),
+      this.aulaService.getAulasActivas(),
+      this.ofertaService.getAll(),
+    ]).subscribe(([cursos, profesores, periodos, aulas, ofertas]) => {
       this.cursos = cursos;
-      if (this.ofertaEditar) this.precargarDatos(this.ofertaEditar);
-    });
-    this.profesorService.getProfesoresActivos().subscribe(profesores => this.profesores = profesores);
-    this.periodoService.getPeriodosActivos().subscribe(periodos => this.periodos = periodos);
-    this.aulaService.getAulasActivas().subscribe(aulas => {
+      this.profesores = profesores;
+      this.periodos = periodos;
       this.aulas = aulas;
+      this.todasLasOfertas = ofertas;
       if (this.ofertaEditar) this.precargarDatos(this.ofertaEditar);
     });
-    this.ofertaService.getAll().subscribe(ofertas => this.todasLasOfertas = ofertas);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -210,6 +214,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
       !this.oferta.idProfesor ||
       !this.oferta.idAula ||
       !this.oferta.cupoMaximo ||
+      this.oferta.cupoMaximo < 1 ||
       seleccionados.length === 0 ||
       seleccionados.some(d => !d.horaInicio || !d.horaFin)
     ) {
@@ -252,14 +257,17 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
         cupoMaximo: this.oferta.cupoMaximo!,
         diasHorarios,
       };
-      this.ofertaService.updateOferta(dto).subscribe(res => {
-        if (!res.blnError) {
-          this.ofertaCreada.emit();
-          this.cerrar();
-          this.limpiar();
-        } else {
-          this.errorServidor = res.strMensajeRespuesta;
-        }
+      this.ofertaService.updateOferta(dto).subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.ofertaCreada.emit();
+            this.cerrar();
+            this.limpiar();
+          } else {
+            this.errorServidor = res.strMensajeRespuesta;
+          }
+        },
+        error: () => { this.errorServidor = 'Error de conexión al guardar. Intente nuevamente.'; }
       });
     } else {
       const dto = {
@@ -270,14 +278,17 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
         cupoMaximo: this.oferta.cupoMaximo!,
         diasHorarios,
       };
-      this.ofertaService.crear(dto).subscribe(res => {
-        if (!res.blnError) {
-          this.ofertaCreada.emit();
-          this.cerrar();
-          this.limpiar();
-        } else {
-          this.errorServidor = res.strMensajeRespuesta;
-        }
+      this.ofertaService.crear(dto).subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.ofertaCreada.emit();
+            this.cerrar();
+            this.limpiar();
+          } else {
+            this.errorServidor = res.strMensajeRespuesta;
+          }
+        },
+        error: () => { this.errorServidor = 'Error de conexión al crear la oferta. Intente nuevamente.'; }
       });
     }
   }

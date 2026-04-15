@@ -1,5 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CursoService } from '../../services/curso.service';
@@ -18,6 +25,7 @@ export class CursoFormComponent implements OnInit {
 
   cursoForm: FormGroup;
   mensajeExito = false;
+  mensajeError = '';
   modoEdicion = false;
   idCurso: number | null = null;
   cursosDisponibles: Curso[] = [];
@@ -29,9 +37,9 @@ export class CursoFormComponent implements OnInit {
     private router: Router
   ) {
     this.cursoForm = this.fb.group({
-      codigo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]],
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
-      descripcion: ['', Validators.required],
+      codigo: ['', [Validators.required, noSoloEspacios, Validators.minLength(3), Validators.maxLength(10)]],
+      nombre: ['', [Validators.required, noSoloEspacios, Validators.minLength(5), Validators.maxLength(100)]],
+      descripcion: ['', [Validators.required, noSoloEspacios]],
       creditos: ['', [Validators.required, Validators.min(1), Validators.max(15)]],
       horasDuracion: ['', [Validators.required, Validators.min(1), Validators.max(200)]],
       precio: ['', [Validators.required, Validators.min(0)]],
@@ -82,6 +90,7 @@ export class CursoFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.mensajeError = '';
     if (this.cursoForm.valid) {
       const val = this.cursoForm.value;
       const precioLaboratorio = val.precioLaboratorio || 0;
@@ -100,9 +109,11 @@ export class CursoFormComponent implements OnInit {
                   this.router.navigate(['/cursos']);
                 }
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al actualizar curso:', err)
+          error: () => { this.mensajeError = 'Error de conexión al actualizar el curso. Intente nuevamente.'; }
         });
       } else {
         this.cursoService.createCurso({ ...val, precioLaboratorio, idCursoRequisito }).subscribe({
@@ -114,9 +125,11 @@ export class CursoFormComponent implements OnInit {
                 this.cursoForm.reset();
                 this.cursoCreado.emit();
               }, 2000);
+            } else {
+              this.mensajeError = res.strMensajeRespuesta;
             }
           },
-          error: (err) => console.error('Error al crear curso:', err)
+          error: () => { this.mensajeError = 'Error de conexión al crear el curso. Intente nuevamente.'; }
         });
       }
     }

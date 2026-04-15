@@ -48,7 +48,7 @@ export class EstudianteDetailComponent implements OnInit {
   }
 
   getProgreso(): number {
-    if (!this.estudiante) return 0;
+    if (!this.estudiante || !this.estudiante.creditosTotales) return 0;
     return Math.round((this.estudiante.creditosAprobados / this.estudiante.creditosTotales) * 100);
   }
 

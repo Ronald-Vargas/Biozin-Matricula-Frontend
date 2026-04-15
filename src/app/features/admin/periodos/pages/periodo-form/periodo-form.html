@@ -49,9 +49,18 @@
     </div>
 
 
+    <small class="error-text" *ngIf="matriculaFueraDeRango">
+      Las fechas de matrícula deben estar dentro del rango del período.
+    </small>
+
+    <div class="error-message" *ngIf="mensajeError" style="margin-bottom:0.5rem">
+      ❌ {{ mensajeError }}
+    </div>
+
     <button
       type="submit"
-      class="btn btn-primary">
+      class="btn btn-primary"
+      [disabled]="periodoForm.invalid">
       {{ periodoEditar ? '💾 Guardar Cambios' : '➕ Crear Periodo' }}
     </button>
   </form>

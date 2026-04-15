@@ -18,7 +18,6 @@ export interface Profesor {
   direccion: string;
   codigo: string;
   emailInstitucional: string;
-  contraseña: string;
   fechaIngreso: Date;
   estado: boolean;
 

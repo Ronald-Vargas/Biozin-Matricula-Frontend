@@ -50,6 +50,9 @@
 </div>
 
 <div class="panel-footer">
+  <span class="error-text" *ngIf="mensajeError" style="margin-right: auto; color: var(--color-danger, #e53e3e);">
+    ❌ {{ mensajeError }}
+  </span>
   <button type="button" class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
   <button type="button" class="btn-submit" [disabled]="formInvalido || guardando" (click)="guardar()">
     {{ guardando ? 'Guardando...' : (esEdicion ? 'Guardar cambios' : 'Crear administrador') }}

@@ -23,13 +23,18 @@ export class EstudianteService {
 
 
   private cargarEstudiantes(): void {
-  this.http.get<Respuesta<Estudiante[]>>(`${this.apiUrl}/Listar`)  
-    .subscribe(res => {
-      if (!res.blnError) {
-        this.estudiantesSubject.next(res.valorRetorno || []);
-      }
-    });
-}
+    this.http.get<Respuesta<Estudiante[]>>(`${this.apiUrl}/Listar`)
+      .subscribe({
+        next: res => {
+          if (!res.blnError) {
+            this.estudiantesSubject.next(res.valorRetorno || []);
+          }
+        },
+        error: () => {
+          this.estudiantesSubject.next([]);
+        }
+      });
+  }
 
   getEstudiantes(): Observable<Estudiante[]> {
     return this.estudiantes$;
@@ -37,7 +42,7 @@ export class EstudianteService {
 
 
   getEstudianteById(id: number): Observable<Estudiante | undefined> {
-    return this.http.post<Respuesta<Estudiante[]>>(`${this.apiUrl}/Obtener`, { idProfesor: id })
+    return this.http.post<Respuesta<Estudiante[]>>(`${this.apiUrl}/Obtener`, { idEstudiante: id })
           .pipe(map(res => (res.blnError || !res.valorRetorno?.length) ? undefined : res.valorRetorno.find(c => c.idEstudiante === id)));
   }
 
@@ -56,7 +61,12 @@ export class EstudianteService {
     const estudiante = estudiantes.find(c => c.idEstudiante === id);
     if (estudiante) {
       const updated = { ...estudiante, estadoEstudiante: !estudiante.estadoEstudiante };
-      this.updateEstudiante(updated).subscribe();
+      this.updateEstudiante(updated).subscribe({
+        error: () => {
+          // Revertir el cambio local si el servidor falla
+          this.cargarEstudiantes();
+        }
+      });
     }
   }
 

@@ -6,7 +6,6 @@ export interface Administrador {
     correo: string,
     emailInstitucional: string,
     telefono: string,
-    contraseña: string,
     activo: boolean
 }
 

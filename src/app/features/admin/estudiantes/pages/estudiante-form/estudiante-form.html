@@ -50,7 +50,7 @@
 
         <div class="form-group">
           <label>Fecha de Nacimiento *</label>
-          <input type="date" formControlName="fechaNacimiento" [class.invalid]="isInvalid('fechaNacimiento')" />
+          <input type="date" formControlName="fechaNacimiento" [class.invalid]="isInvalid('fechaNacimiento')" [max]="hoy" />
           <div class="error-message" *ngIf="isInvalid('fechaNacimiento')">
             <span *ngIf="f('fechaNacimiento').errors?.['required']">La fecha de nacimiento es obligatoria.</span>
           </div>
@@ -213,7 +213,11 @@
 
         <div class="form-group">
           <label>Año de Graduación</label>
-          <input type="number" formControlName="anioGraduacionColegio" placeholder="2025" min="2000" max="2030" />
+          <input type="number" formControlName="anioGraduacionColegio" placeholder="2025" min="1950" max="2030"
+            [class.invalid]="isInvalid('anioGraduacionColegio')" />
+          <div class="error-message" *ngIf="isInvalid('anioGraduacionColegio')">
+            <span>Ingrese un año entre 1950 y 2030.</span>
+          </div>
         </div>
 
       </div>

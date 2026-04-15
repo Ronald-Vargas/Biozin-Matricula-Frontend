@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+
+function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
+  if (typeof control.value === 'string' && control.value.trim().length === 0 && control.value.length > 0) {
+    return { soloEspacios: true };
+  }
+  return null;
+}
 import { ProfesorService } from '../../services/profesores.services';
 import { Profesor } from '../../models/profesores.model';
 
@@ -19,6 +26,7 @@ export class ProfesorFormComponent implements OnInit {
   tituloPage = 'Nuevo Profesor';
   mensajeExito = false;
   profesorActual?: Profesor;
+  readonly hoy = new Date().toISOString().split('T')[0];
 
   
   constructor(
@@ -28,9 +36,9 @@ export class ProfesorFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.profesorForm = this.fb.group({
-      cedula: ['', [Validators.required, Validators.maxLength(11)]],
-      nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      apellidoPaterno: ['', [Validators.required, Validators.maxLength(30)]],
+      cedula: ['', [Validators.required, noSoloEspacios, Validators.maxLength(11)]],
+      nombre: ['', [Validators.required, noSoloEspacios, Validators.minLength(2), Validators.maxLength(50)]],
+      apellidoPaterno: ['', [Validators.required, noSoloEspacios, Validators.maxLength(30)]],
       apellidoMaterno: ['', [Validators.maxLength(30)]],
       fechaNacimiento: ['', Validators.required],
       genero: ['', [Validators.required, Validators.maxLength(9)]],
