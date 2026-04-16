@@ -47,8 +47,14 @@ export class LoginComponent {
         if (res.blnError) {
           this.errorMessage = res.strMensajeRespuesta || 'Usuario o contraseña incorrectos.';
         } else {
-          const role = res.valorRetorno?.role;
-          this.router.navigate(role === 'Administrador' ? ['/dashboard'] : ['/portal/inicio']);
+          const data = res.valorRetorno;
+          if (data?.requiereCambioContrasena) {
+            this.router.navigate(['/cambiar-contrasena-temporal'], {
+              queryParams: { email: data.email }
+            });
+          } else {
+            this.router.navigate(data?.role === 'Administrador' ? ['/dashboard'] : ['/portal/inicio']);
+          }
         }
       },
       error: () => {

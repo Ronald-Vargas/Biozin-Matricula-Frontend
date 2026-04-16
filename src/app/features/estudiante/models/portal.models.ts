@@ -27,6 +27,7 @@ export interface AuthRespuesta {
   idCarrera?: number;
   nombreCarrera?: string;
   semestreActual?: number;
+  requiereCambioContrasena?: boolean;
 }
 
 export interface AdminPerfil {

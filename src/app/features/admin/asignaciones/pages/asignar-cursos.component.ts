@@ -100,15 +100,26 @@ export class AsignarCursosComponent implements OnInit {
   actualizarSemestre(cursoId: number, semestre: number): void {
     const config = this.cursosConfig.get(cursoId);
     if (config) {
-      config.semestre = semestre;
+      const duracion = this.carreraSeleccionada?.duracion ?? semestre;
+      config.semestre = Math.min(Math.max(1, semestre), duracion);
       this.validarPrerequisitos();
     }
   }
 
   validarPrerequisitos(): void {
     this.erroresPrerequisitos = [];
+    const duracion = this.carreraSeleccionada?.duracion;
+
     for (const [cursoId, config] of this.cursosConfig.entries()) {
       const curso = this.cursosList.find(c => c.idCurso === cursoId);
+
+      if (duracion && config.semestre > duracion) {
+        this.erroresPrerequisitos.push(
+          `"${curso?.nombre}" está asignado al semestre ${config.semestre}, pero la carrera solo tiene ${duracion} semestres.`
+        );
+        continue;
+      }
+
       if (!curso?.idCursoRequisito) continue;
 
       const reqConfig = this.cursosConfig.get(curso.idCursoRequisito);
