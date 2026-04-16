@@ -83,7 +83,6 @@ export interface CursoHistorial {
   codigo: string;
   nombre: string;
   creditos: number;
-  nota: number | null;
   estado: 'aprobado' | 'reprobado' | 'en_curso';
 }
 
