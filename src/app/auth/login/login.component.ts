@@ -33,7 +33,7 @@ export class LoginComponent {
       return;
     }
     this.router.navigate(['/cambiar-contrasena-temporal'], {
-      queryParams: { email: this.email.trim() },
+      queryParams: { email: this.email.trim(), modo: 'recuperacion' },
     });
   }
 

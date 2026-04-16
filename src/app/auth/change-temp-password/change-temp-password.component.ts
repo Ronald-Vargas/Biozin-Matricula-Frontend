@@ -18,6 +18,11 @@ export class ChangeTempPasswordComponent implements OnInit {
   nuevaContrasena = '';
   confirmarContrasena = '';
 
+  // Modo recuperación: el usuario olvidó su contraseña y usa un código enviado al correo
+  modoRecuperacion = false;
+  codigoEnviado = false;
+  enviandoCodigo = false;
+
   showTempPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
@@ -39,11 +44,35 @@ export class ChangeTempPasswordComponent implements OnInit {
     if (!this.email) {
       this.errorMessage = 'Enlace inválido. Por favor inicie sesión nuevamente.';
     }
+
+    this.modoRecuperacion = this.route.snapshot.queryParamMap.get('modo') === 'recuperacion';
   }
 
   toggleTempPassword(): void { this.showTempPassword = !this.showTempPassword; }
   toggleNewPassword(): void { this.showNewPassword = !this.showNewPassword; }
   toggleConfirmPassword(): void { this.showConfirmPassword = !this.showConfirmPassword; }
+
+  onEnviarCodigo(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.enviandoCodigo = true;
+
+    this.authService.solicitarRecuperacion(this.email).subscribe({
+      next: (res) => {
+        this.enviandoCodigo = false;
+        if (res.blnError) {
+          this.errorMessage = res.strMensajeRespuesta || 'No se pudo enviar el código.';
+        } else {
+          this.codigoEnviado = true;
+          this.successMessage = 'Se envió un código de 6 dígitos a tu correo. Expira en 15 minutos.';
+        }
+      },
+      error: () => {
+        this.enviandoCodigo = false;
+        this.errorMessage = 'Error al enviar el código. Intenta de nuevo.';
+      },
+    });
+  }
 
   onCambiarContrasena(): void {
     this.errorMessage = '';
@@ -69,7 +98,7 @@ export class ChangeTempPasswordComponent implements OnInit {
       next: (res) => {
         this.isLoading = false;
         if (res.blnError) {
-          this.errorMessage = res.strMensajeRespuesta || 'Contraseña actual incorrecta o error al cambiar la contraseña.';
+          this.errorMessage = res.strMensajeRespuesta || 'Código o contraseña incorrectos.';
         } else {
           this.successMessage = 'Contraseña actualizada correctamente. Redirigiendo...';
           setTimeout(() => this.router.navigate(['/']), 2000);

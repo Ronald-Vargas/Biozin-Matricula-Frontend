@@ -75,4 +75,8 @@ export class AuthService {
   cambiarContrasenaTemporaria(request: CambiarContrasenaTemporariaRequest): Observable<Respuesta<null>> {
     return this.http.post<Respuesta<null>>(`${environment.apiUrl}/Auth/CambiarContrasenaTemporaria`, request);
   }
+
+  solicitarRecuperacion(email: string): Observable<Respuesta<null>> {
+    return this.http.post<Respuesta<null>>(`${environment.apiUrl}/Auth/SolicitarRecuperacion`, { email });
+  }
 }
