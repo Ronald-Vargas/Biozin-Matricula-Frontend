@@ -146,6 +146,9 @@
       </ul>
     </div>
 
+    <!-- Error campos requeridos -->
+    <div class="error-horario" *ngIf="errorFormulario">{{ errorFormulario }}</div>
+
     <!-- Error del servidor -->
     <div class="error-horario" *ngIf="errorServidor">{{ errorServidor }}</div>
 

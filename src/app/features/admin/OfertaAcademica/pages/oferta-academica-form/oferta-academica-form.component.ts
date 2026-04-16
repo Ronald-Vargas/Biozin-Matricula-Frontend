@@ -56,6 +56,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   errorHorario = '';
   errorServidor = '';
   errorHoras = '';
+  errorFormulario = '';
   conflictos: string[] = [];
 
   private todasLasOfertas: OfertaAcademica[] = [];
@@ -205,19 +206,21 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   guardar(): void {
     this.errorHorario = '';
     this.errorHoras = '';
+    this.errorFormulario = '';
     this.conflictos = [];
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
 
     if (
-      !this.oferta.idPeriodo ||
-      !this.oferta.idCurso ||
-      !this.oferta.idProfesor ||
-      !this.oferta.idAula ||
+      !Number(this.oferta.idPeriodo) ||
+      !Number(this.oferta.idCurso) ||
+      !Number(this.oferta.idProfesor) ||
+      !Number(this.oferta.idAula) ||
       !this.oferta.cupoMaximo ||
       this.oferta.cupoMaximo < 1 ||
       seleccionados.length === 0 ||
       seleccionados.some(d => !d.horaInicio || !d.horaFin)
     ) {
+      this.errorFormulario = 'Por favor complete todos los campos requeridos: período, curso, profesor, aula, cupo y al menos un día con horario.';
       return;
     }
 
@@ -311,6 +314,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     this.conflictos = [];
     this.errorHorario = '';
     this.errorHoras = '';
+    this.errorFormulario = '';
     this.errorServidor = '';
     this.diasOptions.forEach(d => {
       d.seleccionado = false;

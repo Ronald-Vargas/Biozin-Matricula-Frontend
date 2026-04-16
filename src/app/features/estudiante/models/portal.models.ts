@@ -10,7 +10,6 @@ export interface EstudiantePerfil {
   creditosAprobados?: number;
   creditosEnCurso?: number;
   creditosTotales?: number;
-  promedio?: number;
 }
 
 export interface LoginRequest {
