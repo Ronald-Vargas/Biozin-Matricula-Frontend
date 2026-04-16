@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
@@ -9,6 +9,7 @@ function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
   return null;
 }
 import { Administrador } from '../../../model/administrados.model';
+import { Subscription } from 'rxjs';
 import { AdministradorService } from '../../../services/administrador.service';
 
 @Component({
@@ -18,13 +19,15 @@ import { AdministradorService } from '../../../services/administrador.service';
   templateUrl: './administrador-form.component.html',
   styleUrls: ['./administrador-form.component.scss'],
 })
-export class AdministradorFormComponent implements OnChanges {
+export class AdministradorFormComponent implements OnChanges, OnInit {
   @Input() admin: Administrador | null = null;
   @Output() cancelar = new EventEmitter<void>();
   @Output() guardado = new EventEmitter<void>();
 
   guardando = false;
   mensajeError = '';
+  private adminsExistentes: Administrador[] = [];
+  private subAdmins?: Subscription;
 
   adminForm: FormGroup;
 
@@ -39,6 +42,10 @@ export class AdministradorFormComponent implements OnChanges {
       correo: ['', [Validators.required, noSoloEspacios, Validators.email, Validators.maxLength(100)]],
       telefono: ['', [Validators.maxLength(20)]],
     });
+  }
+
+  ngOnInit(): void {
+    this.subAdmins = this.adminService.administradores$.subscribe(a => this.adminsExistentes = a);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,10 +69,25 @@ export class AdministradorFormComponent implements OnChanges {
 
   guardar(): void {
     if (this.formInvalido) return;
-    this.guardando = true;
     this.mensajeError = '';
 
     const { identificacion, nombre, correo, telefono } = this.adminForm.value;
+    const otros = this.adminsExistentes.filter(a => a.idAdministrador !== this.admin?.idAdministrador);
+
+    if (otros.some(a => a.identificacion === identificacion.trim())) {
+      this.mensajeError = 'Ya existe un administrador registrado con esa identificación.';
+      return;
+    }
+    if (otros.some(a => a.correo?.toLowerCase() === correo.toLowerCase())) {
+      this.mensajeError = 'El correo electrónico ya está registrado en otro administrador.';
+      return;
+    }
+    if (telefono?.trim() && otros.some(a => a.telefono === telefono.trim())) {
+      this.mensajeError = 'El número de teléfono ya está registrado en otro administrador.';
+      return;
+    }
+
+    this.guardando = true;
 
     if (this.esEdicion && this.admin) {
       const updated: Administrador = {

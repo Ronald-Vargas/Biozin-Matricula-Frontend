@@ -25,7 +25,9 @@ export class ProfesorFormComponent implements OnInit {
   esEdicion = false;
   tituloPage = 'Nuevo Profesor';
   mensajeExito = false;
+  mensajeError = '';
   profesorActual?: Profesor;
+  private profesoresExistentes: Profesor[] = [];
   readonly hoy = new Date().toISOString().split('T')[0];
 
   
@@ -55,6 +57,8 @@ export class ProfesorFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.profesorService.getProfesores().subscribe(p => this.profesoresExistentes = p);
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
       this.esEdicion = true;
@@ -123,6 +127,23 @@ export class ProfesorFormComponent implements OnInit {
   
   onSubmit(): void {
     if (!this.profesorForm.valid) return;
+    this.mensajeError = '';
+
+    const v = this.profesorForm.value;
+    const otros = this.profesoresExistentes.filter(p => p.idProfesor !== this.profesorActual?.idProfesor);
+
+    if (otros.some(p => p.cedula === v.cedula.trim())) {
+      this.mensajeError = 'Ya existe un profesor registrado con esa cédula.';
+      return;
+    }
+    if (otros.some(p => p.emailPersonal?.toLowerCase() === v.emailPersonal.toLowerCase())) {
+      this.mensajeError = 'El correo electrónico ya está registrado en otro profesor.';
+      return;
+    }
+    if (otros.some(p => p.telefono === v.telefono.trim())) {
+      this.mensajeError = 'El número de teléfono ya está registrado en otro profesor.';
+      return;
+    }
 
     if (this.esEdicion && this.profesorActual) {
       const updated: Profesor = { ...this.profesorActual, ...this.profesorForm.value };

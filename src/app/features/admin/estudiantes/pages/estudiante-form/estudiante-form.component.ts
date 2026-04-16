@@ -33,6 +33,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   estudianteForm!: FormGroup;
 
   carreras: Carrera[] = [];
+  private estudiantesExistentes: Estudiante[] = [];
   private subCarreras?: Subscription;
   private subDiscapacidad?: Subscription;
 
@@ -50,6 +51,8 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     this.subCarreras = this.carreraService.getCarrerasActivas().subscribe(c => {
       this.carreras = c;
     });
+
+    this.estudianteService.getEstudiantes().subscribe(e => this.estudiantesExistentes = e);
 
     // Cuando discapacidad cambia, limpiar campos dependientes
     this.subDiscapacidad = this.estudianteForm.get('discapacidad')!.valueChanges.subscribe(val => {
@@ -184,6 +187,20 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     }
 
     const v = this.estudianteForm.value;
+    const otros = this.estudiantesExistentes.filter(e => e.idEstudiante !== this.estudianteId);
+
+    if (otros.some(e => e.cedula === v.cedula.trim())) {
+      alert('❌ Ya existe un estudiante registrado con esa cédula.');
+      return;
+    }
+    if (v.emailPersonal && otros.some(e => e.emailPersonal?.toLowerCase() === v.emailPersonal.toLowerCase())) {
+      alert('❌ El correo personal ya está registrado en otro estudiante.');
+      return;
+    }
+    if (otros.some(e => e.telefonoMovil === v.telefonoMovil.trim())) {
+      alert('❌ El número de teléfono ya está registrado en otro estudiante.');
+      return;
+    }
 
     const carreraSeleccionada = this.carreras.find(c => c.idCarrera === v.idCarrera);
     if (!carreraSeleccionada) {

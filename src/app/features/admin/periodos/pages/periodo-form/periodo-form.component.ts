@@ -29,8 +29,8 @@ function matriculaEnRangoPeriodo(): ValidatorFn {
     const finPeriodo = group.get('fechaFin')?.value;
     const inicioMatricula = group.get('fechaMatriculaInicio')?.value;
     const finMatricula = group.get('fechaMatriculaFin')?.value;
-    if (inicioPeriodo && finPeriodo && inicioMatricula && finMatricula) {
-      if (inicioMatricula < inicioPeriodo || finMatricula > finPeriodo) {
+    if (finPeriodo && finMatricula) {
+      if (finMatricula > finPeriodo) {
         return { matriculaFueraDeRango: true };
       }
     }

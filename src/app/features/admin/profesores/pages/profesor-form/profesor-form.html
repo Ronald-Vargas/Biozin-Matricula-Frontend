@@ -6,6 +6,10 @@
     <h1 class="page-title">{{ tituloPage }}</h1>
   </div>
 
+  <div class="error-message" *ngIf="mensajeError" style="margin: 0 0 1rem 0;">
+    ❌ {{ mensajeError }}
+  </div>
+
   <div class="form-panel">
     <form [formGroup]="profesorForm" (ngSubmit)="onSubmit()">
 
