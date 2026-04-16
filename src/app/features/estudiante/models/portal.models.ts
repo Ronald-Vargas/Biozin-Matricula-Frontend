@@ -8,6 +8,7 @@ export interface EstudiantePerfil {
   semestreActual?: number | null;
   emailInstitucional: string;
   creditosAprobados?: number;
+  creditosMatriculados?: number;
   creditosEnCurso?: number;
   creditosTotales?: number;
 }
