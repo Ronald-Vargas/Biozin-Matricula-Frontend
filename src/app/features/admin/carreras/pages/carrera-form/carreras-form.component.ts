@@ -10,6 +10,7 @@ function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CarreraService } from '../../services/carrera.service';
+import { Carrera } from '../../models/carrera.model';
 
 @Component({
   selector: 'app-carreras-form',
@@ -27,6 +28,7 @@ export class CarreraFormComponent implements OnInit {
   mensajeError = '';
   modoEdicion = false;
   idCarrera: number | null = null;
+  private carrerasExistentes: Carrera[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -43,6 +45,8 @@ export class CarreraFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.carreraService.getCarreras().subscribe(c => this.carrerasExistentes = c);
+
     const routeId = this.route.snapshot.paramMap.get('id');
     const id = this.carreraId ?? (routeId ? +routeId : null);
 
@@ -65,6 +69,17 @@ export class CarreraFormComponent implements OnInit {
   onSubmit(): void {
     this.mensajeError = '';
     if (this.carreraForm.valid) {
+      const { codigo, nombre } = this.carreraForm.value;
+      const otras = this.carrerasExistentes.filter(c => c.idCarrera !== this.idCarrera);
+      if (otras.some(c => c.codigo.toLowerCase() === codigo.trim().toLowerCase())) {
+        this.mensajeError = `Ya existe una carrera con el código "${codigo.trim()}".`;
+        return;
+      }
+      if (otras.some(c => c.nombre.toLowerCase() === nombre.trim().toLowerCase())) {
+        this.mensajeError = `Ya existe una carrera con el nombre "${nombre.trim()}".`;
+        return;
+      }
+
       if (this.modoEdicion && this.idCarrera !== null) {
         const carreraActualizada = { idCarrera: this.idCarrera, ...this.carreraForm.value, estado: true };
         this.carreraService.updateCarrera(carreraActualizada).subscribe({
@@ -80,10 +95,10 @@ export class CarreraFormComponent implements OnInit {
                 }
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo actualizar la carrera. Verifique que el código y nombre no estén duplicados.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al actualizar la carrera. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al actualizar la carrera. Intente nuevamente.'; }
         });
       } else {
         this.carreraService.createCarrera(this.carreraForm.value).subscribe({
@@ -96,10 +111,10 @@ export class CarreraFormComponent implements OnInit {
                 this.carreraCreada.emit();
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo crear la carrera. Verifique que el código y nombre no estén duplicados.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al crear la carrera. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al crear la carrera. Intente nuevamente.'; }
         });
       }
     }

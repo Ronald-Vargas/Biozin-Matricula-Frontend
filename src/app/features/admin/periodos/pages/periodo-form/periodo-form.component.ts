@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 
 function noSoloEspacios(control: AbstractControl): ValidationErrors | null {
@@ -47,7 +47,7 @@ function matriculaEnRangoPeriodo(): ValidatorFn {
 })
 
 
-export class PeriodoFormComponent implements OnChanges {
+export class PeriodoFormComponent implements OnChanges, OnInit {
 
   @Input() periodoEditar: Periodo | null = null;
   @Output() periodoCreado = new EventEmitter<void>();
@@ -56,6 +56,7 @@ export class PeriodoFormComponent implements OnChanges {
   periodoForm: FormGroup;
   mensajeExito = false;
   mensajeError = '';
+  private periodosExistentes: Periodo[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -74,6 +75,10 @@ export class PeriodoFormComponent implements OnChanges {
         matriculaEnRangoPeriodo()
       ]
     });
+  }
+
+  ngOnInit(): void {
+    this.periodoService.getPeriodos().subscribe(p => this.periodosExistentes = p);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,6 +103,13 @@ export class PeriodoFormComponent implements OnChanges {
   onSubmit(): void {
     this.mensajeError = '';
     if (this.periodoForm.valid) {
+      const nombre = this.periodoForm.value.nombre;
+      const otros = this.periodosExistentes.filter(p => p.idPeriodo !== this.periodoEditar?.idPeriodo);
+      if (otros.some(p => p.nombre.toLowerCase() === nombre.trim().toLowerCase())) {
+        this.mensajeError = `Ya existe un periodo con el nombre "${nombre.trim()}".`;
+        return;
+      }
+
       if (this.periodoEditar) {
         const periodoActualizado: Periodo = {
           ...this.periodoEditar,
@@ -112,10 +124,10 @@ export class PeriodoFormComponent implements OnChanges {
                 this.periodoActualizado.emit();
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo actualizar el periodo. Verifique que el nombre no esté duplicado.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al actualizar el periodo. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al actualizar el periodo. Intente nuevamente.'; }
         });
       } else {
         this.periodoService.createPeriodo(this.periodoForm.value).subscribe({
@@ -128,10 +140,10 @@ export class PeriodoFormComponent implements OnChanges {
                 this.periodoCreado.emit();
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo crear el periodo. Verifique que el nombre no esté duplicado.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al crear el periodo. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al crear el periodo. Intente nuevamente.'; }
         });
       }
     }

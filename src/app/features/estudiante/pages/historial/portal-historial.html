@@ -71,15 +71,15 @@
         <div
           class="tabla-fila"
           *ngFor="let curso of sem.cursos"
-          [ngClass]="'fila-' + curso.estado"
+          [ngClass]="'fila-' + getEstadoEfectivo(curso, i)"
         >
           <span class="col-codigo">{{ curso.codigo }}</span>
           <span class="col-nombre">{{ curso.nombre }}</span>
           <span class="col-creditos">{{ curso.creditos }}</span>
           <span class="col-nota">{{ curso.nota !== null ? curso.nota : '—' }}</span>
           <span class="col-estado">
-            <span class="estado-badge" [ngClass]="'badge-' + curso.estado">
-              {{ getEstadoLabel(curso.estado) }}
+            <span class="estado-badge" [ngClass]="'badge-' + getEstadoEfectivo(curso, i)">
+              {{ getEstadoLabel(getEstadoEfectivo(curso, i)) }}
             </span>
           </span>
         </div>

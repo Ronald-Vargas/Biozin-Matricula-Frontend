@@ -49,6 +49,17 @@ export class PortalHistorialComponent implements OnInit {
 
 
 
+  esPeriodoActual(index: number): boolean {
+    return index === 0;
+  }
+
+  getEstadoEfectivo(curso: CursoHistorial, semIndex: number): 'aprobado' | 'reprobado' | 'en_curso' {
+    if (curso.estado === 'en_curso' && !this.esPeriodoActual(semIndex)) {
+      return 'aprobado';
+    }
+    return curso.estado;
+  }
+
   getEstadoLabel(estado: string): string {
     if (estado === 'aprobado') return 'Aprobado';
     if (estado === 'reprobado') return 'Reprobado';

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Aula } from '../../models/aula.model';
@@ -14,7 +14,7 @@ import { AulaService } from '../../services/aula.service';
 })
 
 
-export class AulaFormComponent implements OnChanges {
+export class AulaFormComponent implements OnChanges, OnInit {
 
   @Input() aulaEditar: Aula | null = null;
   @Output() aulaCreada = new EventEmitter<void>();
@@ -24,6 +24,7 @@ export class AulaFormComponent implements OnChanges {
   mensajeExito = false;
   mensajeError = '';
   guardando = false;
+  private aulasExistentes: Aula[] = [];
 
   constructor(private fb: FormBuilder, private aulaService: AulaService) {
     this.aulaForm = this.fb.group({
@@ -33,6 +34,10 @@ export class AulaFormComponent implements OnChanges {
       descripcion: [''],
       activo: [true],
     });
+  }
+
+  ngOnInit(): void {
+    this.aulaService.getAulas().subscribe(a => this.aulasExistentes = a);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -51,8 +56,17 @@ export class AulaFormComponent implements OnChanges {
 
   onSubmit(): void {
     if (this.aulaForm.invalid) return;
-    this.guardando = true;
+    this.guardando = false;
     this.mensajeError = '';
+
+    const numeroAula = this.aulaForm.value.numeroAula;
+    const otras = this.aulasExistentes.filter(a => a.idAula !== this.aulaEditar?.idAula);
+    if (otras.some(a => a.numeroAula.toLowerCase() === numeroAula.trim().toLowerCase())) {
+      this.mensajeError = `Ya existe un aula con el número "${numeroAula.trim()}".`;
+      return;
+    }
+
+    this.guardando = true;
 
     if (this.aulaEditar) {
       const aulaActualizada: Aula = { ...this.aulaEditar, ...this.aulaForm.value };

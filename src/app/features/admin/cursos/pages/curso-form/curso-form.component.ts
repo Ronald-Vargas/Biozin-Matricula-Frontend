@@ -93,6 +93,14 @@ export class CursoFormComponent implements OnInit {
     this.mensajeError = '';
     if (this.cursoForm.valid) {
       const val = this.cursoForm.value;
+      if (this.cursosDisponibles.some(c => c.codigo.toLowerCase() === val.codigo.trim().toLowerCase())) {
+        this.mensajeError = `Ya existe un curso con el código "${val.codigo.trim()}".`;
+        return;
+      }
+      if (this.cursosDisponibles.some(c => c.nombre.toLowerCase() === val.nombre.trim().toLowerCase())) {
+        this.mensajeError = `Ya existe un curso con el nombre "${val.nombre.trim()}".`;
+        return;
+      }
       const precioLaboratorio = val.precioLaboratorio || 0;
       const idCursoRequisito = val.idCursoRequisito ? +val.idCursoRequisito : undefined;
       if (this.modoEdicion && this.idCurso !== null) {
@@ -110,10 +118,10 @@ export class CursoFormComponent implements OnInit {
                 }
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo actualizar el curso. Verifique que el código y nombre no estén duplicados.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al actualizar el curso. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al actualizar el curso. Intente nuevamente.'; }
         });
       } else {
         this.cursoService.createCurso({ ...val, precioLaboratorio, idCursoRequisito }).subscribe({
@@ -126,10 +134,10 @@ export class CursoFormComponent implements OnInit {
                 this.cursoCreado.emit();
               }, 2000);
             } else {
-              this.mensajeError = res.strMensajeRespuesta;
+              this.mensajeError = res.strMensajeRespuesta || 'No se pudo crear el curso. Verifique que el código y nombre no estén duplicados.';
             }
           },
-          error: () => { this.mensajeError = 'Error de conexión al crear el curso. Intente nuevamente.'; }
+          error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al crear el curso. Intente nuevamente.'; }
         });
       }
     }
