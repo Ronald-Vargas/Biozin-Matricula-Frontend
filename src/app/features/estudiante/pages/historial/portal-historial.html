@@ -38,7 +38,7 @@
       <div class="resumen-icon">🗓️</div>
       <div class="resumen-info">
         <span class="resumen-value">{{ semestres.length }}</span>
-        <span class="resumen-label">Semestres Cursados</span>
+        <span class="resumen-label">Periodos Cursados</span>
       </div>
     </div>
   </div>
@@ -54,16 +54,9 @@
         <div class="semestre-titulo">
           <span class="semestre-icon">📅</span>
           <div>
-            <span class="semestre-label">{{ sem.label }}</span>
+            <span class="semestre-label">{{ getSemestreLabel(sem.label) }}</span>
             <span class="semestre-periodo">{{ sem.periodo }}</span>
           </div>
-        </div>
-        <div class="semestre-promedio" *ngIf="sem.promedio !== null">
-          <span class="promedio-valor">{{ sem.promedio }}</span>
-          <span class="promedio-label">Promedio</span>
-        </div>
-        <div class="semestre-promedio en-curso" *ngIf="sem.promedio === null">
-          <span class="en-curso-badge">En curso</span>
         </div>
       </div>
 
@@ -83,9 +76,7 @@
           <span class="col-codigo">{{ curso.codigo }}</span>
           <span class="col-nombre">{{ curso.nombre }}</span>
           <span class="col-creditos">{{ curso.creditos }}</span>
-          <span class="col-nota" [ngClass]="getNotaClass(curso)">
-            {{ curso.nota !== null ? curso.nota : '—' }}
-          </span>
+          <span class="col-nota">{{ curso.nota !== null ? curso.nota : '—' }}</span>
           <span class="col-estado">
             <span class="estado-badge" [ngClass]="'badge-' + curso.estado">
               {{ getEstadoLabel(curso.estado) }}

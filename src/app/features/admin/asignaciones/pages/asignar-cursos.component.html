@@ -39,7 +39,7 @@
     <div *ngIf="carreraSeleccionada" class="cursos-container">
       <p class="info-text">
         Selecciona los cursos que pertenecen a <strong>{{ carreraSeleccionada?.nombre }}</strong>
-        e indica en qué semestre se cursan.
+        e indica en qué periodo se cursan.
       </p>
 
       <div *ngIf="cargandoAsignaciones" class="loading-text">
@@ -62,7 +62,7 @@
 
           <div class="curso-config" *ngIf="estaSeleccionado(curso.idCurso)">
             <div class="config-item">
-              <label>Semestre:</label>
+              <label>Periodo:</label>
               <input
                 type="number"
                 [value]="getSemestre(curso.idCurso)"

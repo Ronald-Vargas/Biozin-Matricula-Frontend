@@ -47,17 +47,15 @@ export class PortalHistorialComponent implements OnInit {
     return this.semestres.flatMap((s) => s.cursos).filter((c) => c.estado === 'aprobado').length;
   }
 
-  getNotaClass(curso: CursoHistorial): string {
-    if (curso.estado === 'en_curso') return 'nota-en-curso';
-    if (!curso.nota) return '';
-    if (curso.nota >= 80) return 'nota-alta';
-    if (curso.nota >= 70) return 'nota-media';
-    return 'nota-baja';
-  }
+
 
   getEstadoLabel(estado: string): string {
     if (estado === 'aprobado') return 'Aprobado';
     if (estado === 'reprobado') return 'Reprobado';
     return 'En curso';
+  }
+
+  getSemestreLabel(label: string): string {
+    return label.replace(/Semestre/gi, 'Periodo');
   }
 }
