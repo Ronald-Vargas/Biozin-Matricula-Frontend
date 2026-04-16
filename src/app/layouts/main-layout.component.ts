@@ -101,6 +101,7 @@ export class MainLayoutComponent {
   }
 
 
+  mobileOpen = false;
   showSettingsMenu = false;
 
   get isAdmin(): boolean {
@@ -119,11 +120,20 @@ export class MainLayoutComponent {
           this.currentView = 'student';
         }
         this.showSettingsMenu = false;
+        this.mobileOpen = false;
       });
   }
 
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+
+  toggleMobileSidebar(): void {
+    this.mobileOpen = !this.mobileOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileOpen = false;
   }
 
   toggleSettingsMenu(): void {

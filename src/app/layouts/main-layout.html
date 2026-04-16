@@ -1,7 +1,10 @@
 <div class="app-container" [class.sidebar-collapsed]="sidebarCollapsed">
 
+  <!-- Overlay mobile -->
+  <div class="sidebar-overlay" *ngIf="mobileOpen" (click)="closeMobileMenu()"></div>
+
   <!-- ══════ SIDEBAR ══════ -->
-  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-open]="mobileOpen">
 
 
     <!-- Header -->
@@ -66,9 +69,12 @@
 
     <!-- Top Header -->
     <header class="top-header">
-      <div class="breadcrumb">
-        <span>🏠</span>
-        <span>/ {{ currentPageTitle }}</span>
+      <div class="header-left">
+        <button class="hamburger-btn" (click)="toggleMobileSidebar()" title="Menú">☰</button>
+        <div class="breadcrumb">
+          <span>🏠</span>
+          <span>/ {{ currentPageTitle }}</span>
+        </div>
       </div>
       <div class="header-right">
         <span class="header-date">{{ today | date:'d \'de\' MMMM, yyyy' }}</span>
