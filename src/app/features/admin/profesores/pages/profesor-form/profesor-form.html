@@ -20,11 +20,11 @@
       <h3 class="form-section-title">👤 Información Personal</h3>
       <div class="form-grid">
         <div class="form-group">
-          <label>Cédula *</label>
+          <label>Identificación *</label>
           <input type="text" formControlName="cedula" placeholder="1-0123-0456"
             [class.invalid]="cedula?.invalid && cedula?.touched" />
           <div class="error-message" *ngIf="cedula?.invalid && cedula?.touched">
-            <span *ngIf="cedula?.errors?.['required']">La cédula es requerida</span>
+            <span *ngIf="cedula?.errors?.['required']">La identificación es requerida</span>
             <span *ngIf="cedula?.errors?.['maxlength']">Máximo 11 caracteres</span>
           </div>
         </div>

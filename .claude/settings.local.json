@@ -3,7 +3,8 @@
     "allow": [
       "Bash(node_modules/.bin/tsc --noEmit)",
       "Bash(echo \"EXIT:$?\")",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(grep -l \"Authorize\" c:/Biozin/BiozinMatricula/Biozin-Matricula-Backend/Biozin-Matricula.API/Controladores/*.cs)"
     ]
   }
 }

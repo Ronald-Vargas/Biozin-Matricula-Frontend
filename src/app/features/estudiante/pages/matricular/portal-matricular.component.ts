@@ -28,7 +28,7 @@ export class PortalMatricularComponent implements OnInit {
     this.portalService.getOfertas().subscribe({
       next: (res) => {
         this.cargando = false;
-        if (!res.blnError) {
+        if (!res.blnError && res.valorRetorno) {
           this.oferta = (res.valorRetorno.ofertas ?? []).map(o => ({
             idOferta: o.idOferta,
             codigoCurso: o.codigo,

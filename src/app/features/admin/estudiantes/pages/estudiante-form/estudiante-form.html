@@ -14,10 +14,10 @@
       <div class="form-grid">
 
         <div class="form-group">
-          <label>Cédula *</label>
+          <label>Identificación *</label>
           <input type="text" formControlName="cedula" [class.invalid]="isInvalid('cedula')" placeholder="1-1234-5678" />
           <div class="error-message" *ngIf="isInvalid('cedula')">
-            <span *ngIf="f('cedula').errors?.['required']">La cédula es obligatoria.</span>
+            <span *ngIf="f('cedula').errors?.['required']">La identificación es obligatoria.</span>
             <span *ngIf="f('cedula').errors?.['maxlength']">Máximo 20 caracteres.</span>
           </div>
         </div>
