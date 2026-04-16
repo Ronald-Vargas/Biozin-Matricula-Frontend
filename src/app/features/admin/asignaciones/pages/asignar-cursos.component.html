@@ -46,8 +46,17 @@
         Cargando asignaciones...
       </div>
 
+      <div class="curso-search-box" *ngIf="!cargandoAsignaciones">
+        <span class="curso-search-icon">🔍</span>
+        <input
+          type="text"
+          class="curso-search-input"
+          placeholder="Buscar curso por nombre o código..."
+          [(ngModel)]="filtroCurso">
+      </div>
+
       <div class="cursos-list" *ngIf="!cargandoAsignaciones">
-        <div class="curso-item" *ngFor="let curso of cursos$ | async">
+        <div class="curso-item" *ngFor="let curso of cursosFiltrados">
           <div class="curso-checkbox">
             <input
               type="checkbox"

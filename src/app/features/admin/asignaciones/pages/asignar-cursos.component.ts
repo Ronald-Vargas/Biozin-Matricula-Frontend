@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Carrera } from '../../carreras/models/carrera.model';
 import { CarreraService } from '../../carreras/services/carrera.service';
 import { Curso } from '../../cursos/models/curso.model';
@@ -13,7 +14,7 @@ import { AsignacionService } from '../services/asignacion.service';
 
 @Component({
   selector: 'app-asignar-cursos',
-  imports: [AsyncPipe, CommonModule],
+  imports: [AsyncPipe, CommonModule, FormsModule],
   templateUrl: './asignar-cursos.component.html',
   styleUrls: ['./asignar-cursos.component.scss']
 })
@@ -24,6 +25,7 @@ export class AsignarCursosComponent implements OnInit {
   cursosList: Curso[] = [];
   carreraSeleccionada?: Carrera;
   cursosConfig: Map<number, { seleccionado: boolean; semestre: number }> = new Map();
+  filtroCurso = '';
   mensajeExito = false;
   mensajeError = false;
   erroresPrerequisitos: string[] = [];
@@ -75,6 +77,15 @@ export class AsignarCursosComponent implements OnInit {
         this.cargandoAsignaciones = false;
       }
     });
+  }
+
+  get cursosFiltrados(): Curso[] {
+    const termino = this.filtroCurso.toLowerCase().trim();
+    if (!termino) return this.cursosList;
+    return this.cursosList.filter(c =>
+      c.nombre.toLowerCase().includes(termino) ||
+      c.codigo.toLowerCase().includes(termino)
+    );
   }
 
   toggleCurso(cursoId: number): void {
