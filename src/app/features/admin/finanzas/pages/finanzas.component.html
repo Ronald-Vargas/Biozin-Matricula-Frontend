@@ -1,0 +1,288 @@
+<div class="finanzas-container">
+
+  <!-- Banner -->
+  <div class="module-banner">
+    <div class="module-banner-content">
+      <div>
+        <h1 class="module-title">💰 Finanzas</h1>
+        <p class="module-subtitle">Ingresos y pagos por período académico</p>
+      </div>
+      <div class="banner-controls">
+        <select class="periodo-select" [(ngModel)]="selectedPeriodoId" (ngModelChange)="onPeriodoChange()">
+          <option value="actual">Período Actual</option>
+          <option *ngFor="let p of periodos" [value]="p.idPeriodo">{{ p.nombre }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-row">
+    <button class="filter-btn" [class.active]="vistaActual === 'resumen'" (click)="cambiarVista('resumen')">
+      📊 Resumen
+    </button>
+    <button class="filter-btn" [class.active]="vistaActual === 'detalles'" (click)="cambiarVista('detalles')">
+      📋 Detalles de Pagos
+    </button>
+    <button class="filter-btn" [class.active]="vistaActual === 'historico'" (click)="cambiarVista('historico')">
+      📅 Histórico
+    </button>
+  </div>
+
+  <!-- ── RESUMEN ── -->
+  <ng-container *ngIf="vistaActual === 'resumen'">
+
+    <div *ngIf="cargandoResumen" class="section loading-state">
+      <div class="spinner"></div>
+      <p>Cargando resumen financiero...</p>
+    </div>
+
+    <div *ngIf="!cargandoResumen && !resumen" class="section empty-state">
+      <div class="empty-icon">📊</div>
+      <p>No hay datos financieros para el período seleccionado.</p>
+    </div>
+
+    <ng-container *ngIf="!cargandoResumen && resumen">
+
+      <!-- Stat Cards -->
+      <div class="stats-grid">
+        <div class="stat-card" [style.--accent-color]="'#10b981'" style="animation-delay: 0s">
+          <div class="stat-header">
+            <div class="stat-info">
+              <span class="stat-value">₡{{ resumen.totalRecaudado | number:'1.0-0' }}</span>
+              <span class="stat-label">Total Recaudado</span>
+              <span class="stat-change">{{ resumen.cantidadPagados }} pagos completados</span>
+            </div>
+            <div class="stat-icon-wrapper">
+              <span class="stat-icon">✅</span>
+            </div>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+
+        <div class="stat-card" [style.--accent-color]="'#f59e0b'" style="animation-delay: 0.1s">
+          <div class="stat-header">
+            <div class="stat-info">
+              <span class="stat-value">₡{{ resumen.totalPendiente | number:'1.0-0' }}</span>
+              <span class="stat-label">Pendiente</span>
+              <span class="stat-change stat-change-warn">{{ resumen.cantidadPendientes }} pagos por cobrar</span>
+            </div>
+            <div class="stat-icon-wrapper">
+              <span class="stat-icon">⏳</span>
+            </div>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+
+        <div class="stat-card" [style.--accent-color]="'#ef4444'" style="animation-delay: 0.2s">
+          <div class="stat-header">
+            <div class="stat-info">
+              <span class="stat-value">₡{{ resumen.totalVencido | number:'1.0-0' }}</span>
+              <span class="stat-label">Vencido</span>
+              <span class="stat-change stat-change-danger">{{ resumen.cantidadVencidos }} pagos vencidos</span>
+            </div>
+            <div class="stat-icon-wrapper">
+              <span class="stat-icon">❌</span>
+            </div>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+
+        <div class="stat-card" [style.--accent-color]="'#06b6d4'" style="animation-delay: 0.3s">
+          <div class="stat-header">
+            <div class="stat-info">
+              <span class="stat-value">{{ resumen.totalMatriculas }}</span>
+              <span class="stat-label">Matrículas</span>
+              <span class="stat-change">en {{ resumen.nombrePeriodo }}</span>
+            </div>
+            <div class="stat-icon-wrapper">
+              <span class="stat-icon">🎓</span>
+            </div>
+          </div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- Distribución -->
+      <div class="section distribution-section">
+        <h2 class="section-title">
+          <span class="section-icon">📈</span>
+          Distribución de Ingresos — {{ resumen.nombrePeriodo }}
+        </h2>
+        <div class="chart-bar-container">
+          <div class="chart-item">
+            <div class="chart-label">Recaudado</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar chart-bar-green"
+                   [style.--bar-width]="getBarWidth(resumen.totalRecaudado, totalGeneral) + '%'">
+              </div>
+            </div>
+            <div class="chart-value chart-value-green">{{ getBarWidth(resumen.totalRecaudado, totalGeneral) }}%</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Pendiente</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar chart-bar-warn"
+                   [style.--bar-width]="getBarWidth(resumen.totalPendiente, totalGeneral) + '%'">
+              </div>
+            </div>
+            <div class="chart-value chart-value-warn">{{ getBarWidth(resumen.totalPendiente, totalGeneral) }}%</div>
+          </div>
+          <div class="chart-item">
+            <div class="chart-label">Vencido</div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar chart-bar-danger"
+                   [style.--bar-width]="getBarWidth(resumen.totalVencido, totalGeneral) + '%'">
+              </div>
+            </div>
+            <div class="chart-value chart-value-danger">{{ getBarWidth(resumen.totalVencido, totalGeneral) }}%</div>
+          </div>
+        </div>
+        <div class="dist-totals">
+          <span class="dist-total-item total-green">₡{{ resumen.totalRecaudado | number:'1.2-2' }} recaudado</span>
+          <span class="dist-total-item total-warn">₡{{ resumen.totalPendiente | number:'1.2-2' }} pendiente</span>
+          <span class="dist-total-item total-danger">₡{{ resumen.totalVencido | number:'1.2-2' }} vencido</span>
+        </div>
+      </div>
+
+    </ng-container>
+  </ng-container>
+
+  <!-- ── DETALLES ── -->
+  <ng-container *ngIf="vistaActual === 'detalles'">
+    <div class="section">
+
+      <!-- Buscador -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input"
+               placeholder="Buscar por estudiante, carnet o concepto..."
+               [(ngModel)]="filtroBusqueda" />
+      </div>
+
+      <!-- Filtros -->
+      <div class="filter-row">
+        <div class="filter-buttons">
+          <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtroEstado = 'todos'">Todos</button>
+          <button class="filter-btn" [class.active]="filtroEstado === 'pagado'" (click)="filtroEstado = 'pagado'">✅ Pagados</button>
+          <button class="filter-btn" [class.active]="filtroEstado === 'pendiente'" (click)="filtroEstado = 'pendiente'">⏳ Pendientes</button>
+          <button class="filter-btn" [class.active]="filtroEstado === 'vencido'" (click)="filtroEstado = 'vencido'">❌ Vencidos</button>
+        </div>
+        <span class="results-count">
+          Total: <strong>₡{{ totalDetallesFiltrados | number:'1.2-2' }}</strong>
+        </span>
+      </div>
+
+      <div *ngIf="cargandoDetalles" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando detalles...</p>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-container" *ngIf="!cargandoDetalles">
+        <table class="pagos-table">
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Carnet</th>
+              <th>Concepto</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Vencimiento</th>
+              <th>Fecha Pago</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="detallesFiltrados.length === 0">
+              <td colspan="7" class="empty-state">
+                <div class="empty-icon">📭</div>
+                <p>No hay pagos que coincidan con los filtros</p>
+              </td>
+            </tr>
+            <tr *ngFor="let pago of detallesFiltrados; let i = index"
+                class="table-row" [style.animation-delay]="(i * 0.04) + 's'">
+              <td>
+                <div class="student-info">
+                  <div class="student-avatar">{{ getIniciales(pago.nombreEstudiante) }}</div>
+                  <span class="student-name">{{ pago.nombreEstudiante }}</span>
+                </div>
+              </td>
+              <td><strong class="student-carnet">{{ pago.carnetEstudiante }}</strong></td>
+              <td class="concepto-cell">{{ pago.concepto }}</td>
+              <td><strong class="monto-value">₡{{ pago.monto | number:'1.2-2' }}</strong></td>
+              <td>
+                <span class="status-badge" [ngClass]="getEstadoClass(pago.estado)">
+                  {{ getEstadoLabel(pago.estado) }}
+                </span>
+              </td>
+              <td class="date-cell">{{ pago.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+              <td class="date-cell">{{ pago.fechaPago ? (pago.fechaPago | date:'dd/MM/yyyy') : '—' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer" *ngIf="!cargandoDetalles && detallesFiltrados.length > 0">
+        <span class="results-count">
+          Mostrando {{ detallesFiltrados.length }} de {{ detalles.length }} pagos
+        </span>
+      </div>
+
+    </div>
+  </ng-container>
+
+  <!-- ── HISTÓRICO ── -->
+  <ng-container *ngIf="vistaActual === 'historico'">
+
+    <div *ngIf="cargandoTodos" class="section loading-state">
+      <div class="spinner"></div>
+      <p>Cargando histórico de períodos...</p>
+    </div>
+
+    <div *ngIf="!cargandoTodos && resumenTodos.length === 0" class="section empty-state">
+      <div class="empty-icon">📅</div>
+      <p>No hay períodos registrados.</p>
+    </div>
+
+    <div class="section" *ngIf="!cargandoTodos && resumenTodos.length > 0">
+      <h2 class="section-title">
+        <span class="section-icon">📅</span>
+        Resumen Histórico por Período
+      </h2>
+
+      <div class="chart-bar-container">
+        <div class="historico-item" *ngFor="let r of resumenTodos; let i = index"
+             [style.animation-delay]="(i * 0.06) + 's'">
+          <div class="historico-header">
+            <span class="historico-nombre">{{ r.nombrePeriodo }}</span>
+            <div class="historico-badges">
+              <span class="status-badge active">🎓 {{ r.totalMatriculas }} matrículas</span>
+              <span class="status-badge badge-success">₡{{ r.totalRecaudado | number:'1.0-0' }}</span>
+              <span class="status-badge badge-warn" *ngIf="r.totalPendiente > 0">₡{{ r.totalPendiente | number:'1.0-0' }} pend.</span>
+              <span class="status-badge badge-danger" *ngIf="r.totalVencido > 0">₡{{ r.totalVencido | number:'1.0-0' }} venc.</span>
+            </div>
+          </div>
+          <div class="historico-bar-stack">
+            <div class="chart-bar-wrapper full-width">
+              <div class="chart-bar chart-bar-green"
+                   [style.--bar-width]="getBarWidth(r.totalRecaudado, r.totalRecaudado + r.totalPendiente + r.totalVencido) + '%'">
+              </div>
+            </div>
+            <div class="chart-bar-wrapper full-width" *ngIf="r.totalPendiente > 0">
+              <div class="chart-bar chart-bar-warn"
+                   [style.--bar-width]="getBarWidth(r.totalPendiente, r.totalRecaudado + r.totalPendiente + r.totalVencido) + '%'">
+              </div>
+            </div>
+            <div class="chart-bar-wrapper full-width" *ngIf="r.totalVencido > 0">
+              <div class="chart-bar chart-bar-danger"
+                   [style.--bar-width]="getBarWidth(r.totalVencido, r.totalRecaudado + r.totalPendiente + r.totalVencido) + '%'">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

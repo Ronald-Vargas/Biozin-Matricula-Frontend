@@ -84,6 +84,11 @@ export const routes: Routes = [
             loadChildren: () =>
               import('./features/admin/aulas/aulas.routes').then((m) => m.AULAS_ROUTES),
           },
+          {
+            path: 'finanzas',
+            loadChildren: () =>
+              import('./features/admin/finanzas/finanzas.routes').then((m) => m.FINANZAS_ROUTES),
+          },
         ],
       },
       // ── Rutas de Estudiante (cualquier usuario autenticado)

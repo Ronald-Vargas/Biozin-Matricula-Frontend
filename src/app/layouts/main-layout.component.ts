@@ -68,6 +68,12 @@ export class MainLayoutComponent {
         { path: '/estudiantes', label: 'Lista Estudiantes', icon: '👨‍🎓' },
       ],
     },
+    {
+      title: 'Finanzas',
+      items: [
+        { path: '/finanzas', label: 'Finanzas', icon: '💰' },
+      ],
+    },
   ];
 
   studentSections: MenuSection[] = [
