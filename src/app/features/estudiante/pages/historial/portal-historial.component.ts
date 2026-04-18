@@ -37,14 +37,15 @@ export class PortalHistorialComponent implements OnInit {
   }
 
   get totalCreditosAprobados(): number {
-    return this.semestres
-      .flatMap((s) => s.cursos)
-      .filter((c) => c.estado === 'aprobado')
-      .reduce((acc, c) => acc + c.creditos, 0);
+    return this.semestres.reduce((acc, s, i) =>
+      acc + s.cursos
+        .filter(c => this.getEstadoEfectivo(c, i) === 'aprobado')
+        .reduce((sum, c) => sum + c.creditos, 0), 0);
   }
 
   get totalCursosAprobados(): number {
-    return this.semestres.flatMap((s) => s.cursos).filter((c) => c.estado === 'aprobado').length;
+    return this.semestres.reduce((acc, s, i) =>
+      acc + s.cursos.filter(c => this.getEstadoEfectivo(c, i) === 'aprobado').length, 0);
   }
 
 

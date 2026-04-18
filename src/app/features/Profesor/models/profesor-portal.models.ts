@@ -32,6 +32,8 @@ export interface EstudianteEnCurso {
   emailInstitucional: string;
   nota?: number;
   estado: string;
+  creditosAprobados?: number;
+  creditosTotales?: number;
 }
 
 export interface AsignarNotaRequest {

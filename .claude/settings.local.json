@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(dotnet build *)",
-      "Bash(npx ng *)"
+      "Bash(npx ng *)",
+      "Bash(find /c/Biozin/BiozinMatricula/Biozin-Matricula-Backend -name \"*.sql\" -exec cat {} \\\\;)"
     ]
   }
 }
