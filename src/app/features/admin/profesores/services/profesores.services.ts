@@ -57,18 +57,10 @@ export class ProfesorService {
       .pipe(tap(() => this.cargarProfesores()));
   }
 
-  toggleEstado(id: number): void {
-    const profesores = this.profesoresSubject.getValue();
-    const profesor = profesores.find(c => c.idProfesor === id);
-    if (profesor) {
-      const updated = { ...profesor, estado: !profesor.estado };
-      this.updateProfesor(updated).subscribe({
-        error: () => {
-          // Revertir el cambio local si el servidor falla
-          this.cargarProfesores();
-        }
-      });
-    }
+  toggleEstado(id: number): Observable<Respuesta<number>> {
+    const profesor = this.profesoresSubject.getValue().find(c => c.idProfesor === id);
+    const updated = { ...profesor!, estado: !profesor!.estado };
+    return this.updateProfesor(updated);
   }
 
   getProfesoresActivos(): Observable<Profesor[]> {

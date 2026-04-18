@@ -1,0 +1,109 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <a class="back-link" routerLink="/profesor/mis-cursos">← Mis Cursos</a>
+    <div class="header-text">
+      <h1 class="page-title">Lista de Estudiantes</h1>
+      <p class="page-subtitle">Gestión de notas del curso</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner"></span>
+    <p>Cargando estudiantes...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="empty-state" *ngIf="!cargando && error">
+    <span class="empty-icon">⚠️</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Sin estudiantes -->
+  <div class="empty-state" *ngIf="!cargando && !error && estudiantes.length === 0">
+    <span class="empty-icon">👥</span>
+    <p>Este curso no tiene estudiantes matriculados.</p>
+  </div>
+
+  <!-- Tabla de estudiantes -->
+  <div class="table-wrapper" *ngIf="!cargando && !error && estudiantes.length > 0">
+    <div class="table-header-info">
+      <span class="total-badge">{{ estudiantes.length }} estudiante(s)</span>
+    </div>
+
+    <table class="students-table">
+      <thead>
+        <tr>
+          <th>Carnet</th>
+          <th>Estudiante</th>
+          <th>Correo</th>
+          <th class="col-nota">Nota</th>
+          <th class="col-estado">Estado</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let est of estudiantes" [class.row-editing]="est.notaEditando">
+
+          <td class="carnet-cell">{{ est.carnet }}</td>
+
+          <td class="nombre-cell">
+            <div class="nombre-completo">{{ est.apellidoPaterno }} {{ est.apellidoMaterno }} {{ est.nombre }}</div>
+          </td>
+
+          <td class="email-cell">{{ est.emailInstitucional }}</td>
+
+          <!-- Nota -->
+          <td class="nota-cell">
+            <ng-container *ngIf="!est.notaEditando">
+              <span class="nota-valor" [class.nota-vacia]="est.nota == null">
+                {{ est.nota != null ? est.nota : '—' }}
+              </span>
+            </ng-container>
+            <ng-container *ngIf="est.notaEditando">
+              <input
+                class="nota-input"
+                type="number"
+                min="0" max="100" step="0.5"
+                [(ngModel)]="est.notaTemporal"
+                (keyup.enter)="guardarNota(est)"
+                (keyup.escape)="cancelarEdicion(est)"
+                autofocus
+              />
+            </ng-container>
+          </td>
+
+          <!-- Estado -->
+          <td class="estado-cell">
+            <span class="estado-badge" [class]="estadoClass(est.estado)">
+              {{ estadoLabel(est.estado) }}
+            </span>
+          </td>
+
+          <!-- Acciones -->
+          <td class="acciones-cell">
+            <ng-container *ngIf="!est.notaEditando">
+              <button class="btn-editar" (click)="iniciarEdicion(est)" title="Asignar nota">
+                ✏️ Asignar nota
+              </button>
+              <span class="mensaje-guardado success" *ngIf="est.mensajeGuardado">{{ est.mensajeGuardado }}</span>
+            </ng-container>
+            <ng-container *ngIf="est.notaEditando">
+              <div class="acciones-edicion">
+                <button class="btn-guardar" (click)="guardarNota(est)" [disabled]="est.guardando">
+                  <span *ngIf="!est.guardando">✓ Guardar</span>
+                  <span *ngIf="est.guardando">Guardando...</span>
+                </button>
+                <button class="btn-cancelar" (click)="cancelarEdicion(est)" [disabled]="est.guardando">✕</button>
+              </div>
+              <span class="mensaje-guardado error" *ngIf="est.mensajeGuardado && est.mensajeGuardado.startsWith('⚠')">{{ est.mensajeGuardado }}</span>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { adminGuard, authGuard } from './core/guards/auth.guard';
+import { adminGuard, authGuard, profesorGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   // ── Login
@@ -92,6 +92,13 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadChildren: () =>
           import('./features/estudiante/portal.routes').then((m) => m.PORTAL_ROUTES),
+      },
+      // ── Rutas de Profesor
+      {
+        path: 'profesor',
+        canActivate: [profesorGuard],
+        loadChildren: () =>
+          import('./features/Profesor/profesor.routes').then((m) => m.PROFESOR_ROUTES),
       },
     ],
   },

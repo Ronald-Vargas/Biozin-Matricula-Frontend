@@ -57,17 +57,10 @@ export class PeriodoService {
       .pipe(tap(() => this.cargarPeriodos()));
   }
 
-  toggleEstado(id: number): void {
-    const periodos = this.periodosSubject.getValue();
-    const periodo = periodos.find(c => c.idPeriodo === id);
-    if (periodo) {
-      const updated = { ...periodo, estadoMatricula: !periodo.estadoMatricula };
-      this.updatePeriodo(updated).subscribe({
-        error: () => {
-          this.cargarPeriodos();
-        }
-      });
-    }
+  toggleEstado(id: number): Observable<Respuesta<number>> {
+    const periodo = this.periodosSubject.getValue().find(c => c.idPeriodo === id);
+    const updated = { ...periodo!, estadoMatricula: !periodo!.estadoMatricula };
+    return this.updatePeriodo(updated);
   }
 
   getPeriodosActivos():  Observable<Periodo[]> {

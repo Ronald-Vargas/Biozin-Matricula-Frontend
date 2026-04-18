@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Aula } from '../../models/aula.model';
 import { AulaService } from '../../services/aula.service';
 import { AulaFormComponent } from '../aula-form/aula-form.component';
+import { ToastService } from '../../../../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-aulas-list',
@@ -24,7 +25,7 @@ export class AulasListComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription;
 
-  constructor(private aulaService: AulaService) {}
+  constructor(private aulaService: AulaService, private toast: ToastService) {}
 
   ngOnInit(): void {
     this.sub = this.aulaService.getAulas().subscribe(aulas => {
@@ -75,8 +76,10 @@ export class AulasListComponent implements OnInit, OnDestroy {
     this.aulaSeleccionada = null;
   }
 
-   toggleEstado(idAula: number): void {
-    this.aulaService.toggleEstado(idAula);
+  toggleEstado(idAula: number): void {
+    this.aulaService.toggleEstado(idAula).subscribe(res => {
+      if (res.blnError) this.toast.show(res.strMensajeRespuesta);
+    });
   }
 
   getToggleButtonConfig(estado: boolean): { icon: string; tooltip: string } {

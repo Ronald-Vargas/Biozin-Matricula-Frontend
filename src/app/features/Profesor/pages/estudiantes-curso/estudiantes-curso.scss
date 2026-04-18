@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #0f172a;
+  --text-light: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+.page-container { padding: 0; animation: fadeIn 0.4s ease-out; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.page-header { margin-bottom: 1.75rem; }
+.back-link { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; display: inline-block; margin-bottom: 0.75rem; transition: color 0.2s; }
+.back-link:hover { color: var(--accent); }
+.page-title { font-size: 1.75rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+.page-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+.loading-state, .empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 4rem; gap: 1rem; color: var(--text-muted); text-align: center;
+  background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+}
+.empty-icon { font-size: 3rem; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.table-wrapper { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border); overflow: hidden; }
+
+.table-header-info { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 1rem; }
+.total-badge { font-size: 0.82rem; font-weight: 600; color: var(--text-light); background: var(--bg); padding: 0.25rem 0.75rem; border-radius: 20px; }
+
+.students-table {
+  width: 100%; border-collapse: collapse;
+}
+.students-table thead { background: var(--bg); }
+.students-table th {
+  padding: 0.8rem 1rem; text-align: left; font-size: 0.78rem; font-weight: 700;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.students-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.students-table tbody tr:last-child td { border-bottom: none; }
+.students-table tbody tr { transition: background 0.2s; }
+.students-table tbody tr:hover { background: #f8fafc; }
+.students-table tbody tr.row-editing { background: color-mix(in srgb, var(--accent) 5%, transparent); }
+
+.carnet-cell { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.nombre-cell { min-width: 160px; }
+.nombre-completo { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.email-cell { font-size: 0.82rem; color: var(--text-light); }
+
+.col-nota, .nota-cell { width: 100px; text-align: center; }
+.nota-valor { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+.nota-vacia { color: var(--text-muted); font-size: 1rem; }
+.nota-input {
+  width: 80px; padding: 0.4rem 0.5rem; border: 2px solid var(--accent); border-radius: var(--radius-sm);
+  text-align: center; font-size: 1rem; font-weight: 700; outline: none;
+  background: white; color: var(--text);
+}
+
+.col-estado, .estado-cell { width: 110px; }
+.estado-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 20px; white-space: nowrap; }
+.estado-aprobado { background: color-mix(in srgb, var(--success) 15%, transparent); color: var(--success); }
+.estado-reprobado { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
+.estado-curso { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
+
+.col-acciones, .acciones-cell { width: 180px; }
+.acciones-edicion { display: flex; gap: 0.4rem; }
+
+.btn-editar {
+  padding: 0.4rem 0.8rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.8rem; font-weight: 600; color: var(--text-light); cursor: pointer; transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-editar:hover { background: white; border-color: var(--accent); color: var(--accent); }
+
+.btn-guardar {
+  padding: 0.4rem 0.8rem; background: var(--success); color: white; border: none;
+  border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-guardar:hover:not(:disabled) { background: #059669; }
+.btn-guardar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-cancelar {
+  padding: 0.4rem 0.7rem; background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+}
+.btn-cancelar:hover { background: var(--bg); color: var(--danger); border-color: var(--danger); }
+
+.mensaje-guardado { font-size: 0.78rem; font-weight: 600; display: block; margin-top: 0.25rem; }
+.mensaje-guardado.success { color: var(--success); }
+.mensaje-guardado.error { color: var(--danger); }
+
+@media (max-width: 900px) {
+  .email-cell { display: none; }
+  .students-table th:nth-child(3) { display: none; }
+}
+@media (max-width: 640px) {
+  .students-table th, .students-table td { padding: 0.6rem 0.6rem; }
+  .col-acciones, .acciones-cell { width: auto; }
+}

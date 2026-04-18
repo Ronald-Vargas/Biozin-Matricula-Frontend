@@ -24,3 +24,17 @@ export const adminGuard: CanActivateFn = () => {
   return true;
 };
 
+export const profesorGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  if (!auth.isLoggedIn()) {
+    router.navigate(['/']);
+    return false;
+  }
+  if (auth.getRole() !== 'profesor') {
+    router.navigate(['/']);
+    return false;
+  }
+  return true;
+};
+

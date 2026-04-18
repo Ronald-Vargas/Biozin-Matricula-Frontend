@@ -65,6 +65,7 @@
           <span>Código</span>
           <span>Nombre</span>
           <span>Créditos</span>
+          <span class="col-nota-header">Nota</span>
           <span>Estado</span>
         </div>
         <div
@@ -75,6 +76,12 @@
           <span class="col-codigo">{{ curso.codigo }}</span>
           <span class="col-nombre">{{ curso.nombre }}</span>
           <span class="col-creditos">{{ curso.creditos }}</span>
+          <span class="col-nota">
+            <span *ngIf="curso.nota != null" class="nota-valor" [ngClass]="getNotaClass(curso.nota)">
+              {{ curso.nota }}
+            </span>
+            <span *ngIf="curso.nota == null" class="nota-pendiente">—</span>
+          </span>
           <span class="col-estado">
             <span class="estado-badge" [ngClass]="'badge-' + getEstadoEfectivo(curso, i)">
               {{ getEstadoLabel(getEstadoEfectivo(curso, i)) }}

@@ -83,7 +83,8 @@ export class OfertaAcademicaListComponent implements OnInit {
     return this.profesores.find(p => p.idProfesor === idProfesor) ?? null;
   }
 
-  getAulaDeOferta(idAula: number): import('../../../aulas/models/aula.model').Aula | null {
+  getAulaDeOferta(idAula: number | null): import('../../../aulas/models/aula.model').Aula | null {
+    if (!idAula) return null;
     return this.aulas.find(a => a.idAula === idAula) ?? null;
   }
 
@@ -105,7 +106,8 @@ export class OfertaAcademicaListComponent implements OnInit {
     return `${p.nombre} ${p.apellidoPaterno} ${p.apellidoMaterno}`.trim();
   }
 
-  getNombreAula(idAula: number): string {
+  getNombreAula(idAula: number | null): string {
+    if (!idAula) return 'Virtual';
     return this.aulas.find(a => a.idAula === idAula)?.numeroAula ?? '';
   }
 

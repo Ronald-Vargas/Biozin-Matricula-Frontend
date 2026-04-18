@@ -37,6 +37,12 @@ export interface AdminPerfil {
   emailInstitucional: string;
 }
 
+export interface ProfesorPerfil {
+  idProfesor: number;
+  nombreCompleto: string;
+  emailInstitucional: string;
+}
+
 export interface HorarioSlot {
   dia: string;
   horaInicio: string;
@@ -84,6 +90,7 @@ export interface CursoHistorial {
   codigo: string;
   nombre: string;
   creditos: number;
+  nota?: number | null;
   estado: 'aprobado' | 'reprobado' | 'en_curso';
 }
 

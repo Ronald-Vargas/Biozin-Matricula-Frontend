@@ -57,17 +57,10 @@ export class CursoService {
 
 
 
-  toggleEstado(id: number): void {
-    const cursos = this.cursosSubject.getValue();
-    const curso = cursos.find(c => c.idCurso === id);
-    if (curso) {
-      const updated = { ...curso, estado: !curso.estado };
-      this.updateCurso(updated).subscribe({
-        error: () => {
-          this.cargarCursos();
-        }
-      });
-    }
+  toggleEstado(id: number): Observable<Respuesta<number>> {
+    const curso = this.cursosSubject.getValue().find(c => c.idCurso === id);
+    const updated = { ...curso!, estado: !curso!.estado };
+    return this.updateCurso(updated);
   }
 
   getCursosActivos(): Observable<Curso[]> {

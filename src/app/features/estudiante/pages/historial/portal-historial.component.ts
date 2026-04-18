@@ -66,6 +66,11 @@ export class PortalHistorialComponent implements OnInit {
     return 'En curso';
   }
 
+  getNotaClass(nota: number): string {
+    if (nota >= 70) return 'nota-aprobada';
+    return 'nota-reprobada';
+  }
+
   getSemestreLabel(label: string): string {
     return label.replace(/Semestre/gi, 'Periodo');
   }

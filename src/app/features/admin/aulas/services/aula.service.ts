@@ -48,17 +48,10 @@ export class AulaService {
   }
 
   
-  toggleEstado(id: number): void {
-    const aulas = this.aulasSubject.getValue();
-    const aula = aulas.find(c => c.idAula === id);
-    if (aula) {
-      const updated = { ...aula, activo: !aula.activo };
-      this.updateAula(updated).subscribe({
-        error: () => {
-          this.cargarAulas();
-        }
-      });
-    }
+  toggleEstado(id: number): Observable<Respuesta<number>> {
+    const aula = this.aulasSubject.getValue().find(c => c.idAula === id);
+    const updated = { ...aula!, activo: !aula!.activo };
+    return this.updateAula(updated);
   }
 }
 

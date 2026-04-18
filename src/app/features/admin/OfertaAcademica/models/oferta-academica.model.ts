@@ -9,7 +9,7 @@ export interface OfertaAcademica {
   idPeriodo: number;
   idCurso: number;
   idProfesor: number;
-  idAula: number;
+  idAula: number | null;
   cupoMaximo: number;
   matriculados: number;
   precio: number;
@@ -22,7 +22,7 @@ export interface CreateOfertaDto {
   idPeriodo: number;
   idCurso: number;
   idProfesor: number;
-  idAula: number;
+  idAula: number | null;
   cupoMaximo: number;
   diasHorarios: DiaHorario[];
 }

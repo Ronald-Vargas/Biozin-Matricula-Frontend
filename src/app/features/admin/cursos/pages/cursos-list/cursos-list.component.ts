@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Curso } from '../../models/curso.model';
 import { CursoService } from '../../services/curso.service';
 import { CursoFormComponent } from '../curso-form/curso-form.component';
+import { ToastService } from '../../../../../shared/toast/toast.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class CursosListComponent implements OnInit, OnDestroy {
 
   constructor(
     private cursoService: CursoService,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +70,9 @@ export class CursosListComponent implements OnInit, OnDestroy {
   }
 
   toggleEstado(idCurso: number): void {
-    this.cursoService.toggleEstado(idCurso);
+    this.cursoService.toggleEstado(idCurso).subscribe(res => {
+      if (res.blnError) this.toast.show(res.strMensajeRespuesta);
+    });
   }
 
   onCursoCreado(): void {

@@ -111,13 +111,24 @@
       </div>
     </div>
 
-    <div class="form-group checkbox-group">
-      <label class="checkbox-label">
-        <input
-          type="checkbox"
-          formControlName="tieneLaboratorio">
-        Lleva Laboratorio
-      </label>
+    <div class="form-row checkboxes-row">
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="tieneLaboratorio">
+          Lleva Laboratorio
+        </label>
+      </div>
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="esVirtual">
+          Es Virtual
+        </label>
+        <small class="form-hint-inline">No requiere aula física</small>
+      </div>
     </div>
 
     <div class="form-group" *ngIf="tieneLaboratorio?.value">

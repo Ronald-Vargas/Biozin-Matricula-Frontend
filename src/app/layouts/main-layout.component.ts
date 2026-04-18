@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../features/estudiante/services/auth.service';
+import { ToastComponent } from '../shared/toast/toast.component';
 
 
 interface MenuItem {
@@ -20,7 +21,7 @@ interface MenuSection {
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ToastComponent],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.scss'],
 })
@@ -29,7 +30,7 @@ export class MainLayoutComponent {
   sidebarCollapsed = false;
   today = new Date();
   currentPageTitle = 'Dashboard';
-  currentView: 'admin' | 'student';
+  currentView: 'admin' | 'student' | 'teacher';
 
   adminSections: MenuSection[] = [
     {
@@ -81,8 +82,23 @@ export class MainLayoutComponent {
     },
   ];
 
+
+  teacherSections: MenuSection[] = [
+    {
+      title: 'Mi Portal',
+      items: [
+        { path: '/profesor/dashboard', label: 'Dashboard', icon: '🏠' },
+        { path: '/profesor/mis-cursos', label: 'Mis Cursos', icon: '📚' },
+      ],
+    },
+  ];
+
+
+
   get menuSections(): MenuSection[] {
-    return this.currentView === 'admin' ? this.adminSections : this.studentSections;
+    if (this.currentView === 'admin') return this.adminSections;
+    if (this.currentView === 'teacher') return this.teacherSections;
+    return this.studentSections;
   }
 
   get userName(): string {
@@ -93,11 +109,16 @@ export class MainLayoutComponent {
       }
       return 'Estudiante';
     }
+    if (this.currentView === 'teacher') {
+      return this.authService.getProfesorPerfil()?.nombreCompleto || 'Profesor';
+    }
     return this.authService.getAdminPerfil()?.nombreCompleto || 'Administrador';
   }
 
   get userRole(): string {
-    return this.currentView === 'admin' ? 'Administrador' : 'Estudiante';
+    if (this.currentView === 'admin') return 'Administrador';
+    if (this.currentView === 'teacher') return 'Profesor';
+    return 'Estudiante';
   }
 
 
@@ -109,15 +130,18 @@ export class MainLayoutComponent {
   }
 
   constructor(private router: Router, private authService: AuthService) {
-    this.currentView = this.authService.getRole() === 'estudiante' ? 'student' : 'admin';
+    const role = this.authService.getRole();
+    this.currentView = role === 'estudiante' ? 'student' : role === 'profesor' ? 'teacher' : 'admin';
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
-        const all = [...this.adminSections, ...this.studentSections].flatMap((s) => s.items);
+        const all = [...this.adminSections, ...this.studentSections, ...this.teacherSections].flatMap((s) => s.items);
         const match = all.find((item) => event.urlAfterRedirects.startsWith(item.path));
         this.currentPageTitle = match ? match.label : 'Dashboard';
         if (event.urlAfterRedirects.startsWith('/portal')) {
           this.currentView = 'student';
+        } else if (event.urlAfterRedirects.startsWith('/profesor/')) {
+          this.currentView = 'teacher';
         }
         this.showSettingsMenu = false;
         this.mobileOpen = false;

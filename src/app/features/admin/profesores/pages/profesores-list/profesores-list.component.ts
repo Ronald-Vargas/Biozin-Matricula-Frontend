@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Profesor } from '../../models/profesores.model';
 import { ProfesorService } from '../../services/profesores.services';
+import { ToastService } from '../../../../../shared/toast/toast.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
   constructor(
     private profesorService: ProfesorService,
     private router: Router,
+    private toast: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +62,9 @@ export class ProfesoresListComponent implements OnInit, OnDestroy {
   }
 
   toggleEstado(idProfesor: number): void {
-    this.profesorService.toggleEstado(idProfesor);
+    this.profesorService.toggleEstado(idProfesor).subscribe(res => {
+      if (res.blnError) this.toast.show(res.strMensajeRespuesta);
+    });
   }
 
   getIniciales(prof: Profesor): string {

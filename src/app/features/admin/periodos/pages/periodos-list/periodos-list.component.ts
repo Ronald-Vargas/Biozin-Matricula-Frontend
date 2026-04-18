@@ -6,6 +6,7 @@ import { Periodo } from "../../models/periodos.model";
 import { PeriodoService } from "../../services/periodos.services";
 import { Observable, Subscription } from "rxjs";
 import { PeriodoFormComponent } from "../periodo-form/periodo-form.component";
+import { ToastService } from "../../../../../shared/toast/toast.service";
 
 
 @Component({
@@ -29,7 +30,8 @@ export class PeriodosListComponent implements OnInit {
 
   constructor(
     private periodoService: PeriodoService,
-    ) {}
+    private toast: ToastService,
+  ) {}
 
 
   ngOnInit(): void {
@@ -83,7 +85,9 @@ export class PeriodosListComponent implements OnInit {
 
 
   toggleEstado(idPeriodo: number): void {
-    this.periodoService.toggleEstado(idPeriodo);
+    this.periodoService.toggleEstado(idPeriodo).subscribe(res => {
+      if (res.blnError) this.toast.show(res.strMensajeRespuesta);
+    });
   }
 
    getEstadoClass(estado: boolean): string {

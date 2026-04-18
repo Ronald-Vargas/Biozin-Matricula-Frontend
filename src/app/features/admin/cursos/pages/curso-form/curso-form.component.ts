@@ -45,7 +45,8 @@ export class CursoFormComponent implements OnInit {
       precio: ['', [Validators.required, Validators.min(0)]],
       tieneLaboratorio: [false],
       precioLaboratorio: [''],
-      idCursoRequisito: [null]
+      idCursoRequisito: [null],
+      esVirtual: [false]
     });
 
     this.cursoForm.get('tieneLaboratorio')!.valueChanges.subscribe((tiene: boolean) => {
@@ -82,7 +83,8 @@ export class CursoFormComponent implements OnInit {
             precio: curso.precio,
             tieneLaboratorio: curso.tieneLaboratorio,
             precioLaboratorio: curso.precioLaboratorio ?? '',
-            idCursoRequisito: curso.idCursoRequisito ?? null
+            idCursoRequisito: curso.idCursoRequisito ?? null,
+            esVirtual: curso.esVirtual ?? false
           });
         }
       });
@@ -152,4 +154,5 @@ export class CursoFormComponent implements OnInit {
   get tieneLaboratorio() { return this.cursoForm.get('tieneLaboratorio'); }
   get precioLaboratorio() { return this.cursoForm.get('precioLaboratorio'); }
   get idCursoRequisito() { return this.cursoForm.get('idCursoRequisito'); }
+  get esVirtual() { return this.cursoForm.get('esVirtual'); }
 }

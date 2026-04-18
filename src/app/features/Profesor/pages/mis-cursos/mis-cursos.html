@@ -1,0 +1,94 @@
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-text">
+      <h1 class="page-title">Mis Cursos</h1>
+      <p class="page-subtitle">Cursos asignados en la oferta académica</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner"></span>
+    <p>Cargando cursos...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="empty-state" *ngIf="!cargando && error">
+    <span class="empty-icon">⚠️</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Sin cursos -->
+  <div class="empty-state" *ngIf="!cargando && !error && cursos.length === 0">
+    <span class="empty-icon">📚</span>
+    <p>No tiene cursos asignados en la oferta académica.</p>
+  </div>
+
+  <!-- Lista de cursos activos -->
+  <ng-container *ngIf="!cargando && !error && cursosActivos.length > 0">
+    <h2 class="section-label">Período Activo</h2>
+    <div class="cursos-grid">
+      <div class="curso-card" *ngFor="let curso of cursosActivos">
+        <div class="curso-header">
+          <div class="curso-codigo">{{ curso.codigoCurso }}</div>
+          <span class="badge badge-activo">Activo</span>
+        </div>
+        <h3 class="curso-nombre">{{ curso.nombreCurso }}</h3>
+        <p class="curso-periodo">📅 {{ curso.nombrePeriodo }}</p>
+        <p class="curso-aula" *ngIf="curso.nombreAula">🏫 {{ curso.nombreAula }}</p>
+        <p class="curso-horario" *ngIf="curso.horario">🕐 {{ curso.horario }}</p>
+
+        <!-- Barra de cupo -->
+        <div class="cupo-section">
+          <div class="cupo-labels">
+            <span class="cupo-text">Estudiantes</span>
+            <span class="cupo-count">{{ curso.matriculados }} / {{ curso.cupoMaximo }}</span>
+          </div>
+          <div class="cupo-bar-track">
+            <div class="cupo-bar-fill"
+              [style.width.%]="porcentajeLleno(curso)"
+              [class.cupo-lleno]="porcentajeLleno(curso) >= 90">
+            </div>
+          </div>
+        </div>
+
+        <div class="curso-meta">
+          <span class="creditos-badge">{{ curso.creditos }} crédito(s)</span>
+        </div>
+
+        <button class="btn-ver-estudiantes" (click)="verEstudiantes(curso.idOferta)">
+          <span>👥 Ver Estudiantes</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Cursos anteriores -->
+  <ng-container *ngIf="!cargando && !error && cursosInactivos.length > 0">
+    <h2 class="section-label section-label-muted">Períodos Anteriores</h2>
+    <div class="cursos-grid cursos-grid-inactive">
+      <div class="curso-card curso-card-inactive" *ngFor="let curso of cursosInactivos">
+        <div class="curso-header">
+          <div class="curso-codigo">{{ curso.codigoCurso }}</div>
+          <span class="badge badge-inactivo">Inactivo</span>
+        </div>
+        <h3 class="curso-nombre">{{ curso.nombreCurso }}</h3>
+        <p class="curso-periodo">📅 {{ curso.nombrePeriodo }}</p>
+        <div class="cupo-section">
+          <div class="cupo-labels">
+            <span class="cupo-text">Estudiantes</span>
+            <span class="cupo-count">{{ curso.matriculados }} / {{ curso.cupoMaximo }}</span>
+          </div>
+        </div>
+        <button class="btn-ver-estudiantes btn-secondary" (click)="verEstudiantes(curso.idOferta)">
+          <span>👥 Ver Estudiantes y Notas</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

@@ -33,7 +33,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     idPeriodo: 0,
     idCurso: 0,
     idProfesor: 0,
-    idAula: 0,
+    idAula: 0 as number | null,
     cupoMaximo: null as number | null,
   };
 
@@ -109,7 +109,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
 
     // Curso y aulas filtradas
     this.cursoSeleccionado = this.cursos.find(c => c.idCurso === o.idCurso) || null;
-    if (this.cursoSeleccionado) {
+    if (this.cursoSeleccionado && !this.cursoSeleccionado.esVirtual) {
       this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === this.cursoSeleccionado!.tieneLaboratorio);
     }
 
@@ -176,6 +176,10 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     return this.cursoSeleccionado?.horasDuracion ?? 0;
   }
 
+  get cursoEsVirtual(): boolean {
+    return this.cursoSeleccionado?.esVirtual === true;
+  }
+
   onHoraInicioChange(dia: { horaInicio: string; horaFin: string }): void {
     if (dia.horaFin && dia.horaFin <= dia.horaInicio) {
       dia.horaFin = '';
@@ -188,7 +192,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   onCursoChange(): void {
     const id = Number(this.oferta.idCurso);
     this.cursoSeleccionado = this.cursos.find(c => c.idCurso === id) || null;
-    if (this.cursoSeleccionado) {
+    if (this.cursoSeleccionado && !this.cursoSeleccionado.esVirtual) {
       this.aulasFiltradas = this.aulas.filter(a => a.esLaboratorio === this.cursoSeleccionado!.tieneLaboratorio);
     } else {
       this.aulasFiltradas = [];
@@ -210,17 +214,20 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     this.conflictos = [];
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
 
+    const requiereAula = !this.cursoEsVirtual;
     if (
       !Number(this.oferta.idPeriodo) ||
       !Number(this.oferta.idCurso) ||
       !Number(this.oferta.idProfesor) ||
-      !Number(this.oferta.idAula) ||
+      (requiereAula && !Number(this.oferta.idAula)) ||
       !this.oferta.cupoMaximo ||
       this.oferta.cupoMaximo < 1 ||
       seleccionados.length === 0 ||
       seleccionados.some(d => !d.horaInicio || !d.horaFin)
     ) {
-      this.errorFormulario = 'Por favor complete todos los campos requeridos: período, curso, profesor, aula, cupo y al menos un día con horario.';
+      this.errorFormulario = requiereAula
+        ? 'Por favor complete todos los campos requeridos: período, curso, profesor, aula, cupo y al menos un día con horario.'
+        : 'Por favor complete todos los campos requeridos: período, curso, profesor, cupo y al menos un día con horario.';
       return;
     }
 
@@ -250,13 +257,15 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
 
     this.errorServidor = '';
 
+    const idAulaFinal = this.cursoEsVirtual ? null : Number(this.oferta.idAula) || null;
+
     if (this.modoEdicion && this.ofertaEditar) {
       const dto = {
         ...this.ofertaEditar,
         idPeriodo: Number(this.oferta.idPeriodo),
         idCurso: Number(this.oferta.idCurso),
         idProfesor: Number(this.oferta.idProfesor),
-        idAula: Number(this.oferta.idAula),
+        idAula: idAulaFinal,
         cupoMaximo: this.oferta.cupoMaximo!,
         diasHorarios,
       };
@@ -277,7 +286,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
         idPeriodo: Number(this.oferta.idPeriodo),
         idCurso: Number(this.oferta.idCurso),
         idProfesor: Number(this.oferta.idProfesor),
-        idAula: Number(this.oferta.idAula),
+        idAula: idAulaFinal,
         cupoMaximo: this.oferta.cupoMaximo!,
         diasHorarios,
       };

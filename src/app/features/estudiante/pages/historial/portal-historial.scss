@@ -248,6 +248,24 @@
 .nota-baja { color: var(--danger); }
 .nota-en-curso { color: var(--text-muted); }
 
+.col-nota-header,
+.col-nota {
+  text-align: center;
+}
+
+.nota-valor {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.nota-aprobada { color: var(--success); }
+.nota-reprobada { color: var(--danger); }
+
+.nota-pendiente {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
 .col-estado { text-align: center; }
 
 .estado-badge {

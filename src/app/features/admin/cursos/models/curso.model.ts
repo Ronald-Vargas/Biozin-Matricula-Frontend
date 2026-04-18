@@ -10,6 +10,7 @@ export interface Curso {
   precioLaboratorio?: number;
   idCursoRequisito?: number;
   horasDuracion: number;
+  esVirtual: boolean;
 }
 
 export interface CreateCursoDto {
@@ -22,6 +23,7 @@ export interface CreateCursoDto {
   precioLaboratorio?: number;
   idCursoRequisito?: number;
   horasDuracion: number;
+  esVirtual: boolean;
 }
 
 export interface Respuesta<T> {

@@ -53,7 +53,13 @@ export class LoginComponent {
               queryParams: { email: data.email }
             });
           } else {
-            this.router.navigate(data?.role === 'Administrador' ? ['/dashboard'] : ['/portal/inicio']);
+            if (data?.role === 'Administrador') {
+              this.router.navigate(['/dashboard']);
+            } else if (data?.role === 'Profesor') {
+              this.router.navigate(['/profesor/dashboard']);
+            } else {
+              this.router.navigate(['/portal/inicio']);
+            }
           }
         }
       },
