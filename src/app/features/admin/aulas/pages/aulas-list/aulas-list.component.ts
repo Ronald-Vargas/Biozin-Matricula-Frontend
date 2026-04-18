@@ -22,6 +22,7 @@ export class AulasListComponent implements OnInit, OnDestroy {
   aulaSeleccionada: Aula | null = null;
   filtroNumero = '';
   filtroEstado = 'activo';
+  filtroTipo = 'todos';
 
   private sub?: Subscription;
 
@@ -45,8 +46,16 @@ export class AulasListComponent implements OnInit, OnDestroy {
         this.filtroEstado === 'todos' ||
         (this.filtroEstado === 'activo' && a.activo === true) ||
         (this.filtroEstado === 'inactivo' && a.activo === false);
-      return matchNumero && matchEstado;
+      const matchTipo =
+        this.filtroTipo === 'todos' ||
+        (this.filtroTipo === 'aula' && !a.esLaboratorio) ||
+        (this.filtroTipo === 'laboratorio' && a.esLaboratorio);
+      return matchNumero && matchEstado && matchTipo;
     });
+  }
+
+  filtrarTipo(tipo: string): void {
+    this.filtroTipo = tipo;
   }
 
   filtrar(estado: string): void {

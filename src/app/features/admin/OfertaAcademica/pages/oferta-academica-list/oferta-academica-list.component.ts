@@ -28,6 +28,7 @@ export class OfertaAcademicaListComponent implements OnInit {
   ofertas: OfertaAcademica[] = [];
   ofertasFiltradas: OfertaAcademica[] = [];
   busqueda = '';
+  filtroEstado = 'activo';
   mostrarModal = false;
 
   vista: Vista = 'list';
@@ -114,6 +115,11 @@ export class OfertaAcademicaListComponent implements OnInit {
   filtrar(): void {
     let resultado = this.ofertas;
 
+    if (this.filtroEstado !== 'todos') {
+      const activo = this.filtroEstado === 'activo';
+      resultado = resultado.filter(o => o.estado === activo);
+    }
+
     if (this.busqueda.trim()) {
       const termino = this.busqueda.toLowerCase();
       resultado = resultado.filter(o =>
@@ -125,6 +131,11 @@ export class OfertaAcademicaListComponent implements OnInit {
     }
 
     this.ofertasFiltradas = resultado;
+  }
+
+  cambiarFiltroEstado(estado: string): void {
+    this.filtroEstado = estado;
+    this.filtrar();
   }
 
   getPorcentajeOcupacion(oferta: OfertaAcademica): number {

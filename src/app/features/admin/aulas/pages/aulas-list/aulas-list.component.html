@@ -38,6 +38,10 @@
       <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="filtrar('activo')">Activos</button>
       <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
       <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
+      <span class="filter-sep">|</span>
+      <button class="filter-btn" [class.active]="filtroTipo === 'todos'" (click)="filtrarTipo('todos')">🏫 Todos</button>
+      <button class="filter-btn" [class.active]="filtroTipo === 'aula'" (click)="filtrarTipo('aula')">Aulas</button>
+      <button class="filter-btn" [class.active]="filtroTipo === 'laboratorio'" (click)="filtrarTipo('laboratorio')">🔬 Laboratorios</button>
     </div>
 
     <!-- Tabla -->

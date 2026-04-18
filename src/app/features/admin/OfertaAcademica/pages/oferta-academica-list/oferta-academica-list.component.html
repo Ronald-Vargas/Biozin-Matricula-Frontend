@@ -49,6 +49,13 @@
       />
     </div>
 
+    <!-- Filtros -->
+    <div class="filter-buttons">
+      <button class="filter-btn" [class.active]="filtroEstado === 'activo'" (click)="cambiarFiltroEstado('activo')">Activos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="cambiarFiltroEstado('inactivo')">Inactivos</button>
+      <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="cambiarFiltroEstado('todos')">Todos</button>
+    </div>
+
     <!-- Cards Grid -->
     <div class="oferta-grid" *ngIf="ofertasFiltradas.length > 0">
       <div

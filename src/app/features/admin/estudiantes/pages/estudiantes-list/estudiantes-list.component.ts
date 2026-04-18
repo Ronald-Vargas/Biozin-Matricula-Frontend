@@ -6,6 +6,7 @@ import { Estudiante } from '../../models/estudiantes.model';
 import { combineLatest, Subscription } from 'rxjs';
 import { EstudianteService } from '../../services/estudiantes.services';
 import { CarreraService } from '../../../carreras/services/carrera.service';
+import { Carrera } from '../../../carreras/models/carrera.model';
 
 
 @Component({
@@ -20,8 +21,10 @@ import { CarreraService } from '../../../carreras/services/carrera.service';
 export class EstudiantesListComponent implements OnInit, OnDestroy {
 
   estudiantes: Estudiante[] = [];
+  carreras: Carrera[] = [];
   filtroNombre = '';
   filtroEstado = 'activo';
+  filtroCarrera = 0;
 
   private sub?: Subscription;
 
@@ -38,6 +41,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
       this.estudianteService.getEstudiantes(),
       this.carreraService.getCarreras(),
     ]).subscribe(([estudiantes, carreras]) => {
+      this.carreras = carreras;
       this.estudiantes = estudiantes.map(est => {
         const carrera = carreras.find(c => c.idCarrera === est.idCarrera);
         return {
@@ -59,16 +63,17 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   
 
   get estudiantesFiltrados(): Estudiante[] {
-        return this.estudiantes.filter(c => {
-          const term = this.filtroNombre.toLowerCase();
-          const matchNombre = !term || c.nombre.toLowerCase().includes(term) || c.cedula.toLowerCase().includes(term) || c.emailInstitucional.toLowerCase().includes(term);
-          const matchEstado =
-            this.filtroEstado === 'todos' ||
-            (this.filtroEstado === 'activo' && c.estadoEstudiante === true) ||
-            (this.filtroEstado === 'inactivo' && c.estadoEstudiante === false);
-          return matchNombre && matchEstado;
-        });
-      }
+    return this.estudiantes.filter(c => {
+      const term = this.filtroNombre.toLowerCase();
+      const matchNombre = !term || c.nombre.toLowerCase().includes(term) || c.cedula.toLowerCase().includes(term) || c.emailInstitucional.toLowerCase().includes(term);
+      const matchEstado =
+        this.filtroEstado === 'todos' ||
+        (this.filtroEstado === 'activo' && c.estadoEstudiante === true) ||
+        (this.filtroEstado === 'inactivo' && c.estadoEstudiante === false);
+      const matchCarrera = !this.filtroCarrera || c.idCarrera === this.filtroCarrera;
+      return matchNombre && matchEstado && matchCarrera;
+    });
+  }
 
 
 
