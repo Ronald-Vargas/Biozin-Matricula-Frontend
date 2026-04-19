@@ -125,6 +125,32 @@ export interface CambiarContrasenaTemporariaRequest {
   nuevaContrasena: string;
 }
 
+export interface CursoMalla {
+  idCurso: number;
+  codigo: string;
+  nombre: string;
+  creditos: number;
+  semestre: number;
+  esVirtual: boolean;
+  idCursoRequisito?: number | null;
+  nombreRequisito?: string | null;
+  estado: 'aprobado' | 'en_curso' | 'disponible' | 'pendiente';
+  nota?: number | null;
+}
+
+export interface SemestreMalla {
+  numero: number;
+  cursos: CursoMalla[];
+}
+
+export interface MallaCurricular {
+  nombreCarrera: string;
+  totalCreditos: number;
+  creditosAprobados: number;
+  creditosEnCurso: number;
+  semestres: SemestreMalla[];
+}
+
 export interface Respuesta<T> {
   valorRetorno: T;
   strMensajeRespuesta: string;

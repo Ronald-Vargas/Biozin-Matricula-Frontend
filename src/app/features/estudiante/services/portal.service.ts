@@ -9,6 +9,7 @@ import {
   Pago,
   Respuesta,
   MatricularBulkRequest,
+  MallaCurricular,
 } from '../models/portal.models';
 
 
@@ -45,5 +46,9 @@ export class PortalService {
 
   pagar(idPago: number): Observable<Respuesta<number>> {
     return this.http.post<Respuesta<number>>(`${this.apiUrl}/Pagos/Pagar/${idPago}`, {});
+  }
+
+  getMalla(): Observable<Respuesta<MallaCurricular>> {
+    return this.http.get<Respuesta<MallaCurricular>>(`${this.apiUrl}/MallaCurricular`);
   }
 }

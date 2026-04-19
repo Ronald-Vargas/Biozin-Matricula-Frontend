@@ -48,6 +48,13 @@ export class PortalInicioComponent implements OnInit {
       route: '/portal/historial',
       color: '#f59e0b',
     },
+    {
+      icon: '🗺️',
+      title: 'Malla Curricular',
+      description: 'Consulta los cursos pendientes de tu carrera',
+      route: '/portal/malla',
+      color: '#8b5cf6',
+    },
   ];
 
   get iniciales(): string {

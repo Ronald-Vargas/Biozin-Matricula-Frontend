@@ -1,0 +1,96 @@
+<div class="malla-container">
+
+  <!-- Cargando -->
+  <div class="loading-state" *ngIf="cargando">
+    <span class="spinner"></span>
+    <p>Cargando malla curricular...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-state" *ngIf="!cargando && error">
+    <span class="error-icon">⚠️</span>
+    <p>{{ error }}</p>
+  </div>
+
+  <ng-container *ngIf="!cargando && !error && malla">
+
+    <!-- Encabezado -->
+    <div class="malla-header">
+      <div class="header-text">
+        <h1 class="malla-title">Malla Curricular</h1>
+        <p class="malla-carrera">{{ malla.nombreCarrera }}</p>
+      </div>
+    </div>
+
+    <!-- Resumen de progreso -->
+    <div class="progreso-card">
+      <div class="progreso-row">
+        <div class="progreso-stat">
+          <span class="stat-num aprobado">{{ malla.creditosAprobados }}</span>
+          <span class="stat-lbl">Créditos aprobados</span>
+        </div>
+        <div class="progreso-stat">
+          <span class="stat-num en-curso">{{ malla.creditosEnCurso }}</span>
+          <span class="stat-lbl">En curso</span>
+        </div>
+        <div class="progreso-stat">
+          <span class="stat-num total">{{ malla.totalCreditos }}</span>
+          <span class="stat-lbl">Total carrera</span>
+        </div>
+        <div class="progreso-stat pct">
+          <span class="stat-num pct-num">{{ progreso }}%</span>
+          <span class="stat-lbl">Completado</span>
+        </div>
+      </div>
+      <div class="barra-track">
+        <div class="barra-fill" [style.width.%]="progreso"></div>
+      </div>
+    </div>
+
+    <!-- Leyenda -->
+    <div class="leyenda">
+      <span class="leyenda-item"><span class="dot aprobado"></span>Aprobado</span>
+      <span class="leyenda-item"><span class="dot en_curso"></span>En Curso</span>
+      <span class="leyenda-item"><span class="dot disponible"></span>Disponible</span>
+      <span class="leyenda-item"><span class="dot pendiente"></span>Pendiente (requisito)</span>
+    </div>
+
+    <!-- Semestres -->
+    <div class="semestres-list">
+      <div class="semestre-block" *ngFor="let sem of malla.semestres">
+        <div class="semestre-header">
+          <span class="semestre-num">Semestre {{ sem.numero }}</span>
+          <span class="semestre-meta">{{ sem.cursos.length }} curso(s) &middot; {{ cursosPorEstado(sem, 'aprobado') }} aprobado(s)</span>
+        </div>
+
+        <div class="cursos-grid">
+          <div
+            class="curso-card"
+            *ngFor="let curso of sem.cursos"
+            [ngClass]="estadoClass(curso.estado)"
+          >
+            <div class="curso-top">
+              <div class="curso-codigo">{{ curso.codigo }}</div>
+              <div class="estado-badge" [ngClass]="estadoClass(curso.estado)">
+                {{ estadoLabel(curso.estado) }}
+              </div>
+            </div>
+            <div class="curso-nombre">{{ curso.nombre }}</div>
+            <div class="curso-meta">
+              <span class="meta-item">📚 {{ curso.creditos }} crédito(s)</span>
+              <span class="meta-item virtual" *ngIf="curso.esVirtual">🖥️ Virtual</span>
+            </div>
+            <div class="curso-requisito" *ngIf="curso.nombreRequisito">
+              <span class="requisito-label">Requisito:</span> {{ curso.nombreRequisito }}
+            </div>
+            <div class="curso-nota" *ngIf="curso.nota != null">
+              <span class="nota-label">Nota:</span>
+              <span [ngClass]="notaClass(curso.nota)">{{ curso.nota | number:'1.1-1' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

@@ -22,6 +22,11 @@ export const PORTAL_ROUTES: Routes = [
       import('./pages/pagos/portal-pagos.component').then((m) => m.PortalPagosComponent),
   },
   {
+    path: 'malla',
+    loadComponent: () =>
+      import('./pages/malla/portal-malla.component').then((m) => m.PortalMallaComponent),
+  },
+  {
     path: '',
     redirectTo: 'inicio',
     pathMatch: 'full',

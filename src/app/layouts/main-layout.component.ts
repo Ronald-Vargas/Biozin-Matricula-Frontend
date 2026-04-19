@@ -82,6 +82,7 @@ export class MainLayoutComponent {
       items: [
         { path: '/portal/inicio', label: 'Inicio', icon: '🏠' },
         { path: '/portal/matricular', label: 'Matricular', icon: '📝' },
+        { path: '/portal/malla', label: 'Malla Curricular', icon: '🗺️' },
         { path: '/portal/historial', label: 'Historial', icon: '📊' },
         { path: '/portal/pagos', label: 'Pagos', icon: '💳' },
       ],
