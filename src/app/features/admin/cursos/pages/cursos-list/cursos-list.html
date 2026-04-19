@@ -20,6 +20,7 @@
   </div>
 
   <!-- Formulario de creación / edición -->
+  <div #formularioCursoAnchor class="form-scroll-anchor" *ngIf="mostrarFormulario"></div>
   <app-curso-form
     *ngIf="mostrarFormulario"
     [cursoId]="cursoEditandoId"

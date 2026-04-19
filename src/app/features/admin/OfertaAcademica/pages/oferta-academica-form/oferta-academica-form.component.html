@@ -1,6 +1,5 @@
-
 <div class="modal-overlay" *ngIf="visible" (click)="cerrar()">
-  <div class="modal" (click)="$event.stopPropagation()">
+  <div class="modal" (click)="cerrarCombos(); $event.stopPropagation()">
 
     <!-- Header -->
     <div class="modal-header">
@@ -15,66 +14,127 @@
         <!-- Período -->
         <div class="form-group full">
           <label class="form-label">Período Académico</label>
-          <input
-            class="form-input combo-search"
-            type="search"
-            [(ngModel)]="busquedaPeriodo"
-            placeholder="Buscar periodo..."
-            autocomplete="off"
-          />
-          <select
-            class="form-select"
-            [(ngModel)]="oferta.idPeriodo"
-          >
-            <option [value]="0">Seleccionar período...</option>
-            <option *ngFor="let p of periodosFiltrados" [value]="p.idPeriodo">{{ periodoTexto(p) }}</option>
-            <option *ngIf="periodosFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
-          </select>
+          <div class="searchable-combobox" [class.open]="comboAbierto === 'periodo'" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="combo-trigger"
+              [class.placeholder]="!oferta.idPeriodo"
+              (click)="toggleCombo('periodo')"
+            >
+              <span>{{ periodoSeleccionadoTexto }}</span>
+              <span class="combo-chevron"></span>
+            </button>
+
+            <div class="combo-panel" *ngIf="comboAbierto === 'periodo'">
+              <div class="combo-search-box">
+                <input
+                  class="combo-search-input"
+                  type="search"
+                  [(ngModel)]="busquedaPeriodo"
+                  autocomplete="off"
+                />
+                <span class="combo-search-icon"></span>
+              </div>
+
+              <div class="combo-options">
+                <button
+                  type="button"
+                  class="combo-option"
+                  *ngFor="let p of periodosFiltrados"
+                  [class.selected]="oferta.idPeriodo === p.idPeriodo"
+                  (click)="seleccionarPeriodo(p)"
+                >
+                  <span class="combo-option-title">{{ periodoTexto(p) }}</span>
+                  <span class="combo-option-subtitle">Período académico</span>
+                </button>
+                <div class="combo-empty" *ngIf="periodosFiltrados.length === 0">No hay resultados</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Curso -->
         <div class="form-group full">
           <label class="form-label">Curso</label>
-          <input
-            class="form-input combo-search"
-            type="search"
-            [(ngModel)]="busquedaCurso"
-            placeholder="Buscar por codigo o nombre..."
-            autocomplete="off"
-          />
-          <select
-            class="form-select"
-            [(ngModel)]="oferta.idCurso"
-            (ngModelChange)="onCursoChange()"
-          >
-            <option [value]="0">Seleccionar curso...</option>
-            <option *ngFor="let c of cursosFiltrados" [value]="c.idCurso">
-              {{ cursoTexto(c) }}
-            </option>
-            <option *ngIf="cursosFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
-          </select>
+          <div class="searchable-combobox" [class.open]="comboAbierto === 'curso'" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="combo-trigger"
+              [class.placeholder]="!oferta.idCurso"
+              (click)="toggleCombo('curso')"
+            >
+              <span>{{ cursoSeleccionadoTexto }}</span>
+              <span class="combo-chevron"></span>
+            </button>
+
+            <div class="combo-panel" *ngIf="comboAbierto === 'curso'">
+              <div class="combo-search-box">
+                <input
+                  class="combo-search-input"
+                  type="search"
+                  [(ngModel)]="busquedaCurso"
+                  autocomplete="off"
+                />
+                <span class="combo-search-icon"></span>
+              </div>
+
+              <div class="combo-options">
+                <button
+                  type="button"
+                  class="combo-option"
+                  *ngFor="let c of cursosFiltrados"
+                  [class.selected]="oferta.idCurso === c.idCurso"
+                  (click)="seleccionarCurso(c)"
+                >
+                  <span class="combo-option-title">{{ c.nombre }}</span>
+                  <span class="combo-option-subtitle">{{ cursoDetalleTexto(c) }}</span>
+                </button>
+                <div class="combo-empty" *ngIf="cursosFiltrados.length === 0">No hay resultados</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Profesor -->
         <div class="form-group full">
           <label class="form-label">Profesor</label>
-          <input
-            class="form-input combo-search"
-            type="search"
-            [(ngModel)]="busquedaProfesor"
-            placeholder="Buscar profesor..."
-            autocomplete="off"
-          />
-          <select
-            class="form-select"
-            [(ngModel)]="oferta.idProfesor"
-          >
-            <option [value]="0">Seleccionar profesor...</option>
-            <option *ngFor="let pr of profesoresFiltrados" [value]="pr.idProfesor">
-              {{ profesorTexto(pr) }}
-            </option>
-            <option *ngIf="profesoresFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
-          </select>
+          <div class="searchable-combobox" [class.open]="comboAbierto === 'profesor'" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="combo-trigger"
+              [class.placeholder]="!oferta.idProfesor"
+              (click)="toggleCombo('profesor')"
+            >
+              <span>{{ profesorSeleccionadoTexto }}</span>
+              <span class="combo-chevron"></span>
+            </button>
+
+            <div class="combo-panel" *ngIf="comboAbierto === 'profesor'">
+              <div class="combo-search-box">
+                <input
+                  class="combo-search-input"
+                  type="search"
+                  [(ngModel)]="busquedaProfesor"
+                  autocomplete="off"
+                />
+                <span class="combo-search-icon"></span>
+              </div>
+
+              <div class="combo-options">
+                <button
+                  type="button"
+                  class="combo-option"
+                  *ngFor="let pr of profesoresFiltrados"
+                  [class.selected]="oferta.idProfesor === pr.idProfesor"
+                  (click)="seleccionarProfesor(pr)"
+                >
+                  <span class="combo-option-title">{{ profesorTexto(pr) }}</span>
+                  <span class="combo-option-subtitle">{{ profesorDetalleTexto(pr) }}</span>
+                </button>
+                <div class="combo-empty" *ngIf="profesoresFiltrados.length === 0">No hay resultados</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Días y Horarios -->
@@ -122,28 +182,49 @@
         <ng-container *ngIf="!cursoEsVirtual">
           <div class="form-group">
             <label class="form-label">Aula</label>
-            <input
-              class="form-input combo-search"
-              type="search"
-              [(ngModel)]="busquedaAula"
-              [disabled]="!oferta.idCurso"
-              [placeholder]="oferta.idCurso ? 'Buscar aula...' : 'Seleccione un curso primero'"
-              autocomplete="off"
-            />
-            <select
-              class="form-select"
-              [(ngModel)]="oferta.idAula"
-              (ngModelChange)="onAulaChange()"
-              [disabled]="!oferta.idCurso"
+            <div
+              class="searchable-combobox"
+              [class.open]="comboAbierto === 'aula'"
+              [class.disabled]="!oferta.idCurso"
+              (click)="$event.stopPropagation()"
             >
-              <option [value]="0">
-                {{ oferta.idCurso ? 'Seleccionar aula...' : 'Seleccione un curso primero' }}
-              </option>
-              <option *ngFor="let a of aulasFiltradasPorBusqueda" [value]="a.idAula">
-                {{ aulaTexto(a) }}
-              </option>
-              <option *ngIf="oferta.idCurso && aulasFiltradasPorBusqueda.length === 0" [value]="0" disabled>No hay resultados</option>
-            </select>
+              <button
+                type="button"
+                class="combo-trigger"
+                [class.placeholder]="!oferta.idAula"
+                [disabled]="!oferta.idCurso"
+                (click)="toggleCombo('aula')"
+              >
+                <span>{{ aulaSeleccionadaTexto }}</span>
+                <span class="combo-chevron"></span>
+              </button>
+
+              <div class="combo-panel" *ngIf="comboAbierto === 'aula'">
+                <div class="combo-search-box">
+                  <input
+                    class="combo-search-input"
+                    type="search"
+                    [(ngModel)]="busquedaAula"
+                    autocomplete="off"
+                  />
+                  <span class="combo-search-icon"></span>
+                </div>
+
+                <div class="combo-options">
+                  <button
+                    type="button"
+                    class="combo-option"
+                    *ngFor="let a of aulasFiltradasPorBusqueda"
+                    [class.selected]="oferta.idAula === a.idAula"
+                    (click)="seleccionarAula(a)"
+                  >
+                    <span class="combo-option-title">{{ a.numeroAula }}</span>
+                    <span class="combo-option-subtitle">{{ aulaDetalleTexto(a) }}</span>
+                  </button>
+                  <div class="combo-empty" *ngIf="aulasFiltradasPorBusqueda.length === 0">No hay resultados</div>
+                </div>
+              </div>
+            </div>
             <small *ngIf="oferta.idCurso && aulasFiltradas.length === 0" class="form-hint">
               No hay aulas disponibles para este tipo de curso.
             </small>

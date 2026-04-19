@@ -29,6 +29,8 @@ export class CursoFormComponent implements OnInit {
   modoEdicion = false;
   idCurso: number | null = null;
   cursosDisponibles: Curso[] = [];
+  requisitoComboAbierto = false;
+  busquedaRequisito = '';
 
   constructor(
     private fb: FormBuilder,
@@ -143,6 +145,65 @@ export class CursoFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  get cursoRequisitoSeleccionadoTexto(): string {
+    const idSeleccionado = Number(this.idCursoRequisito?.value);
+    const curso = this.cursosDisponibles.find(c => c.idCurso === idSeleccionado);
+    return curso ? `${curso.codigo} - ${curso.nombre}` : 'Buscar curso requisito...';
+  }
+
+  get cursosRequisitoFiltrados(): Curso[] {
+    const filtrados = this.cursosDisponibles.filter(curso =>
+      this.coincideBusqueda(`${curso.codigo} ${curso.nombre} ${curso.descripcion ?? ''}`, this.busquedaRequisito)
+    );
+
+    const idSeleccionado = Number(this.idCursoRequisito?.value);
+    if (!idSeleccionado || filtrados.some(curso => curso.idCurso === idSeleccionado)) return filtrados;
+
+    const seleccionado = this.cursosDisponibles.find(curso => curso.idCurso === idSeleccionado);
+    return seleccionado ? [seleccionado, ...filtrados] : filtrados;
+  }
+
+  toggleRequisitoCombo(): void {
+    this.requisitoComboAbierto = !this.requisitoComboAbierto;
+  }
+
+  cerrarComboRequisito(): void {
+    this.requisitoComboAbierto = false;
+  }
+
+  seleccionarCursoRequisito(curso: Curso | null): void {
+    this.idCursoRequisito?.setValue(curso?.idCurso ?? null);
+    this.idCursoRequisito?.markAsDirty();
+    this.idCursoRequisito?.markAsTouched();
+    this.busquedaRequisito = '';
+    this.requisitoComboAbierto = false;
+  }
+
+  cursoRequisitoDetalleTexto(curso: Curso): string {
+    const modalidad = curso.esVirtual ? 'Virtual' : 'Presencial';
+    return `${curso.codigo} | ${modalidad} | ${curso.horasDuracion} h`;
+  }
+
+  actualizarBusquedaRequisito(event: Event): void {
+    this.busquedaRequisito = (event.target as HTMLInputElement).value;
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   get codigo() { return this.cursoForm.get('codigo'); }

@@ -7,16 +7,20 @@ import { CarreraService } from '../../../carreras/services/carrera.service';
 import { MallaCurricular, SemestreInfo, CursoMalla } from '../../../asignaciones/models/asignacion.model';
 import { AsignacionService } from '../../../asignaciones/services/asignacion.service';
 import { CursoService } from '../../../cursos/services/curso.service';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-malla-curricular',
   templateUrl: './malla-curricular.component.html',
-  imports: [CommonModule, AsyncPipe],
+  imports: [CommonModule],
   styleUrls: ['./malla-curricular.component.scss']
 })
 export class MallaCurricularComponent implements OnInit {
   carreras$!: Observable<Carrera[]>;
+  carrerasList: Carrera[] = [];
+  carreraSeleccionada?: Carrera;
+  carreraComboAbierto = false;
+  busquedaCarrera = '';
   mallaCurricular?: MallaCurricular | null;
   cargando = false;
 
@@ -28,15 +32,58 @@ export class MallaCurricularComponent implements OnInit {
 
   ngOnInit(): void {
     this.carreras$ = this.carreraService.getCarrerasActivas();
+    this.carreras$.subscribe(carreras => this.carrerasList = carreras);
   }
 
-  onCarreraSeleccionada(event: any): void {
-    const id = Number(event.target.value);
-    if (!id) {
+  get carreraSeleccionadaTexto(): string {
+    return this.carreraSeleccionada
+      ? `${this.carreraSeleccionada.codigo} - ${this.carreraSeleccionada.nombre}`
+      : 'Sin selección';
+  }
+
+  get carrerasFiltradas(): Carrera[] {
+    const filtradas = this.carrerasList.filter(carrera =>
+      this.coincideBusqueda(`${carrera.codigo} ${carrera.nombre} ${carrera.descripcion ?? ''}`, this.busquedaCarrera)
+    );
+
+    if (!this.carreraSeleccionada || filtradas.some(c => c.idCarrera === this.carreraSeleccionada?.idCarrera)) {
+      return filtradas;
+    }
+
+    return [this.carreraSeleccionada, ...filtradas];
+  }
+
+  toggleCarreraCombo(): void {
+    this.carreraComboAbierto = !this.carreraComboAbierto;
+  }
+
+  cerrarComboCarrera(): void {
+    this.carreraComboAbierto = false;
+  }
+
+  seleccionarCarrera(carrera?: Carrera): void {
+    this.busquedaCarrera = '';
+    this.carreraComboAbierto = false;
+
+    if (!carrera) {
+      this.carreraSeleccionada = undefined;
       this.mallaCurricular = undefined;
       return;
     }
 
+    this.carreraSeleccionada = carrera;
+    this.cargarMalla(carrera.idCarrera);
+  }
+
+  carreraDetalleTexto(carrera: Carrera): string {
+    return `${carrera.duracion} periodos`;
+  }
+
+  actualizarBusquedaCarrera(event: Event): void {
+    this.busquedaCarrera = (event.target as HTMLInputElement).value;
+  }
+
+  private cargarMalla(id: number): void {
     this.cargando = true;
     this.mallaCurricular = undefined;
 
@@ -98,5 +145,21 @@ export class MallaCurricularComponent implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 }

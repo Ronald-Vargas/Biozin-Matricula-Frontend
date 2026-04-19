@@ -1,5 +1,5 @@
 
-<div class="malla-page">
+<div class="malla-page" (click)="cerrarComboCarrera()">
 
   <div class="module-banner">
     <div class="module-banner-content">
@@ -13,12 +13,57 @@
   <div class="section">
     <div class="form-group">
       <label for="carrera">Ver Malla de:</label>
-      <select id="carrera" (change)="onCarreraSeleccionada($event)">
-        <option value="">-- Selecciona una carrera --</option>
-        <option *ngFor="let carrera of carreras$ | async" [value]="carrera.idCarrera">
-          {{ carrera?.codigo }} - {{ carrera?.nombre }}
-        </option>
-      </select>
+      <div class="searchable-combobox" [class.open]="carreraComboAbierto" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          id="carrera"
+          class="combo-trigger"
+          [class.placeholder]="!carreraSeleccionada"
+          (click)="toggleCarreraCombo()"
+        >
+          <span>{{ carreraSeleccionadaTexto }}</span>
+          <span class="combo-chevron"></span>
+        </button>
+
+        <div class="combo-panel" *ngIf="carreraComboAbierto">
+          <div class="combo-search-box">
+            <input
+              class="combo-search-input"
+              type="search"
+              [value]="busquedaCarrera"
+              (input)="actualizarBusquedaCarrera($event)"
+              autocomplete="off"
+            />
+            <span class="combo-search-icon"></span>
+          </div>
+
+          <div class="combo-options">
+            <button
+              type="button"
+              class="combo-option"
+              [class.selected]="!carreraSeleccionada"
+              (click)="seleccionarCarrera()"
+            >
+              <span class="combo-option-title">Sin selección</span>
+            </button>
+
+            <button
+              type="button"
+              class="combo-option"
+              *ngFor="let carrera of carrerasFiltradas"
+              [class.selected]="carreraSeleccionada?.idCarrera === carrera.idCarrera"
+              (click)="seleccionarCarrera(carrera)"
+            >
+              <span class="combo-option-title">{{ carrera.nombre }}</span>
+              <span class="combo-option-subtitle">{{ carrera.codigo }} | {{ carreraDetalleTexto(carrera) }}</span>
+            </button>
+
+            <div class="combo-empty" *ngIf="carrerasFiltradas.length === 0">
+              No hay resultados
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div *ngIf="cargando" class="no-data">

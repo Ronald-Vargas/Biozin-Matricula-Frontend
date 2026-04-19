@@ -1,6 +1,6 @@
 
-<div class="form-container">
-  <h2 class="form-title">Crear Nuevo Curso</h2>
+<div class="form-container" (click)="cerrarComboRequisito()">
+  <h2 class="form-title">{{ modoEdicion ? 'Editar Curso' : 'Crear Nuevo Curso' }}</h2>
 
   <div class="success-message" *ngIf="mensajeExito">
     ✓ Curso creado exitosamente
@@ -149,21 +149,65 @@
 
     <div class="form-group">
       <label for="idCursoRequisito">Curso Requisito (opcional)</label>
-      <select
-        id="idCursoRequisito"
-        formControlName="idCursoRequisito">
-        <option [ngValue]="null">-- Sin requisito --</option>
-        <option *ngFor="let curso of cursosDisponibles" [ngValue]="curso.idCurso">
-          {{ curso.codigo }} - {{ curso.nombre }}
-        </option>
-      </select>
+      <div class="searchable-combobox" [class.open]="requisitoComboAbierto" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          id="idCursoRequisito"
+          class="combo-trigger"
+          [class.placeholder]="!idCursoRequisito?.value"
+          (click)="toggleRequisitoCombo()"
+        >
+          <span>{{ cursoRequisitoSeleccionadoTexto }}</span>
+          <span class="combo-chevron"></span>
+        </button>
+
+        <div class="combo-panel" *ngIf="requisitoComboAbierto">
+          <div class="combo-search-box">
+            <input
+              class="combo-search-input"
+              type="search"
+              [value]="busquedaRequisito"
+              (input)="actualizarBusquedaRequisito($event)"
+              autocomplete="off"
+            />
+            <span class="combo-search-icon"></span>
+          </div>
+
+          <div class="combo-options">
+            <button
+              type="button"
+              class="combo-option"
+              [class.selected]="!idCursoRequisito?.value"
+              (click)="seleccionarCursoRequisito(null)"
+            >
+              <span class="combo-option-title">Sin requisito</span>
+              <span class="combo-option-subtitle">El curso no depende de otro curso</span>
+            </button>
+
+            <button
+              type="button"
+              class="combo-option"
+              *ngFor="let curso of cursosRequisitoFiltrados"
+              [class.selected]="idCursoRequisito?.value === curso.idCurso"
+              (click)="seleccionarCursoRequisito(curso)"
+            >
+              <span class="combo-option-title">{{ curso.nombre }}</span>
+              <span class="combo-option-subtitle">{{ cursoRequisitoDetalleTexto(curso) }}</span>
+            </button>
+
+            <div class="combo-empty" *ngIf="cursosRequisitoFiltrados.length === 0">
+              No hay resultados
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <button
       type="submit"
       class="btn btn-primary"
       [disabled]="cursoForm.invalid">
-      ➕ Crear Curso
+      {{ modoEdicion ? 'Guardar Cambios' : '➕ Crear Curso' }}
     </button>
   </form>
 </div>

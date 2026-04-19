@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,8 @@ import { ToastService } from '../../../../../shared/toast/toast.service';
 })
 
 export class CursosListComponent implements OnInit, OnDestroy {
+  @ViewChild('formularioCursoAnchor') formularioCursoAnchor?: ElementRef<HTMLElement>;
+
   cursos: Curso[] = [];
   mostrarFormulario = false;
   cursoEditandoId: number | null = null;
@@ -28,7 +30,8 @@ export class CursosListComponent implements OnInit, OnDestroy {
   constructor(
     private cursoService: CursoService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +86,61 @@ export class CursosListComponent implements OnInit, OnDestroy {
   editarCurso(id: number): void {
     this.cursoEditandoId = id;
     this.mostrarFormulario = true;
+    this.cdr.detectChanges();
+    this.scrollAlFormulario();
+  }
+
+  private scrollAlFormulario(): void {
+    requestAnimationFrame(() => {
+      const elemento = this.formularioCursoAnchor?.nativeElement;
+      if (!elemento) return;
+
+      const posicion = elemento.getBoundingClientRect().top + window.scrollY - 16;
+      const scrollParent = this.obtenerContenedorScroll(elemento);
+
+      elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      window.scrollTo({
+        top: Math.max(posicion, 0),
+        behavior: 'smooth',
+      });
+
+      document.documentElement.scrollTo({
+        top: Math.max(posicion, 0),
+        behavior: 'smooth',
+      });
+
+      document.body.scrollTo({
+        top: Math.max(posicion, 0),
+        behavior: 'smooth',
+      });
+
+      if (scrollParent) {
+        const parentRect = scrollParent.getBoundingClientRect();
+        const targetRect = elemento.getBoundingClientRect();
+        scrollParent.scrollTo({
+          top: scrollParent.scrollTop + targetRect.top - parentRect.top - 16,
+          behavior: 'smooth',
+        });
+      }
+    });
+  }
+
+  private obtenerContenedorScroll(elemento: HTMLElement): HTMLElement | null {
+    let actual = elemento.parentElement;
+
+    while (actual) {
+      const estilo = getComputedStyle(actual);
+      const puedeScrollear = /(auto|scroll|overlay)/.test(`${estilo.overflowY}${estilo.overflow}`);
+
+      if (puedeScrollear && actual.scrollHeight > actual.clientHeight) {
+        return actual;
+      }
+
+      actual = actual.parentElement;
+    }
+
+    return null;
   }
 
 

@@ -56,6 +56,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   busquedaCurso = '';
   busquedaProfesor = '';
   busquedaAula = '';
+  comboAbierto: 'periodo' | 'curso' | 'profesor' | 'aula' | null = null;
 
   cursoSeleccionado: Curso | null = null;
   errorHorario = '';
@@ -186,6 +187,27 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     return this.cursoSeleccionado?.esVirtual === true;
   }
 
+  get periodoSeleccionadoTexto(): string {
+    const periodo = this.periodos.find(p => p.idPeriodo === Number(this.oferta.idPeriodo));
+    return periodo ? this.periodoTexto(periodo) : 'Buscar período...';
+  }
+
+  get cursoSeleccionadoTexto(): string {
+    return this.cursoSeleccionado ? this.cursoTexto(this.cursoSeleccionado) : 'Buscar curso...';
+  }
+
+  get profesorSeleccionadoTexto(): string {
+    const profesor = this.profesores.find(p => p.idProfesor === Number(this.oferta.idProfesor));
+    return profesor ? this.profesorTexto(profesor) : 'Buscar profesor...';
+  }
+
+  get aulaSeleccionadaTexto(): string {
+    if (!this.oferta.idCurso) return 'Seleccione un curso primero';
+
+    const aula = this.aulas.find(a => a.idAula === Number(this.oferta.idAula));
+    return aula ? this.aulaTexto(aula) : 'Buscar aula...';
+  }
+
   get periodosFiltrados(): Periodo[] {
     const filtrados = this.periodos.filter(periodo =>
       this.coincideBusqueda(this.periodoTexto(periodo), this.busquedaPeriodo)
@@ -236,6 +258,19 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     return `${aula.numeroAula} - Cap. ${aula.capacidad}${aula.esLaboratorio ? ' (Laboratorio)' : ''}`;
   }
 
+  cursoDetalleTexto(curso: Curso): string {
+    const modalidad = curso.esVirtual ? 'Virtual' : 'Presencial';
+    return `${curso.codigo} | ${modalidad} | ${curso.horasDuracion} h`;
+  }
+
+  profesorDetalleTexto(profesor: Profesor): string {
+    return [profesor.cedula, profesor.emailInstitucional].filter(Boolean).join(' | ');
+  }
+
+  aulaDetalleTexto(aula: Aula): string {
+    return `${aula.capacidad} cupos${aula.esLaboratorio ? ' | Laboratorio' : ''}`;
+  }
+
   onHoraInicioChange(dia: { horaInicio: string; horaFin: string }): void {
     if (dia.horaFin && dia.horaFin <= dia.horaInicio) {
       dia.horaFin = '';
@@ -256,6 +291,38 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     this.oferta.idAula = 0;
     this.oferta.cupoMaximo = null;
     this.busquedaAula = '';
+  }
+
+  toggleCombo(combo: 'periodo' | 'curso' | 'profesor' | 'aula'): void {
+    if (combo === 'aula' && !this.oferta.idCurso) return;
+
+    this.comboAbierto = this.comboAbierto === combo ? null : combo;
+  }
+
+  seleccionarPeriodo(periodo: Periodo): void {
+    this.oferta.idPeriodo = periodo.idPeriodo;
+    this.comboAbierto = null;
+  }
+
+  seleccionarCurso(curso: Curso): void {
+    this.oferta.idCurso = curso.idCurso;
+    this.onCursoChange();
+    this.comboAbierto = null;
+  }
+
+  seleccionarProfesor(profesor: Profesor): void {
+    this.oferta.idProfesor = profesor.idProfesor;
+    this.comboAbierto = null;
+  }
+
+  seleccionarAula(aula: Aula): void {
+    this.oferta.idAula = aula.idAula;
+    this.onAulaChange();
+    this.comboAbierto = null;
+  }
+
+  cerrarCombos(): void {
+    this.comboAbierto = null;
   }
 
   onAulaChange(): void {
@@ -363,6 +430,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   }
 
   cerrar(): void {
+    this.cerrarCombos();
     this.visible = false;
     this.visibleChange.emit(false);
   }

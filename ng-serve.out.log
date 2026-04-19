@@ -1,0 +1,507 @@
+
+> biozin-matricula-frontend@0.0.0 start
+> ng serve --host 127.0.0.1 --port 4200
+
+[33m>[39m Building...
+[32m√[39m Building...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                         [2m | [22m [36m12.49 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+[32mchunk-BQNUZFC6.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m3.70 kB[39m[2m | [22m
+[32mchunk-653SOEEV.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m1.51 kB[39m[2m | [22m
+[32mchunk-ASUAFOQY.js[39m  [2m | [22m[2m-[22m                              [2m | [22m[36m192 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                      [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m                  [2m | [22m [1m24.98 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-6IN5AKJA.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m173.34 kB[39m[2m | [22m
+[32mchunk-7CAI5YT5.js[39m  [2m | [22m[2majustes-component[22m              [2m | [22m[36m152.14 kB[39m[2m | [22m
+[32mchunk-ZZIVXN47.js[39m  [2m | [22m[2mfinanzas-component[22m             [2m | [22m [36m82.58 kB[39m[2m | [22m
+[32mchunk-SZEK5YFI.js[39m  [2m | [22m[2mportal-matricular-component[22m    [2m | [22m [36m77.64 kB[39m[2m | [22m
+[32mchunk-ILEBGF4Y.js[39m  [2m | [22m[2maulas-list-component[22m           [2m | [22m [36m74.92 kB[39m[2m | [22m
+[32mchunk-FTRAZ4RD.js[39m  [2m | [22m[2mestudiante-form-component[22m      [2m | [22m [36m69.90 kB[39m[2m | [22m
+[32mchunk-6Q4GCWGX.js[39m  [2m | [22m[2mprofesor-form-component[22m        [2m | [22m [36m59.44 kB[39m[2m | [22m
+[32mchunk-7ZBHP3GH.js[39m  [2m | [22m[2mprofesores-list-component[22m      [2m | [22m [36m55.86 kB[39m[2m | [22m
+[32mchunk-3FOC6XCW.js[39m  [2m | [22m[2mestudiantes-list-component[22m     [2m | [22m [36m54.14 kB[39m[2m | [22m
+[32mchunk-XGH6KXFR.js[39m  [2m | [22m[2mportal-pagos-component[22m         [2m | [22m [36m53.61 kB[39m[2m | [22m
+[32mchunk-A3ODTICS.js[39m  [2m | [22m[2mmain-layout-component[22m          [2m | [22m [36m52.47 kB[39m[2m | [22m
+[32mchunk-Q5EM3FZ7.js[39m  [2m | [22m[2mestudiante-detail-component[22m    [2m | [22m [36m51.52 kB[39m[2m | [22m
+[32mchunk-T3ZL5FTH.js[39m  [2m | [22m[2mchange-temp-password-component[22m [2m | [22m [36m48.92 kB[39m[2m | [22m
+[32mchunk-RVMNOCBZ.js[39m  [2m | [22m[2mperiodos-list-component[22m        [2m | [22m [36m48.56 kB[39m[2m | [22m
+[32mchunk-MYVRNROX.js[39m  [2m | [22m[2mdashboard-component[22m            [2m | [22m [36m41.16 kB[39m[2m | [22m
+[2m...and 44 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [6.045 seconds] - 2026-04-19T18:12:02.649Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4200[22m/[39m
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [4.423 seconds] - 2026-04-19T18:17:46.762Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                         [2m | [22m [36m12.49 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+[32mchunk-BQNUZFC6.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m3.70 kB[39m[2m | [22m
+[32mchunk-653SOEEV.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m1.51 kB[39m[2m | [22m
+[32mchunk-ASUAFOQY.js[39m  [2m | [22m[2m-[22m                              [2m | [22m[36m192 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                      [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m                  [2m | [22m [1m24.98 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-K4VCV3RI.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m176.53 kB[39m[2m | [22m
+[32mchunk-7CAI5YT5.js[39m  [2m | [22m[2majustes-component[22m              [2m | [22m[36m152.14 kB[39m[2m | [22m
+[32mchunk-ZZIVXN47.js[39m  [2m | [22m[2mfinanzas-component[22m             [2m | [22m [36m82.58 kB[39m[2m | [22m
+[32mchunk-SZEK5YFI.js[39m  [2m | [22m[2mportal-matricular-component[22m    [2m | [22m [36m77.64 kB[39m[2m | [22m
+[32mchunk-ILEBGF4Y.js[39m  [2m | [22m[2maulas-list-component[22m           [2m | [22m [36m74.92 kB[39m[2m | [22m
+[32mchunk-FTRAZ4RD.js[39m  [2m | [22m[2mestudiante-form-component[22m      [2m | [22m [36m69.90 kB[39m[2m | [22m
+[32mchunk-6Q4GCWGX.js[39m  [2m | [22m[2mprofesor-form-component[22m        [2m | [22m [36m59.44 kB[39m[2m | [22m
+[32mchunk-7ZBHP3GH.js[39m  [2m | [22m[2mprofesores-list-component[22m      [2m | [22m [36m55.86 kB[39m[2m | [22m
+[32mchunk-3FOC6XCW.js[39m  [2m | [22m[2mestudiantes-list-component[22m     [2m | [22m [36m54.14 kB[39m[2m | [22m
+[32mchunk-XGH6KXFR.js[39m  [2m | [22m[2mportal-pagos-component[22m         [2m | [22m [36m53.61 kB[39m[2m | [22m
+[32mchunk-A3ODTICS.js[39m  [2m | [22m[2mmain-layout-component[22m          [2m | [22m [36m52.47 kB[39m[2m | [22m
+[32mchunk-Q5EM3FZ7.js[39m  [2m | [22m[2mestudiante-detail-component[22m    [2m | [22m [36m51.52 kB[39m[2m | [22m
+[32mchunk-T3ZL5FTH.js[39m  [2m | [22m[2mchange-temp-password-component[22m [2m | [22m [36m48.92 kB[39m[2m | [22m
+[32mchunk-RVMNOCBZ.js[39m  [2m | [22m[2mperiodos-list-component[22m        [2m | [22m [36m48.56 kB[39m[2m | [22m
+[32mchunk-MYVRNROX.js[39m  [2m | [22m[2mdashboard-component[22m            [2m | [22m [36m41.16 kB[39m[2m | [22m
+[2m...and 44 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.960 seconds] - 2026-04-19T18:19:33.511Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-2V3B7BXP.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m174.27 kB[39m[2m | [22m
+[32mchunk-TWS4UADT.js[39m  [2m | [22m[2mofertas-routes[22m                 [2m | [22m[36m328 bytes[39m[2m | [22m
+
+Application bundle generation complete. [1.178 seconds] - 2026-04-19T18:20:32.711Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-GILBBYCT.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m174.42 kB[39m[2m | [22m
+[32mchunk-NHGEFMPW.js[39m  [2m | [22m[2mofertas-routes[22m                 [2m | [22m[36m328 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.891 seconds] - 2026-04-19T18:21:39.142Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-J6NUZCPX.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m174.42 kB[39m[2m | [22m
+[32mchunk-PRKHF6RY.js[39m  [2m | [22m[2mofertas-routes[22m                 [2m | [22m[36m328 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.909 seconds] - 2026-04-19T18:21:46.772Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-G3MEL4DC.js[39m  [2m | [22m[2m-[22m                    [2m | [22m [36m38.78 kB[39m[2m | [22m
+[32mchunk-HZ4A4TJW.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m21.76 kB[39m[2m | [22m
+[32mchunk-MIJDQHTC.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+[32mchunk-4FNILXZN.js[39m  [2m | [22m[2mcurso-form-component[22m [2m | [22m[36m226 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.707 seconds] - 2026-04-19T18:32:52.803Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-G34UGS3D.js[39m  [2m | [22m[2m-[22m                    [2m | [22m [36m44.78 kB[39m[2m | [22m
+[32mchunk-6MIPS466.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m21.76 kB[39m[2m | [22m
+[32mchunk-7VJXUBBY.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+[32mchunk-A75KVZDK.js[39m  [2m | [22m[2mcurso-form-component[22m [2m | [22m[36m226 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.681 seconds] - 2026-04-19T18:33:07.464Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-RU6HAKTI.js[39m  [2m | [22m[2m-[22m                    [2m | [22m [36m51.31 kB[39m[2m | [22m
+[32mchunk-JK6TRDRP.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m21.76 kB[39m[2m | [22m
+[32mchunk-PE6S4B65.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+[32mchunk-7HGKPFGL.js[39m  [2m | [22m[2mcurso-form-component[22m [2m | [22m[36m226 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.796 seconds] - 2026-04-19T18:33:33.972Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-WWXUVIID.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m22.39 kB[39m[2m | [22m
+[32mchunk-Q6CRJV7V.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.601 seconds] - 2026-04-19T18:37:24.109Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-ANNMLGBG.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m22.43 kB[39m[2m | [22m
+[32mchunk-ZN5GAULD.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.528 seconds] - 2026-04-19T18:37:45.020Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-MMDQBUQT.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m22.49 kB[39m[2m | [22m
+[32mchunk-SP7AQRNF.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.545 seconds] - 2026-04-19T18:39:10.861Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-NRZYFJWC.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m22.65 kB[39m[2m | [22m
+[32mchunk-TJTHR6NI.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.486 seconds] - 2026-04-19T18:39:18.388Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-6NPCQX4U.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m23.87 kB[39m[2m | [22m
+[32mchunk-C7354B4L.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.546 seconds] - 2026-04-19T18:41:58.664Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-W7TKPUXN.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m24.29 kB[39m[2m | [22m
+[32mchunk-PLQ45C66.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.469 seconds] - 2026-04-19T18:42:12.373Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-3SNPVF7S.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m24.45 kB[39m[2m | [22m
+[32mchunk-UQSGRHCV.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.543 seconds] - 2026-04-19T18:42:19.518Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                 [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                [2m | [22m [1mRaw size[22m
+[32mchunk-5W4SGQ6E.js[39m  [2m | [22m[2m-[22m                    [2m | [22m [36m51.61 kB[39m[2m | [22m
+[32mchunk-MDGYMFAM.js[39m  [2m | [22m[2mcursos-list-component[22m[2m | [22m [36m24.45 kB[39m[2m | [22m
+[32mchunk-F5KBJILS.js[39m  [2m | [22m[2mcursos-routes[22m        [2m | [22m[36m645 bytes[39m[2m | [22m
+[32mchunk-KRFZOQIT.js[39m  [2m | [22m[2mcurso-form-component[22m [2m | [22m[36m226 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.767 seconds] - 2026-04-19T18:45:36.940Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.812 seconds] - 2026-04-19T18:50:13.713Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                         [2m | [22m [36m12.49 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+[32mchunk-BQNUZFC6.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m3.70 kB[39m[2m | [22m
+[32mchunk-653SOEEV.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m1.51 kB[39m[2m | [22m
+[32mchunk-ASUAFOQY.js[39m  [2m | [22m[2m-[22m                              [2m | [22m[36m192 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                      [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m                  [2m | [22m [1m24.98 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-J6NUZCPX.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m174.42 kB[39m[2m | [22m
+[32mchunk-7CAI5YT5.js[39m  [2m | [22m[2majustes-component[22m              [2m | [22m[36m152.14 kB[39m[2m | [22m
+[32mchunk-ZZIVXN47.js[39m  [2m | [22m[2mfinanzas-component[22m             [2m | [22m [36m82.58 kB[39m[2m | [22m
+[32mchunk-SZEK5YFI.js[39m  [2m | [22m[2mportal-matricular-component[22m    [2m | [22m [36m77.64 kB[39m[2m | [22m
+[32mchunk-ILEBGF4Y.js[39m  [2m | [22m[2maulas-list-component[22m           [2m | [22m [36m74.92 kB[39m[2m | [22m
+[32mchunk-FTRAZ4RD.js[39m  [2m | [22m[2mestudiante-form-component[22m      [2m | [22m [36m69.90 kB[39m[2m | [22m
+[32mchunk-6Q4GCWGX.js[39m  [2m | [22m[2mprofesor-form-component[22m        [2m | [22m [36m59.44 kB[39m[2m | [22m
+[32mchunk-7ZBHP3GH.js[39m  [2m | [22m[2mprofesores-list-component[22m      [2m | [22m [36m55.86 kB[39m[2m | [22m
+[32mchunk-3FOC6XCW.js[39m  [2m | [22m[2mestudiantes-list-component[22m     [2m | [22m [36m54.14 kB[39m[2m | [22m
+[32mchunk-XGH6KXFR.js[39m  [2m | [22m[2mportal-pagos-component[22m         [2m | [22m [36m53.61 kB[39m[2m | [22m
+[32mchunk-A3ODTICS.js[39m  [2m | [22m[2mmain-layout-component[22m          [2m | [22m [36m52.47 kB[39m[2m | [22m
+[32mchunk-5W4SGQ6E.js[39m  [2m | [22m[2m-[22m                              [2m | [22m [36m51.61 kB[39m[2m | [22m
+[32mchunk-Q5EM3FZ7.js[39m  [2m | [22m[2mestudiante-detail-component[22m    [2m | [22m [36m51.52 kB[39m[2m | [22m
+[32mchunk-T3ZL5FTH.js[39m  [2m | [22m[2mchange-temp-password-component[22m [2m | [22m [36m48.92 kB[39m[2m | [22m
+[32mchunk-RVMNOCBZ.js[39m  [2m | [22m[2mperiodos-list-component[22m        [2m | [22m [36m48.56 kB[39m[2m | [22m
+[2m...and 44 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.552 seconds] - 2026-04-19T18:50:35.022Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-IMVDACRO.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m38.93 kB[39m[2m | [22m
+[32mchunk-VECH2FN5.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.649 seconds] - 2026-04-19T18:51:02.356Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-3267M2JE.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m38.90 kB[39m[2m | [22m
+[32mchunk-6ULNDEVG.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.548 seconds] - 2026-04-19T18:51:07.719Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-OBI46GXI.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m38.90 kB[39m[2m | [22m
+[32mchunk-B25MAZSI.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.524 seconds] - 2026-04-19T18:52:47.031Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-O5TCNHBM.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m39.72 kB[39m[2m | [22m
+[32mchunk-2PF4CYOP.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.636 seconds] - 2026-04-19T18:52:54.394Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-G6FT4UH3.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m39.85 kB[39m[2m | [22m
+[32mchunk-PEFHY7TD.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.565 seconds] - 2026-04-19T18:53:46.171Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-N332VTZ6.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m39.86 kB[39m[2m | [22m
+[32mchunk-D3CY7RZF.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.641 seconds] - 2026-04-19T18:54:00.409Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                    [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                   [2m | [22m [1mRaw size[22m
+[32mchunk-LNQ7ZRDV.js[39m  [2m | [22m[2masignar-cursos-component[22m[2m | [22m [36m39.86 kB[39m[2m | [22m
+[32mchunk-ZQDHAFT7.js[39m  [2m | [22m[2masignaciones-routes[22m     [2m | [22m[36m316 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.477 seconds] - 2026-04-19T18:54:08.014Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.519 seconds] - 2026-04-19T18:55:22.399Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                         [2m | [22m [36m12.49 kB[39m[2m | [22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                           [2m | [22m  [36m6.99 kB[39m[2m | [22m
+[32mchunk-BQNUZFC6.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m3.70 kB[39m[2m | [22m
+[32mchunk-653SOEEV.js[39m  [2m | [22m[2m-[22m                              [2m | [22m  [36m1.51 kB[39m[2m | [22m
+[32mchunk-ASUAFOQY.js[39m  [2m | [22m[2m-[22m                              [2m | [22m[36m192 bytes[39m[2m | [22m
+[32mpolyfills.js[39m       [2m | [22m[2mpolyfills[22m                      [2m | [22m [36m95 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m                  [2m | [22m [1m24.98 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                          [2m | [22m [1mRaw size[22m
+[32mchunk-J6NUZCPX.js[39m  [2m | [22m[2moferta-academica-list-component[22m[2m | [22m[36m174.42 kB[39m[2m | [22m
+[32mchunk-7CAI5YT5.js[39m  [2m | [22m[2majustes-component[22m              [2m | [22m[36m152.14 kB[39m[2m | [22m
+[32mchunk-ZZIVXN47.js[39m  [2m | [22m[2mfinanzas-component[22m             [2m | [22m [36m82.58 kB[39m[2m | [22m
+[32mchunk-SZEK5YFI.js[39m  [2m | [22m[2mportal-matricular-component[22m    [2m | [22m [36m77.64 kB[39m[2m | [22m
+[32mchunk-ILEBGF4Y.js[39m  [2m | [22m[2maulas-list-component[22m           [2m | [22m [36m74.92 kB[39m[2m | [22m
+[32mchunk-FTRAZ4RD.js[39m  [2m | [22m[2mestudiante-form-component[22m      [2m | [22m [36m69.90 kB[39m[2m | [22m
+[32mchunk-6Q4GCWGX.js[39m  [2m | [22m[2mprofesor-form-component[22m        [2m | [22m [36m59.44 kB[39m[2m | [22m
+[32mchunk-7ZBHP3GH.js[39m  [2m | [22m[2mprofesores-list-component[22m      [2m | [22m [36m55.86 kB[39m[2m | [22m
+[32mchunk-3FOC6XCW.js[39m  [2m | [22m[2mestudiantes-list-component[22m     [2m | [22m [36m54.14 kB[39m[2m | [22m
+[32mchunk-XGH6KXFR.js[39m  [2m | [22m[2mportal-pagos-component[22m         [2m | [22m [36m53.61 kB[39m[2m | [22m
+[32mchunk-A3ODTICS.js[39m  [2m | [22m[2mmain-layout-component[22m          [2m | [22m [36m52.47 kB[39m[2m | [22m
+[32mchunk-5W4SGQ6E.js[39m  [2m | [22m[2m-[22m                              [2m | [22m [36m51.61 kB[39m[2m | [22m
+[32mchunk-Q5EM3FZ7.js[39m  [2m | [22m[2mestudiante-detail-component[22m    [2m | [22m [36m51.52 kB[39m[2m | [22m
+[32mchunk-T3ZL5FTH.js[39m  [2m | [22m[2mchange-temp-password-component[22m [2m | [22m [36m48.92 kB[39m[2m | [22m
+[32mchunk-RVMNOCBZ.js[39m  [2m | [22m[2mperiodos-list-component[22m        [2m | [22m [36m48.56 kB[39m[2m | [22m
+[2m...and 44 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [0.586 seconds] - 2026-04-19T18:55:38.442Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-BOFTLV67.js[39m  [2m | [22m[2mmalla-curricular-component[22m[2m | [22m [36m46.81 kB[39m[2m | [22m
+[32mchunk-5CBHLKCC.js[39m  [2m | [22m[2mmalla-curricular-routes[22m   [2m | [22m[36m334 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.711 seconds] - 2026-04-19T18:56:06.282Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-3BP43W4C.js[39m  [2m | [22m[2mmalla-curricular-component[22m[2m | [22m [36m46.81 kB[39m[2m | [22m
+[32mchunk-YL55PBD4.js[39m  [2m | [22m[2mmalla-curricular-routes[22m   [2m | [22m[36m334 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.585 seconds] - 2026-04-19T19:00:17.956Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-4TO2VUT3.js[39m  [2m | [22m[2mestudiantes-list-component[22m[2m | [22m [36m55.77 kB[39m[2m | [22m
+[32mchunk-OTYGSUH5.js[39m  [2m | [22m[2mestudiantes-routes[22m        [2m | [22m[36m685 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.642 seconds] - 2026-04-19T19:02:43.959Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-KQ6YT4CD.js[39m  [2m | [22m[2mestudiantes-list-component[22m[2m | [22m [36m61.02 kB[39m[2m | [22m
+[32mchunk-PNRSRRPT.js[39m  [2m | [22m[2mestudiantes-routes[22m        [2m | [22m[36m685 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.572 seconds] - 2026-04-19T19:02:56.793Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-WLHV4ON5.js[39m  [2m | [22m[2mestudiantes-list-component[22m[2m | [22m [36m66.85 kB[39m[2m | [22m
+[32mchunk-FXFYYOYN.js[39m  [2m | [22m[2mestudiantes-routes[22m        [2m | [22m[36m685 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.724 seconds] - 2026-04-19T19:03:26.014Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-KAGRIK7R.js[39m  [2m | [22m[2mestudiantes-list-component[22m[2m | [22m [36m66.86 kB[39m[2m | [22m
+[32mchunk-WY6V6QCH.js[39m  [2m | [22m[2mestudiantes-routes[22m        [2m | [22m[36m685 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.474 seconds] - 2026-04-19T19:05:14.131Z
+
+Page reload sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-QYW6Z2H7.js[39m  [2m | [22m[2mestudiantes-list-component[22m[2m | [22m [36m67.02 kB[39m[2m | [22m
+[32mchunk-FQMCOIY7.js[39m  [2m | [22m[2mestudiantes-routes[22m        [2m | [22m[36m685 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.471 seconds] - 2026-04-19T19:05:28.590Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                      [2m | [22m  [36m6.99 kB[39m[2m | [22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m
+[32mchunk-OG4GTHES.js[39m  [2m | [22m[2mmalla-curricular-component[22m[2m | [22m [36m46.94 kB[39m[2m | [22m
+[32mchunk-QOF6QNKN.js[39m  [2m | [22m[2mmalla-curricular-routes[22m   [2m | [22m[36m334 bytes[39m[2m | [22m
+
+Application bundle generation complete. [0.576 seconds] - 2026-04-19T19:05:41.411Z
+
+Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...

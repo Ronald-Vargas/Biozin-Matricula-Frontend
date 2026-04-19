@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Carrera } from '../../carreras/models/carrera.model';
 import { CarreraService } from '../../carreras/services/carrera.service';
@@ -14,7 +14,7 @@ import { AsignacionService } from '../services/asignacion.service';
 
 @Component({
   selector: 'app-asignar-cursos',
-  imports: [AsyncPipe, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './asignar-cursos.component.html',
   styleUrls: ['./asignar-cursos.component.scss']
 })
@@ -22,9 +22,12 @@ export class AsignarCursosComponent implements OnInit {
 
   carreras$!: Observable<Carrera[]>;
   cursos$!: Observable<Curso[]>;
+  carrerasList: Carrera[] = [];
   cursosList: Curso[] = [];
   carreraSeleccionada?: Carrera;
   cursosConfig: Map<number, { seleccionado: boolean; semestre: number }> = new Map();
+  carreraComboAbierto = false;
+  busquedaCarrera = '';
   filtroCurso = '';
   mensajeExito = false;
   mensajeError = false;
@@ -41,22 +44,76 @@ export class AsignarCursosComponent implements OnInit {
   ngOnInit(): void {
     this.carreras$ = this.carreraService.getCarrerasActivas();
     this.cursos$ = this.cursoService.getCursosActivos();
+    this.carreras$.subscribe(carreras => this.carrerasList = carreras);
     this.cursos$.subscribe(cursos => this.cursosList = cursos);
   }
 
-  onCarreraSeleccionada(event: any): void {
-    const id = Number(event.target.value);
-    if (id) {
-      this.carreraService.getCarreraById(id).subscribe(carrera => {
-        this.carreraSeleccionada = carrera;
-        if (carrera) {
-          this.cargarAsignacionesExistentes(id);
-        }
-      });
-    } else {
+  get carreraSeleccionadaTexto(): string {
+    return this.carreraSeleccionada
+      ? `${this.carreraSeleccionada.codigo} - ${this.carreraSeleccionada.nombre}`
+      : 'Seleccione una carrera';
+  }
+
+  get carrerasFiltradas(): Carrera[] {
+    const filtradas = this.carrerasList.filter(carrera =>
+      this.coincideBusqueda(`${carrera.codigo} ${carrera.nombre} ${carrera.descripcion ?? ''}`, this.busquedaCarrera)
+    );
+
+    if (!this.carreraSeleccionada || filtradas.some(c => c.idCarrera === this.carreraSeleccionada?.idCarrera)) {
+      return filtradas;
+    }
+
+    return [this.carreraSeleccionada, ...filtradas];
+  }
+
+  toggleCarreraCombo(): void {
+    this.carreraComboAbierto = !this.carreraComboAbierto;
+  }
+
+  cerrarComboCarrera(): void {
+    this.carreraComboAbierto = false;
+  }
+
+  seleccionarCarrera(carrera?: Carrera): void {
+    this.busquedaCarrera = '';
+    this.carreraComboAbierto = false;
+
+    if (!carrera) {
       this.carreraSeleccionada = undefined;
       this.cursosConfig.clear();
+      return;
     }
+
+    this.carreraService.getCarreraById(carrera.idCarrera).subscribe(carreraCompleta => {
+      this.carreraSeleccionada = carreraCompleta;
+      if (carreraCompleta) {
+        this.cargarAsignacionesExistentes(carreraCompleta.idCarrera);
+      }
+    });
+  }
+
+  carreraDetalleTexto(carrera: Carrera): string {
+    return `${carrera.duracion} periodos`;
+  }
+
+  actualizarBusquedaCarrera(event: Event): void {
+    this.busquedaCarrera = (event.target as HTMLInputElement).value;
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   cargarAsignacionesExistentes(carreraId: number): void {

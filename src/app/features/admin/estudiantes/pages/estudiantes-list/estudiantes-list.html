@@ -1,4 +1,4 @@
-<div class="estudiantes-container">
+<div class="estudiantes-container" (click)="cerrarComboCarrera()">
 
   <div class="module-banner">
     <div class="module-banner-content">
@@ -33,10 +33,56 @@
         <button class="filter-btn" [class.active]="filtroEstado === 'inactivo'" (click)="filtrar('inactivo')">Inactivos</button>
         <button class="filter-btn" [class.active]="filtroEstado === 'todos'" (click)="filtrar('todos')">Todos</button>
       </div>
-      <select class="filter-select" [(ngModel)]="filtroCarrera">
-        <option [ngValue]="0">Todas las carreras</option>
-        <option *ngFor="let c of carreras" [ngValue]="c.idCarrera">{{ c.nombre }}</option>
-      </select>
+      <div class="searchable-combobox" [class.open]="carreraComboAbierto" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          class="combo-trigger"
+          [class.placeholder]="!filtroCarrera"
+          (click)="toggleCarreraCombo()"
+        >
+          <span>{{ carreraSeleccionadaTexto }}</span>
+          <span class="combo-chevron"></span>
+        </button>
+
+        <div class="combo-panel" *ngIf="carreraComboAbierto">
+          <div class="combo-search-box">
+            <input
+              class="combo-search-input"
+              type="search"
+              [value]="busquedaCarrera"
+              (input)="actualizarBusquedaCarrera($event)"
+              autocomplete="off"
+            />
+            <span class="combo-search-icon"></span>
+          </div>
+
+          <div class="combo-options">
+            <button
+              type="button"
+              class="combo-option"
+              [class.selected]="!filtroCarrera"
+              (click)="seleccionarCarrera()"
+            >
+              <span class="combo-option-title">Todos los estudiantes</span>
+            </button>
+
+            <button
+              type="button"
+              class="combo-option"
+              *ngFor="let carrera of carrerasFiltradas"
+              [class.selected]="filtroCarrera === carrera.idCarrera"
+              (click)="seleccionarCarrera(carrera)"
+            >
+              <span class="combo-option-title">{{ carrera.nombre }}</span>
+              <span class="combo-option-subtitle">{{ carreraDetalleTexto(carrera) }}</span>
+            </button>
+
+            <div class="combo-empty" *ngIf="carrerasFiltradas.length === 0">
+              No hay resultados
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
 

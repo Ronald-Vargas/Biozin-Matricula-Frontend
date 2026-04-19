@@ -25,6 +25,8 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
   filtroNombre = '';
   filtroEstado = 'activo';
   filtroCarrera = 0;
+  carreraComboAbierto = false;
+  busquedaCarrera = '';
 
   private sub?: Subscription;
 
@@ -73,6 +75,61 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
       const matchCarrera = !this.filtroCarrera || c.idCarrera === this.filtroCarrera;
       return matchNombre && matchEstado && matchCarrera;
     });
+  }
+
+  get carreraSeleccionadaTexto(): string {
+    const carrera = this.carreras.find(c => c.idCarrera === Number(this.filtroCarrera));
+    return carrera ? carrera.nombre : 'Todos los estudiantes';
+  }
+
+  get carrerasFiltradas(): Carrera[] {
+    const filtradas = this.carreras.filter(carrera =>
+      this.coincideBusqueda(`${carrera.codigo} ${carrera.nombre} ${carrera.descripcion ?? ''}`, this.busquedaCarrera)
+    );
+
+    const idSeleccionado = Number(this.filtroCarrera);
+    if (!idSeleccionado || filtradas.some(c => c.idCarrera === idSeleccionado)) return filtradas;
+
+    const seleccionada = this.carreras.find(c => c.idCarrera === idSeleccionado);
+    return seleccionada ? [seleccionada, ...filtradas] : filtradas;
+  }
+
+  toggleCarreraCombo(): void {
+    this.carreraComboAbierto = !this.carreraComboAbierto;
+  }
+
+  cerrarComboCarrera(): void {
+    this.carreraComboAbierto = false;
+  }
+
+  seleccionarCarrera(carrera?: Carrera): void {
+    this.filtroCarrera = carrera?.idCarrera ?? 0;
+    this.busquedaCarrera = '';
+    this.carreraComboAbierto = false;
+  }
+
+  carreraDetalleTexto(carrera: Carrera): string {
+    return `${carrera.codigo} | ${carrera.duracion} periodos`;
+  }
+
+  actualizarBusquedaCarrera(event: Event): void {
+    this.busquedaCarrera = (event.target as HTMLInputElement).value;
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
 
