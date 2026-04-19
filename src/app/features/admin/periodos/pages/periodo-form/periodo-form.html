@@ -20,7 +20,8 @@
 
       <div class="form-group">
           <label>Fecha de Inicio *</label>
-          <input type="date" formControlName="fechaInicio" />
+          <input type="date" formControlName="fechaInicio" [min]="fechaMinima" />
+          <small class="error-text" *ngIf="fechaAnteriorHoy('fechaInicio')">La fecha de inicio no puede ser anterior a la fecha actual.</small>
         </div>
     </div>
 
@@ -28,23 +29,26 @@
     <div class="form-group">
       <div class="form-group">
           <label>Fecha de Fin *</label>
-          <input type="date" formControlName="fechaFin" [min]="fechaInicio?.value" />
-          <small class="error-text" *ngIf="fechaFinInvalida">La fecha de fin no puede ser anterior a la de inicio.</small>
+          <input type="date" formControlName="fechaFin" [min]="minFechaFin" />
+          <small class="error-text" *ngIf="fechaAnteriorHoy('fechaFin')">La fecha de fin no puede ser anterior a la fecha actual.</small>
+          <small class="error-text" *ngIf="fechaFinInvalida">La fecha de fin debe ser al menos un dia posterior a la fecha de inicio.</small>
         </div>
     </div>
 
     <div class="form-group">
       <div class="form-group">
           <label>Inicio de Matricula *</label>
-          <input type="date" formControlName="fechaMatriculaInicio" />
+          <input type="date" formControlName="fechaMatriculaInicio" [min]="fechaMinima" />
+          <small class="error-text" *ngIf="fechaAnteriorHoy('fechaMatriculaInicio')">El inicio de matrÃ­cula no puede ser anterior a la fecha actual.</small>
         </div>
     </div>
 
     <div class="form-group">
       <div class="form-group">
           <label>Cierre de Matricula *</label>
-          <input type="date" formControlName="fechaMatriculaFin" [min]="fechaMatriculaInicio?.value" />
-          <small class="error-text" *ngIf="fechaMatriculaFinInvalida">El cierre de matrícula no puede ser anterior al inicio.</small>
+          <input type="date" formControlName="fechaMatriculaFin" [min]="minFechaMatriculaFin" />
+          <small class="error-text" *ngIf="fechaAnteriorHoy('fechaMatriculaFin')">El cierre de matrÃ­cula no puede ser anterior a la fecha actual.</small>
+          <small class="error-text" *ngIf="fechaMatriculaFinInvalida">El cierre de matricula debe ser al menos un dia posterior al inicio de matricula.</small>
         </div>
     </div>
 

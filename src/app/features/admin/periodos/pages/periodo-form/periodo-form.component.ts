@@ -16,10 +16,45 @@ function fechaFinNoAnterior(inicioKey: string, finKey: string): ValidatorFn {
   return (group: AbstractControl): ValidationErrors | null => {
     const inicio = group.get(inicioKey)?.value;
     const fin = group.get(finKey)?.value;
-    if (inicio && fin && fin < inicio) {
+    if (inicio && fin && fin <= inicio) {
       return { [finKey + 'Invalida']: true };
     }
     return null;
+  };
+}
+
+function sumarDiasFechaInput(fecha: string, dias: number): string {
+  if (!fecha) {
+    return '';
+  }
+
+  const [year, month, day] = fecha.split('-').map(Number);
+  const fechaBase = new Date(year, month - 1, day);
+  fechaBase.setDate(fechaBase.getDate() + dias);
+
+  const nuevoYear = fechaBase.getFullYear();
+  const nuevoMonth = String(fechaBase.getMonth() + 1).padStart(2, '0');
+  const nuevoDay = String(fechaBase.getDate()).padStart(2, '0');
+  return `${nuevoYear}-${nuevoMonth}-${nuevoDay}`;
+}
+
+function obtenerFechaActualInput(): string {
+  const hoy = new Date();
+  const year = hoy.getFullYear();
+  const month = String(hoy.getMonth() + 1).padStart(2, '0');
+  const day = String(hoy.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function fechasNoAnterioresAHoy(campos: string[]): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const hoy = obtenerFechaActualInput();
+    const fechasAnteriores = campos.filter(campo => {
+      const valor = group.get(campo)?.value;
+      return valor && valor < hoy;
+    });
+
+    return fechasAnteriores.length ? { fechasAnterioresHoy: fechasAnteriores } : null;
   };
 }
 
@@ -56,6 +91,7 @@ export class PeriodoFormComponent implements OnChanges, OnInit {
   periodoForm: FormGroup;
   mensajeExito = false;
   mensajeError = '';
+  readonly fechaMinima = obtenerFechaActualInput();
   private periodosExistentes: Periodo[] = [];
 
   constructor(
@@ -72,6 +108,7 @@ export class PeriodoFormComponent implements OnChanges, OnInit {
       validators: [
         fechaFinNoAnterior('fechaInicio', 'fechaFin'),
         fechaFinNoAnterior('fechaMatriculaInicio', 'fechaMatriculaFin'),
+        fechasNoAnterioresAHoy(['fechaInicio', 'fechaFin', 'fechaMatriculaInicio', 'fechaMatriculaFin']),
         matriculaEnRangoPeriodo()
       ]
     });
@@ -146,6 +183,8 @@ export class PeriodoFormComponent implements OnChanges, OnInit {
           error: (err) => { this.mensajeError = err?.error?.strMensajeRespuesta || err?.error?.message || 'Error al crear el periodo. Intente nuevamente.'; }
         });
       }
+    } else {
+      this.periodoForm.markAllAsTouched();
     }
   }
 
@@ -158,4 +197,30 @@ export class PeriodoFormComponent implements OnChanges, OnInit {
   get fechaFinInvalida() { return this.periodoForm.hasError('fechaFinInvalida'); }
   get fechaMatriculaFinInvalida() { return this.periodoForm.hasError('fechaMatriculaFinInvalida'); }
   get matriculaFueraDeRango() { return this.periodoForm.hasError('matriculaFueraDeRango'); }
+
+  get minFechaFin(): string {
+    return this.mayorFecha(this.fechaMinima, this.fechaPosteriorA(this.fechaInicio?.value));
+  }
+
+  get minFechaMatriculaFin(): string {
+    return this.mayorFecha(this.fechaMinima, this.fechaPosteriorA(this.fechaMatriculaInicio?.value));
+  }
+
+  fechaAnteriorHoy(campo: string): boolean {
+    const fechasAnteriores = this.periodoForm.getError('fechasAnterioresHoy') as string[] | null;
+    const control = this.periodoForm.get(campo);
+    return !!fechasAnteriores?.includes(campo) && !!(control?.touched || control?.dirty);
+  }
+
+  private mayorFecha(fechaA: string, fechaB?: string | null): string {
+    if (!fechaB) {
+      return fechaA;
+    }
+
+    return fechaB > fechaA ? fechaB : fechaA;
+  }
+
+  private fechaPosteriorA(fecha?: string | null): string {
+    return fecha ? sumarDiasFechaInput(fecha, 1) : '';
+  }
 }

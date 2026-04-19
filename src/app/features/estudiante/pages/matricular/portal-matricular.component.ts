@@ -21,6 +21,7 @@ export class PortalMatricularComponent implements OnInit {
   procesando = false;
   mensajeExito = '';
   mensajeError = '';
+  mensajeSinOfertas = '';
 
   mostrarResumen = false;
   metodoPago: 'tarjeta' | 'transferencia' = 'tarjeta';
@@ -45,8 +46,17 @@ export class PortalMatricularComponent implements OnInit {
     this.portalService.getOfertas().subscribe({
       next: (res) => {
         this.cargando = false;
-        if (!res.blnError && res.valorRetorno) {
-          this.oferta = (res.valorRetorno.ofertas ?? []).map(o => ({
+        this.mensajeSinOfertas = '';
+
+        if (res.blnError) {
+          this.oferta = [];
+          this.mensajeSinOfertas = res.strMensajeRespuesta || 'No se encontraron cursos para matricular en este momento.';
+          return;
+        }
+
+        if (res.valorRetorno) {
+          const ofertas = res.valorRetorno.ofertas ?? [];
+          this.oferta = ofertas.map(o => ({
             idOferta: o.idOferta,
             codigoCurso: o.codigo,
             nombreCurso: o.nombre,
@@ -60,9 +70,20 @@ export class PortalMatricularComponent implements OnInit {
             yaMatriculado: o.yaMatriculado ?? false,
             seleccionado: false,
           }));
+
+          if (this.oferta.length === 0) {
+            this.mensajeSinOfertas = res.strMensajeRespuesta || 'No se encontraron cursos para matricular en este momento.';
+          }
+        } else {
+          this.oferta = [];
+          this.mensajeSinOfertas = res.strMensajeRespuesta || 'No se encontraron cursos para matricular en este momento.';
         }
       },
-      error: () => { this.cargando = false; },
+      error: () => {
+        this.cargando = false;
+        this.oferta = [];
+        this.mensajeSinOfertas = 'No se pudieron cargar los cursos para matricular en este momento.';
+      },
     });
   }
 

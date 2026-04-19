@@ -28,7 +28,7 @@
   <div class="alert-success" *ngIf="mensajeExito">{{ mensajeExito }}</div>
 
   <!-- Buscador -->
-  <div class="search-bar" *ngIf="!cargando">
+  <div class="search-bar" *ngIf="!cargando && oferta.length > 0">
     <span class="search-icon">🔍</span>
     <input
       type="text"
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Lista de oferta -->
-  <div class="oferta-grid" *ngIf="!cargando" [class.con-barra]="seleccionados.length > 0">
+  <div class="oferta-grid" *ngIf="!cargando && ofertaFiltrada.length > 0" [class.con-barra]="seleccionados.length > 0">
     <div
       class="curso-card"
       *ngFor="let curso of ofertaFiltrada; let i = index"
@@ -100,8 +100,14 @@
     </div>
   </div>
 
+  <!-- Sin cursos para matricular -->
+  <div class="empty-state" *ngIf="!cargando && oferta.length === 0">
+    <span class="empty-icon">📚</span>
+    <p>{{ mensajeSinOfertas || 'No se encontraron cursos para matricular en este momento.' }}</p>
+  </div>
+
   <!-- Sin resultados -->
-  <div class="empty-state" *ngIf="!cargando && ofertaFiltrada.length === 0">
+  <div class="empty-state" *ngIf="!cargando && oferta.length > 0 && ofertaFiltrada.length === 0">
     <span class="empty-icon">🔍</span>
     <p>No se encontraron cursos para "{{ filtroBusqueda }}"</p>
   </div>
