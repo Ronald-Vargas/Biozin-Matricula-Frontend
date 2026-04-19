@@ -49,7 +49,7 @@
       <table class="periodos-table">
         <thead>
           <tr>
-            <th>Perido</th>
+            <th>Periodo</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>Matricula Inicio</th>
@@ -70,13 +70,13 @@
               class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
               
-            <td><strong class="periodo-name">{{ per.nombre }}</strong></td>
+            <td data-label="Periodo"><strong class="periodo-name">{{ per.nombre }}</strong></td>
 
-            <td>{{ per.fechaInicio | date:'dd/MM/yyyy' }}</td>
-            <td>{{ per.fechaFin | date:'dd/MM/yyyy' }}</td>
-            <td>{{ per.fechaMatriculaInicio | date:'dd/MM/yyyy' }}</td>
-            <td>{{ per.fechaMatriculaFin | date:'dd/MM/yyyy' }}</td>
-            <td>
+            <td data-label="Fecha Inicio">{{ per.fechaInicio | date:'dd/MM/yyyy' }}</td>
+            <td data-label="Fecha Fin">{{ per.fechaFin | date:'dd/MM/yyyy' }}</td>
+            <td data-label="Matrícula Inicio">{{ per.fechaMatriculaInicio | date:'dd/MM/yyyy' }}</td>
+            <td data-label="Matrícula Cierre">{{ per.fechaMatriculaFin | date:'dd/MM/yyyy' }}</td>
+            <td data-label="Estado">
               <span class="status-badge"
                     [class.active]="per.estadoMatricula"
                     [class.inactive]="!per.estadoMatricula">
@@ -84,7 +84,7 @@
               </span>
             </td>
 
-            <td>
+            <td data-label="Acciones">
               <div class="action-buttons">
                 <button 
                   class="btn-icon btn-edit"

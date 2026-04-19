@@ -15,41 +15,65 @@
         <!-- Período -->
         <div class="form-group full">
           <label class="form-label">Período Académico</label>
+          <input
+            class="form-input combo-search"
+            type="search"
+            [(ngModel)]="busquedaPeriodo"
+            placeholder="Buscar periodo..."
+            autocomplete="off"
+          />
           <select
             class="form-select"
             [(ngModel)]="oferta.idPeriodo"
           >
             <option [value]="0">Seleccionar período...</option>
-            <option *ngFor="let p of periodos" [value]="p.idPeriodo">{{ p.nombre }}</option>
+            <option *ngFor="let p of periodosFiltrados" [value]="p.idPeriodo">{{ periodoTexto(p) }}</option>
+            <option *ngIf="periodosFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
           </select>
         </div>
 
         <!-- Curso -->
         <div class="form-group full">
           <label class="form-label">Curso</label>
+          <input
+            class="form-input combo-search"
+            type="search"
+            [(ngModel)]="busquedaCurso"
+            placeholder="Buscar por codigo o nombre..."
+            autocomplete="off"
+          />
           <select
             class="form-select"
             [(ngModel)]="oferta.idCurso"
             (ngModelChange)="onCursoChange()"
           >
             <option [value]="0">Seleccionar curso...</option>
-            <option *ngFor="let c of cursos" [value]="c.idCurso">
-              {{ c.codigo }} — {{ c.nombre }}
+            <option *ngFor="let c of cursosFiltrados" [value]="c.idCurso">
+              {{ cursoTexto(c) }}
             </option>
+            <option *ngIf="cursosFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
           </select>
         </div>
 
         <!-- Profesor -->
         <div class="form-group full">
           <label class="form-label">Profesor</label>
+          <input
+            class="form-input combo-search"
+            type="search"
+            [(ngModel)]="busquedaProfesor"
+            placeholder="Buscar profesor..."
+            autocomplete="off"
+          />
           <select
             class="form-select"
             [(ngModel)]="oferta.idProfesor"
           >
             <option [value]="0">Seleccionar profesor...</option>
-            <option *ngFor="let pr of profesores" [value]="pr.idProfesor">
-              {{ pr.nombre }} {{ pr.apellidoPaterno }} {{ pr.apellidoMaterno }}
+            <option *ngFor="let pr of profesoresFiltrados" [value]="pr.idProfesor">
+              {{ profesorTexto(pr) }}
             </option>
+            <option *ngIf="profesoresFiltrados.length === 0" [value]="0" disabled>No hay resultados</option>
           </select>
         </div>
 
@@ -98,6 +122,14 @@
         <ng-container *ngIf="!cursoEsVirtual">
           <div class="form-group">
             <label class="form-label">Aula</label>
+            <input
+              class="form-input combo-search"
+              type="search"
+              [(ngModel)]="busquedaAula"
+              [disabled]="!oferta.idCurso"
+              [placeholder]="oferta.idCurso ? 'Buscar aula...' : 'Seleccione un curso primero'"
+              autocomplete="off"
+            />
             <select
               class="form-select"
               [(ngModel)]="oferta.idAula"
@@ -107,9 +139,10 @@
               <option [value]="0">
                 {{ oferta.idCurso ? 'Seleccionar aula...' : 'Seleccione un curso primero' }}
               </option>
-              <option *ngFor="let a of aulasFiltradas" [value]="a.idAula">
-                {{ a.numeroAula }} — Cap. {{ a.capacidad }}{{ a.esLaboratorio ? ' (Laboratorio)' : '' }}
+              <option *ngFor="let a of aulasFiltradasPorBusqueda" [value]="a.idAula">
+                {{ aulaTexto(a) }}
               </option>
+              <option *ngIf="oferta.idCurso && aulasFiltradasPorBusqueda.length === 0" [value]="0" disabled>No hay resultados</option>
             </select>
             <small *ngIf="oferta.idCurso && aulasFiltradas.length === 0" class="form-hint">
               No hay aulas disponibles para este tipo de curso.

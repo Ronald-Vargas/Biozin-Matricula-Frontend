@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -25,7 +25,9 @@ interface MenuSection {
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.scss'],
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('sidebarScroller') private sidebarScroller?: ElementRef<HTMLElement>;
+
   
   sidebarCollapsed = false;
   today = new Date();
@@ -131,6 +133,53 @@ export class MainLayoutComponent {
 
   mobileOpen = false;
   showSettingsMenu = false;
+  private lastSidebarTouchY: number | null = null;
+  private readonly touchListenerOptions: AddEventListenerOptions = { passive: false };
+  private readonly updateViewportHeight = () => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
+    }
+
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    document.documentElement.style.setProperty('--app-viewport-height', `${viewportHeight}px`);
+  };
+  private readonly handleSidebarTouchStart = (event: TouchEvent) => {
+    if (!this.shouldHandleSidebarTouch(event)) {
+      this.lastSidebarTouchY = null;
+      return;
+    }
+
+    this.lastSidebarTouchY = event.touches[0]?.clientY ?? null;
+  };
+  private readonly handleSidebarTouchMove = (event: TouchEvent) => {
+    if (!this.shouldHandleSidebarTouch(event) || this.lastSidebarTouchY === null) {
+      return;
+    }
+
+    const scrollArea = this.sidebarScroller?.nativeElement;
+    if (!scrollArea || scrollArea.scrollHeight <= scrollArea.clientHeight) {
+      return;
+    }
+
+    const currentY = event.touches[0]?.clientY;
+    if (currentY === undefined) {
+      return;
+    }
+
+    const deltaY = this.lastSidebarTouchY - currentY;
+    const maxScroll = scrollArea.scrollHeight - scrollArea.clientHeight;
+    const nextScroll = Math.max(0, Math.min(maxScroll, scrollArea.scrollTop + deltaY));
+
+    if (nextScroll !== scrollArea.scrollTop) {
+      scrollArea.scrollTop = nextScroll;
+      event.preventDefault();
+    }
+
+    this.lastSidebarTouchY = currentY;
+  };
+  private readonly handleSidebarTouchEnd = () => {
+    this.lastSidebarTouchY = null;
+  };
 
   get isAdmin(): boolean {
     return this.currentView === 'admin';
@@ -155,11 +204,49 @@ export class MainLayoutComponent {
       });
   }
 
+  ngOnInit(): void {
+    this.updateViewportHeight();
+    window.addEventListener('resize', this.updateViewportHeight);
+    window.addEventListener('orientationchange', this.updateViewportHeight);
+    window.visualViewport?.addEventListener('resize', this.updateViewportHeight);
+    window.visualViewport?.addEventListener('scroll', this.updateViewportHeight);
+  }
+
+  ngAfterViewInit(): void {
+    const scrollArea = this.sidebarScroller?.nativeElement;
+    if (!scrollArea) {
+      return;
+    }
+
+    scrollArea.addEventListener('touchstart', this.handleSidebarTouchStart, this.touchListenerOptions);
+    scrollArea.addEventListener('touchmove', this.handleSidebarTouchMove, this.touchListenerOptions);
+    scrollArea.addEventListener('touchend', this.handleSidebarTouchEnd);
+    scrollArea.addEventListener('touchcancel', this.handleSidebarTouchEnd);
+  }
+
+  ngOnDestroy(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.removeEventListener('resize', this.updateViewportHeight);
+    window.removeEventListener('orientationchange', this.updateViewportHeight);
+    window.visualViewport?.removeEventListener('resize', this.updateViewportHeight);
+    window.visualViewport?.removeEventListener('scroll', this.updateViewportHeight);
+
+    const scrollArea = this.sidebarScroller?.nativeElement;
+    scrollArea?.removeEventListener('touchstart', this.handleSidebarTouchStart);
+    scrollArea?.removeEventListener('touchmove', this.handleSidebarTouchMove);
+    scrollArea?.removeEventListener('touchend', this.handleSidebarTouchEnd);
+    scrollArea?.removeEventListener('touchcancel', this.handleSidebarTouchEnd);
+  }
+
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
 
   toggleMobileSidebar(): void {
+    this.updateViewportHeight();
     this.mobileOpen = !this.mobileOpen;
   }
 
@@ -174,6 +261,18 @@ export class MainLayoutComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  private shouldHandleSidebarTouch(event: TouchEvent): boolean {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    const isTouchLayout =
+      window.innerWidth <= 900 ||
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+    return isTouchLayout && event.touches.length === 1;
   }
 
 }

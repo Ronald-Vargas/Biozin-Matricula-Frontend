@@ -58,7 +58,7 @@
         </thead>
         <tbody>
           <tr *ngIf="estudiantesFiltrados.length === 0">
-            <td colspan="8" class="empty-state">
+            <td colspan="5" class="empty-state">
               <div class="empty-icon">📭</div>
               <p>No se encontraron estudiantes</p>
             </td>
@@ -67,9 +67,9 @@
           <tr *ngFor="let est of estudiantesFiltrados; let i = index"
               class="table-row" [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="student-carnet">{{ est.carnet }}</strong></td>
+            <td data-label="Carnet"><strong class="student-carnet">{{ est.carnet }}</strong></td>
 
-            <td>
+            <td data-label="Estudiante">
               <div class="student-info">
                 <div class="student-avatar">{{ getIniciales(est) }}</div>
                 <div>
@@ -79,14 +79,14 @@
               </div>
             </td>
 
-            <td>
+            <td data-label="Carrera">
               <div class="career-badge">
                 <span class="career-code">{{ est.carreraCodigo }}</span>
                 <span class="career-name">{{ est.carreraNombre }}</span>
               </div>
             </td>
 
-            <td>
+            <td data-label="Estado">
               <span class="status-badge"
                     [class.active]="est.estadoEstudiante"
                     [class.inactive]="!est.estadoEstudiante">
@@ -94,7 +94,7 @@
               </span>
             </td>
 
-            <td>
+            <td data-label="Acciones">
               <div class="action-buttons">
                 <button
                   class="btn-icon btn-view"

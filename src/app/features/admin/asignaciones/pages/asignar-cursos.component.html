@@ -84,10 +84,9 @@
       </div>
 
       <button
-        class="btn btn-success"
+        class="btn btn-success guardar-asignaciones-btn"
         (click)="guardarAsignaciones()"
-        [disabled]="guardando || erroresPrerequisitos.length > 0"
-        style="margin-top: 2rem;">
+        [disabled]="guardando || erroresPrerequisitos.length > 0">
         {{ guardando ? 'Guardando...' : 'Guardar Asignaciones' }}
       </button>
     </div>

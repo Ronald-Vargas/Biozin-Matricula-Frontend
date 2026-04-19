@@ -1,6 +1,87 @@
+.malla-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.module-banner,
+.section,
+.semestre-container,
+.table-container {
+  min-width: 0;
+}
+
+.section {
+  overflow: hidden;
+}
+
+.module-title,
+.module-subtitle,
+.section-title {
+  overflow-wrap: anywhere;
+}
+
+.form-group {
+  max-width: 560px;
+}
+
+.form-group select {
+  max-width: 100%;
+}
+
+.semestre-container {
+  container-type: inline-size;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--card, #ffffff);
+}
+
+.semestre-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg, #f8fafc);
+  border-bottom: 1px solid var(--border, #e2e8f0);
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.table-container {
+  width: 100%;
+  overflow: visible;
+}
+
+.creditos-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  padding: 0.35rem 0.75rem;
+  background: rgba(6, 182, 212, 0.12);
+  color: var(--accent-dark, #0891b2);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .malla-table {
   width: 100%;
   table-layout: fixed;
+
+  th,
+  td {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
 }
 
 .prereq-badge {
@@ -13,9 +94,260 @@
   font-size: 0.8rem;
   font-weight: 500;
   margin: 2px 4px 2px 0;
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
 }
 
 .text-muted {
   color: var(--text-light, #888);
+}
+
+.resumen-final {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  background: var(--bg, #f8fafc);
+
+  h3 {
+    margin-bottom: 0.35rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .module-banner {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .module-banner-content {
+    gap: 1rem;
+  }
+
+  .module-title {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .module-subtitle {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .section {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    max-width: none;
+    margin-bottom: 1rem;
+  }
+
+  .form-group select {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+
+  .semestre-container {
+    margin-bottom: 1rem;
+  }
+
+  .semestre-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .creditos-badge {
+    white-space: normal;
+    text-align: left;
+  }
+
+  .table-container {
+    overflow: visible;
+  }
+
+  .malla-table {
+    display: block;
+    table-layout: auto;
+
+    colgroup,
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg, #f8fafc);
+    }
+
+    tr {
+      display: block;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 8px;
+      background: white;
+      overflow: hidden;
+    }
+
+    tbody tr:hover {
+      background: white;
+    }
+
+    td {
+      display: grid;
+      grid-template-columns: minmax(96px, 36%) 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.8rem;
+      border-bottom: 1px solid var(--border, #e2e8f0);
+      text-align: left;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+
+    td::before {
+      content: attr(data-label);
+      color: var(--text-light, #64748b);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+
+  .prereq-badge {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .resumen-final {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .no-data {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .module-banner {
+    padding: 1.5rem 1.75rem;
+    border-radius: 8px;
+  }
+
+  .section {
+    padding: 1.25rem;
+    border-radius: 8px;
+  }
+
+  .malla-table {
+    th,
+    td {
+      padding: 0.85rem 0.75rem;
+      font-size: 0.92rem;
+    }
+  }
+
+  .prereq-badge {
+    padding: 0.18rem 0.45rem;
+    font-size: 0.76rem;
+  }
+}
+
+@container (max-width: 760px) {
+  .semestre-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .creditos-badge {
+    white-space: normal;
+    text-align: left;
+  }
+
+  .table-container {
+    overflow: visible;
+  }
+
+  .malla-table {
+    display: block;
+    table-layout: auto;
+
+    colgroup,
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: grid;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg, #f8fafc);
+    }
+
+    tr {
+      display: block;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: 8px;
+      background: white;
+      overflow: hidden;
+    }
+
+    tbody tr:hover {
+      background: white;
+    }
+
+    td {
+      display: grid;
+      grid-template-columns: minmax(96px, 36%) 1fr;
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.8rem;
+      border-bottom: 1px solid var(--border, #e2e8f0);
+      text-align: left;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+
+    td::before {
+      content: attr(data-label);
+      color: var(--text-light, #64748b);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@container (max-width: 420px) {
+  .malla-table td {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .malla-table td {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
 }

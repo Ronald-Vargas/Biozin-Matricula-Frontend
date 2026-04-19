@@ -52,10 +52,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let curso of semestre.cursos">
-                <td><strong>{{ curso?.codigo }}</strong></td>
-                <td>{{ curso?.nombre }}</td>
-                <td class="text-center">{{ curso?.creditos }}</td>
-                <td>
+                <td data-label="Código"><strong>{{ curso?.codigo }}</strong></td>
+                <td data-label="Curso">{{ curso?.nombre }}</td>
+                <td data-label="Créditos" class="text-center">{{ curso?.creditos }}</td>
+                <td data-label="Prerrequisitos">
                   <ng-container *ngIf="curso.prerequisitos && curso.prerequisitos.length > 0; else sinPrereq">
                     <span *ngFor="let prereq of curso.prerequisitos" class="prereq-badge">
                       {{ prereq }}

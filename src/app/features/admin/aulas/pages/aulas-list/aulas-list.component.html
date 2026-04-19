@@ -49,10 +49,10 @@
       <table class="aulas-table">
         <thead>
           <tr>
-            <th>Numero</th>
+            <th>Número</th>
             <th>Capacidad</th>
             <th>Tipo</th>
-            <th>Descripcion</th>
+            <th>Descripción</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
@@ -69,22 +69,22 @@
               class="table-row"
               [style.animation-delay]="(i * 0.05) + 's'">
 
-            <td><strong class="aula-numero">{{ aula.numeroAula }}</strong></td>
-            <td>{{ aula.capacidad }} personas</td>
-            <td>
+            <td data-label="Número"><strong class="aula-numero">{{ aula.numeroAula }}</strong></td>
+            <td data-label="Capacidad">{{ aula.capacidad }} personas</td>
+            <td data-label="Tipo">
               <span class="tipo-badge" [class.lab]="aula.esLaboratorio">
                 {{ aula.esLaboratorio ? '🔬 Laboratorio' : '🏫 Aula' }}
               </span>
             </td>
-            <td class="desc-cell">{{ aula.descripcion || '—' }}</td>
-            <td>
+            <td data-label="Descripción" class="desc-cell">{{ aula.descripcion || '—' }}</td>
+            <td data-label="Estado">
               <span class="status-badge"
                     [class.active]="aula.activo"
                     [class.inactive]="!aula.activo">
                 {{ aula.activo ? 'Activo' : 'Inactivo' }}
               </span>
             </td>
-            <td>
+            <td data-label="Acciones">
               <div class="action-buttons">
                 <button 
                   class="btn-icon btn-edit"

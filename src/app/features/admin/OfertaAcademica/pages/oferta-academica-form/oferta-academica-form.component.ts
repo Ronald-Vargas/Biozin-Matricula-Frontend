@@ -52,6 +52,11 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
   aulas: Aula[] = [];
   aulasFiltradas: Aula[] = [];
 
+  busquedaPeriodo = '';
+  busquedaCurso = '';
+  busquedaProfesor = '';
+  busquedaAula = '';
+
   cursoSeleccionado: Curso | null = null;
   errorHorario = '';
   errorServidor = '';
@@ -88,6 +93,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visible']?.currentValue === true) {
+      this.limpiarBusquedas();
       if (this.ofertaEditar) {
         this.modoEdicion = true;
         this.precargarDatos(this.ofertaEditar);
@@ -180,6 +186,56 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     return this.cursoSeleccionado?.esVirtual === true;
   }
 
+  get periodosFiltrados(): Periodo[] {
+    const filtrados = this.periodos.filter(periodo =>
+      this.coincideBusqueda(this.periodoTexto(periodo), this.busquedaPeriodo)
+    );
+
+    return this.incluirSeleccionado(filtrados, this.periodos, this.oferta.idPeriodo, periodo => periodo.idPeriodo);
+  }
+
+  get cursosFiltrados(): Curso[] {
+    const filtrados = this.cursos.filter(curso =>
+      this.coincideBusqueda(`${this.cursoTexto(curso)} ${curso.descripcion ?? ''}`, this.busquedaCurso)
+    );
+
+    return this.incluirSeleccionado(filtrados, this.cursos, this.oferta.idCurso, curso => curso.idCurso);
+  }
+
+  get profesoresFiltrados(): Profesor[] {
+    const filtrados = this.profesores.filter(profesor =>
+      this.coincideBusqueda(this.profesorBusquedaTexto(profesor), this.busquedaProfesor)
+    );
+
+    return this.incluirSeleccionado(filtrados, this.profesores, this.oferta.idProfesor, profesor => profesor.idProfesor);
+  }
+
+  get aulasFiltradasPorBusqueda(): Aula[] {
+    const filtradas = this.aulasFiltradas.filter(aula =>
+      this.coincideBusqueda(this.aulaTexto(aula), this.busquedaAula)
+    );
+
+    return this.incluirSeleccionado(filtradas, this.aulasFiltradas, this.oferta.idAula, aula => aula.idAula);
+  }
+
+  periodoTexto(periodo: Periodo): string {
+    return periodo.nombre;
+  }
+
+  cursoTexto(curso: Curso): string {
+    return `${curso.codigo} - ${curso.nombre}`;
+  }
+
+  profesorTexto(profesor: Profesor): string {
+    return [profesor.nombre, profesor.apellidoPaterno, profesor.apellidoMaterno]
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  aulaTexto(aula: Aula): string {
+    return `${aula.numeroAula} - Cap. ${aula.capacidad}${aula.esLaboratorio ? ' (Laboratorio)' : ''}`;
+  }
+
   onHoraInicioChange(dia: { horaInicio: string; horaFin: string }): void {
     if (dia.horaFin && dia.horaFin <= dia.horaInicio) {
       dia.horaFin = '';
@@ -199,6 +255,7 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     }
     this.oferta.idAula = 0;
     this.oferta.cupoMaximo = null;
+    this.busquedaAula = '';
   }
 
   onAulaChange(): void {
@@ -325,10 +382,58 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     this.errorHoras = '';
     this.errorFormulario = '';
     this.errorServidor = '';
+    this.limpiarBusquedas();
     this.diasOptions.forEach(d => {
       d.seleccionado = false;
       d.horaInicio = '';
       d.horaFin = '';
     });
+  }
+
+  private profesorBusquedaTexto(profesor: Profesor): string {
+    return [
+      this.profesorTexto(profesor),
+      profesor.cedula,
+      profesor.codigo,
+      profesor.emailInstitucional,
+      profesor.especialidad,
+      profesor.titulo,
+    ].filter(Boolean).join(' ');
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  private incluirSeleccionado<T>(
+    filtrados: T[],
+    todos: T[],
+    idSeleccionado: number | null,
+    obtenerId: (item: T) => number
+  ): T[] {
+    const id = Number(idSeleccionado);
+    if (!id || filtrados.some(item => obtenerId(item) === id)) return filtrados;
+
+    const seleccionado = todos.find(item => obtenerId(item) === id);
+    return seleccionado ? [seleccionado, ...filtrados] : filtrados;
+  }
+
+  private limpiarBusquedas(): void {
+    this.busquedaPeriodo = '';
+    this.busquedaCurso = '';
+    this.busquedaProfesor = '';
+    this.busquedaAula = '';
   }
 }

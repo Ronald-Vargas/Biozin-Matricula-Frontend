@@ -6,7 +6,7 @@
   <div class="sidebar-overlay" *ngIf="mobileOpen" (click)="closeMobileMenu()"></div>
 
   <!-- ══════ SIDEBAR ══════ -->
-  <aside class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-open]="mobileOpen">
+  <aside #sidebarScroller class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-open]="mobileOpen">
 
 
     <!-- Header -->
@@ -25,6 +25,7 @@
 
 
 
+    <div class="sidebar-body">
     <!-- Navigation con secciones -->
     <nav class="sidebar-nav">
       <div class="nav-section" *ngFor="let section of menuSections">
@@ -55,6 +56,7 @@
           <div class="user-role">{{ userRole }}</div>
         </div>
       </div>
+    </div>
     </div>
 
   </aside>
