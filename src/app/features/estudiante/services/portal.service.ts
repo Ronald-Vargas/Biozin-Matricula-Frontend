@@ -8,6 +8,7 @@ import {
   SemestreHistorial,
   Pago,
   Respuesta,
+  MatricularBulkRequest,
 } from '../models/portal.models';
 
 
@@ -28,6 +29,10 @@ export class PortalService {
 
   matricular(idOferta: number): Observable<Respuesta<number>> {
     return this.http.post<Respuesta<number>>(`${this.apiUrl}/Matricular`, { idOferta });
+  }
+
+  matricularBulk(solicitud: MatricularBulkRequest): Observable<Respuesta<boolean>> {
+    return this.http.post<Respuesta<boolean>>(`${this.apiUrl}/MatricularBulk`, solicitud);
   }
 
   getHistorial(): Observable<Respuesta<SemestreHistorial[]>> {

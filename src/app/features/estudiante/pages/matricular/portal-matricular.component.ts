@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PortalService } from '../../services/portal.service';
-import { OfertaMatricula } from '../../models/portal.models';
+import { EstudiantePerfil, OfertaMatricula } from '../../models/portal.models';
+
+const MONTO_MATRICULA = 100000;
+const MONTO_INFRAESTRUCTURA = 15000;
 
 @Component({
   selector: 'app-portal-matricular',
@@ -14,17 +17,31 @@ import { OfertaMatricula } from '../../models/portal.models';
 export class PortalMatricularComponent implements OnInit {
 
   filtroBusqueda = '';
-  confirmando: OfertaMatricula | null = null;
   cargando = true;
-  matriculando = false;
+  procesando = false;
   mensajeExito = '';
   mensajeError = '';
 
+  mostrarResumen = false;
+  metodoPago: 'tarjeta' | 'transferencia' = 'tarjeta';
+
   oferta: OfertaMatricula[] = [];
+  perfil: EstudiantePerfil | null = null;
+
+  readonly montoMatricula = MONTO_MATRICULA;
+  readonly montoInfraestructura = MONTO_INFRAESTRUCTURA;
 
   constructor(private portalService: PortalService) {}
 
   ngOnInit(): void {
+    this.portalService.getPerfil().subscribe({
+      next: (res) => {
+        if (!res.blnError && res.valorRetorno) {
+          this.perfil = res.valorRetorno;
+        }
+      }
+    });
+
     this.portalService.getOfertas().subscribe({
       next: (res) => {
         this.cargando = false;
@@ -41,6 +58,7 @@ export class PortalMatricularComponent implements OnInit {
             matriculados: o.matriculados,
             precio: o.precio,
             yaMatriculado: o.yaMatriculado ?? false,
+            seleccionado: false,
           }));
         }
       },
@@ -59,8 +77,75 @@ export class PortalMatricularComponent implements OnInit {
     );
   }
 
-  get cuposDisponibles(): number {
-    return this.oferta.filter((c) => !c.yaMatriculado && this.getCuposRestantes(c) > 0).length;
+  get seleccionados(): OfertaMatricula[] {
+    return this.oferta.filter(c => c.seleccionado);
+  }
+
+  get becaFactor(): number {
+    if (!this.perfil?.tipoBeca || this.perfil.tipoBeca === 'Ninguna') return 0;
+    const pct = parseFloat(this.perfil.tipoBeca.replace('%', ''));
+    return isNaN(pct) ? 0 : pct / 100;
+  }
+
+  precioConBeca(precio: number): number {
+    return precio * (1 - this.becaFactor);
+  }
+
+  get subtotalCursos(): number {
+    return this.seleccionados.reduce((acc, c) => acc + this.precioConBeca(c.precio), 0);
+  }
+
+  get totalFinal(): number {
+    return this.subtotalCursos + MONTO_MATRICULA + MONTO_INFRAESTRUCTURA;
+  }
+
+  toggleSeleccion(curso: OfertaMatricula): void {
+    if (curso.yaMatriculado || this.getCuposRestantes(curso) <= 0) return;
+    curso.seleccionado = !curso.seleccionado;
+  }
+
+  abrirResumen(): void {
+    if (this.seleccionados.length === 0) return;
+    this.mensajeError = '';
+    this.mostrarResumen = true;
+    this.metodoPago = 'tarjeta';
+  }
+
+  cerrarResumen(): void {
+    this.mostrarResumen = false;
+    this.mensajeError = '';
+  }
+
+  confirmarMatricula(financiar: boolean): void {
+    if (this.procesando) return;
+    this.procesando = true;
+    this.mensajeError = '';
+
+    this.portalService.matricularBulk({
+      idsOferta: this.seleccionados.map(c => c.idOferta),
+      financiar,
+      metodoPago: this.metodoPago,
+    }).subscribe({
+      next: (res) => {
+        this.procesando = false;
+        if (res.blnError) {
+          this.mensajeError = res.strMensajeRespuesta || 'Error al procesar la matrícula.';
+        } else {
+          this.mostrarResumen = false;
+          this.seleccionados.forEach(c => {
+            c.yaMatriculado = true;
+            c.seleccionado = false;
+            c.matriculados += 1;
+          });
+          this.mensajeExito = res.strMensajeRespuesta || 'Matrícula realizada exitosamente.';
+          setTimeout(() => { this.mensajeExito = ''; }, 6000);
+        }
+      },
+      error: () => {
+        this.procesando = false;
+        this.mensajeError = 'Error al procesar la matrícula.';
+      },
+    });
   }
 
   getCuposRestantes(curso: OfertaMatricula): number {
@@ -76,42 +161,5 @@ export class PortalMatricularComponent implements OnInit {
     if (pct >= 100) return 'cupo-lleno';
     if (pct >= 80) return 'cupo-critico';
     return 'cupo-ok';
-  }
-
-  abrirConfirmacion(curso: OfertaMatricula): void {
-    this.confirmando = curso;
-    this.mensajeError = '';
-  }
-
-  cancelarConfirmacion(): void {
-    this.confirmando = null;
-  }
-
-  confirmarMatricula(): void {
-    if (!this.confirmando) return;
-    this.matriculando = true;
-    const idOferta = this.confirmando.idOferta;
-
-    this.portalService.matricular(idOferta).subscribe({
-      next: (res) => {
-        this.matriculando = false;
-        if (res.blnError) {
-          this.mensajeError = res.strMensajeRespuesta || 'Error al matricular.';
-        } else {
-          const curso = this.oferta.find(c => c.idOferta === idOferta);
-          if (curso) {
-            curso.yaMatriculado = true;
-            curso.matriculados += 1;
-          }
-          this.mensajeExito = `Matriculado exitosamente en ${this.confirmando?.nombreCurso}.`;
-          this.confirmando = null;
-          setTimeout(() => { this.mensajeExito = ''; }, 4000);
-        }
-      },
-      error: () => {
-        this.matriculando = false;
-        this.mensajeError = 'Error al procesar la matrícula.';
-      },
-    });
   }
 }

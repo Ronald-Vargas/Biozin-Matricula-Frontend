@@ -11,6 +11,7 @@ export interface EstudiantePerfil {
   creditosMatriculados?: number;
   creditosEnCurso?: number;
   creditosTotales?: number;
+  tipoBeca?: string | null;
 }
 
 export interface LoginRequest {
@@ -84,6 +85,13 @@ export interface OfertaMatricula {
   matriculados: number;
   precio: number;
   yaMatriculado: boolean;
+  seleccionado: boolean;
+}
+
+export interface MatricularBulkRequest {
+  idsOferta: number[];
+  financiar: boolean;
+  metodoPago: string;
 }
 
 export interface CursoHistorial {
