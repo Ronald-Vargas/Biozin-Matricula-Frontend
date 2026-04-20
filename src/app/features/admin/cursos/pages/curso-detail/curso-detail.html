@@ -34,6 +34,12 @@
         <span class="value">{{ curso?.precio | currency:'USD':'symbol':'1.2-2' }}</span>
       </div>
       <div class="detail-item">
+        <span class="label">Modalidad:</span>
+        <span class="status-badge" [class.active]="curso?.esVirtual" [class.inactive]="!curso?.esVirtual">
+          {{ curso?.esVirtual ? '🖥️ Virtual' : '🏫 Presencial' }}
+        </span>
+      </div>
+      <div class="detail-item">
         <span class="label">Laboratorio:</span>
         <span class="value">{{ curso?.tieneLaboratorio ? 'Sí' : 'No' }}</span>
       </div>
