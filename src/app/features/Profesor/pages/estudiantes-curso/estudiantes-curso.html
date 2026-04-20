@@ -39,7 +39,6 @@
           <th>Carnet</th>
           <th>Estudiante</th>
           <th>Correo</th>
-          <th class="col-creditos">Créditos Aprobados</th>
           <th class="col-nota">Nota</th>
           <th class="col-estado">Estado</th>
           <th class="col-acciones">Acciones</th>
@@ -55,10 +54,6 @@
           </td>
 
           <td class="email-cell">{{ est.emailInstitucional }}</td>
-
-          <td class="creditos-cell">
-            {{ est.creditosAprobados ?? 0 }} / {{ est.creditosTotales ?? '—' }}
-          </td>
 
           <!-- Nota -->
           <td class="nota-cell">

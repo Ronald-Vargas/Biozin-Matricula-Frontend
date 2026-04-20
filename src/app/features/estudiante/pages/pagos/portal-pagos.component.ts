@@ -40,7 +40,11 @@ export class PortalPagosComponent implements OnInit {
   }
 
   get pagosPendientes(): Pago[] {
-    return this.pagos.filter((p) => p.estado === 'pendiente' || p.estado === 'vencido');
+    return this.pagos.filter((p) => p.estado === 'pendiente');
+  }
+
+  get pagosVencidos(): Pago[] {
+    return this.pagos.filter((p) => p.estado === 'vencido');
   }
 
   get pagosRealizados(): Pago[] {
@@ -49,6 +53,10 @@ export class PortalPagosComponent implements OnInit {
 
   get totalPendiente(): number {
     return this.pagosPendientes.reduce((acc, p) => acc + p.monto, 0);
+  }
+
+  get totalVencido(): number {
+    return this.pagosVencidos.reduce((acc, p) => acc + p.monto, 0);
   }
 
   get totalPagado(): number {

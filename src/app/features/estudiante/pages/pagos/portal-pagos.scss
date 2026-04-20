@@ -102,6 +102,7 @@
 .resumen-card.pendiente { border-left: 4px solid var(--warning); }
 .resumen-card.pagado { border-left: 4px solid var(--success); }
 .resumen-card.info { border-left: 4px solid var(--accent); }
+.resumen-card.vencido { border-left: 4px solid var(--danger); }
 
 .resumen-icon { font-size: 1.8rem; }
 
@@ -162,6 +163,7 @@
 
 .pago-pendiente { background: rgba(245, 158, 11, 0.04); }
 .pago-realizado { background: var(--bg); }
+.pago-vencido { background: rgba(239, 68, 68, 0.04); border-color: rgba(239, 68, 68, 0.2); }
 
 .pago-left {
   display: flex;
@@ -180,6 +182,7 @@
 
 .pago-indicador.pendiente { background: var(--warning); }
 .pago-indicador.pagado { background: var(--success); }
+.pago-indicador.vencido { background: var(--danger); }
 
 .pago-info {
   display: flex;
@@ -224,6 +227,36 @@
 }
 
 .pago-monto.pagado { color: var(--success); }
+.pago-monto.vencido-monto { color: var(--danger); }
+
+.vencido-text { color: var(--danger) !important; }
+
+.badge-vencido {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.section-vencidos {
+  border-color: rgba(239, 68, 68, 0.25);
+  margin-bottom: 1.5rem;
+}
+
+.vencido-title { color: var(--danger); }
+
+.alerta-vencido {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  color: #991b1b;
+  margin-bottom: 1rem;
+}
 
 .btn-pagar {
   padding: 0.5rem 1.1rem;

@@ -25,3 +25,4 @@ export class ToastComponent {
     return type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '❌';
   }
 }
+ 

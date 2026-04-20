@@ -102,6 +102,8 @@
 .mensaje-guardado.success { color: var(--success); }
 .mensaje-guardado.error { color: var(--danger); }
 
+
+
 @media (max-width: 900px) {
   .email-cell { display: none; }
   .students-table th:nth-child(3) { display: none; }

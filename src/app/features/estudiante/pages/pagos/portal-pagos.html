@@ -21,6 +21,13 @@
         <span class="resumen-label">Saldo Pendiente</span>
       </div>
     </div>
+    <div class="resumen-card vencido" *ngIf="pagosVencidos.length > 0">
+      <div class="resumen-icon">⛔</div>
+      <div class="resumen-info">
+        <span class="resumen-value">₡{{ totalVencido | number }}</span>
+        <span class="resumen-label">Pagos Vencidos</span>
+      </div>
+    </div>
     <div class="resumen-card pagado">
       <div class="resumen-icon">✅</div>
       <div class="resumen-info">
@@ -28,11 +35,41 @@
         <span class="resumen-label">Total Pagado</span>
       </div>
     </div>
-    <div class="resumen-card info">
+    <div class="resumen-card info" *ngIf="pagosVencidos.length === 0">
       <div class="resumen-icon">📋</div>
       <div class="resumen-info">
         <span class="resumen-value">{{ pagosPendientes.length }}</span>
         <span class="resumen-label">Cuotas Pendientes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagos vencidos -->
+  <div class="section section-vencidos" *ngIf="pagosVencidos.length > 0">
+    <h2 class="section-title vencido-title">
+      <span>⛔</span>
+      Pagos Vencidos
+    </h2>
+    <div class="alerta-vencido">
+      <strong>Cursos marcados como reprobados.</strong> El plazo de pago expiró. Si crees que es un error, comunícate con la oficina de registro.
+    </div>
+    <div class="pagos-list">
+      <div
+        class="pago-card pago-vencido"
+        *ngFor="let p of pagosVencidos; let i = index"
+        [style.animation-delay]="(i * 0.08) + 's'"
+      >
+        <div class="pago-left">
+          <div class="pago-indicador vencido"></div>
+          <div class="pago-info">
+            <span class="pago-concepto">{{ p.concepto }}</span>
+            <span class="pago-vencimiento vencido-text">Venció: {{ p.fechaVencimiento | date:'d MMM yyyy' }}</span>
+          </div>
+        </div>
+        <div class="pago-right">
+          <span class="pago-monto vencido-monto">₡{{ p.monto | number }}</span>
+          <span class="badge-vencido">⛔ Vencido</span>
+        </div>
       </div>
     </div>
   </div>
@@ -64,8 +101,8 @@
     </div>
   </div>
 
-  <!-- Sin pendientes -->
-  <div class="al-dia-card" *ngIf="pagosPendientes.length === 0">
+  <!-- Sin pendientes ni vencidos -->
+  <div class="al-dia-card" *ngIf="pagosPendientes.length === 0 && pagosVencidos.length === 0">
     <span class="al-dia-icon">🎉</span>
     <div>
       <p class="al-dia-title">¡Estás al día!</p>
