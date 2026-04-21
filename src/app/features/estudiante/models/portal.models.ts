@@ -1,10 +1,15 @@
+export interface CarreraResumenPortal {
+  idCarrera: number;
+  codigo: string;
+  nombre: string;
+}
+
 export interface EstudiantePerfil {
   idEstudiante: number;
   nombre: string;
   apellidoPaterno: string;
   carnet: number;
-  idCarrera: number;
-  nombreCarrera: string;
+  carreras: CarreraResumenPortal[];
   semestreActual?: number | null;
   emailInstitucional: string;
   creditosAprobados?: number;
@@ -26,8 +31,7 @@ export interface AuthRespuesta {
   nombre: string;
   email: string;
   carnet?: number;
-  idCarrera?: number;
-  nombreCarrera?: string;
+  carreras?: CarreraResumenPortal[];
   semestreActual?: number;
   requiereCambioContrasena?: boolean;
 }

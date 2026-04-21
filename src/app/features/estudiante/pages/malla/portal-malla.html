@@ -22,6 +22,19 @@
       </div>
     </div>
 
+    <!-- Selector de carrera (solo si tiene más de una) -->
+    <div class="carrera-selector" *ngIf="carreras.length > 1">
+      <span class="selector-label">Carrera:</span>
+      <button
+        *ngFor="let c of carreras"
+        class="carrera-tab"
+        [class.active]="carreraSeleccionada?.idCarrera === c.idCarrera"
+        (click)="seleccionarCarrera(c)"
+      >
+        {{ c.codigo }} — {{ c.nombre }}
+      </button>
+    </div>
+
     <!-- Resumen de progreso -->
     <div class="progreso-card">
       <div class="progreso-row">

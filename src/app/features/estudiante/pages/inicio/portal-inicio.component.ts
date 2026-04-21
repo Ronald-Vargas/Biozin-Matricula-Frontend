@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PortalService } from '../../services/portal.service';
 import { AuthService } from '../../services/auth.service';
-import { EstudiantePerfil } from '../../models/portal.models';
+import { CarreraResumenPortal, EstudiantePerfil } from '../../models/portal.models';
 
 interface AccionRapida {
   icon: string;
@@ -24,7 +24,13 @@ export class PortalInicioComponent implements OnInit {
 
   currentDate = '';
   cargando = true;
+  cargandoCreditos = false;
   estudiante: EstudiantePerfil | null = null;
+
+  carreras: CarreraResumenPortal[] = [];
+  carreraSeleccionada: CarreraResumenPortal | null = null;
+  creditosAprobadosCarrera = 0;
+  creditosTotalesCarrera = 0;
 
   accionesRapidas: AccionRapida[] = [
     {
@@ -68,8 +74,8 @@ export class PortalInicioComponent implements OnInit {
   }
 
   get progresoCreditos(): number {
-    if (!this.estudiante?.creditosAprobados || !this.estudiante?.creditosTotales) return 0;
-    return Math.round((this.estudiante.creditosAprobados / this.estudiante.creditosTotales) * 100);
+    if (!this.creditosAprobadosCarrera || !this.creditosTotalesCarrera) return 0;
+    return Math.round((this.creditosAprobadosCarrera / this.creditosTotalesCarrera) * 100);
   }
 
   constructor(private portalService: PortalService, private authService: AuthService) {}
@@ -83,17 +89,41 @@ export class PortalInicioComponent implements OnInit {
     };
     this.currentDate = new Date().toLocaleDateString('es-CR', options);
 
-    // Use cached perfil first, then refresh from API
     this.estudiante = this.authService.getPerfil();
+    this.carreras = this.estudiante?.carreras ?? [];
     this.cargando = false;
+
+    if (this.carreras.length > 0) {
+      this.seleccionarCarrera(this.carreras[0]);
+    }
 
     this.portalService.getPerfil().subscribe({
       next: (res) => {
         if (!res.blnError && res.valorRetorno) {
           this.estudiante = res.valorRetorno;
           this.authService.setSession(this.authService.getToken()!, res.valorRetorno);
+          this.carreras = this.estudiante.carreras ?? [];
+          if (this.carreras.length > 0 && !this.carreraSeleccionada) {
+            this.seleccionarCarrera(this.carreras[0]);
+          }
         }
       },
+    });
+  }
+
+  seleccionarCarrera(carrera: CarreraResumenPortal): void {
+    if (this.carreraSeleccionada?.idCarrera === carrera.idCarrera) return;
+    this.carreraSeleccionada = carrera;
+    this.cargandoCreditos = true;
+    this.portalService.getMalla(carrera.idCarrera).subscribe({
+      next: (res) => {
+        this.cargandoCreditos = false;
+        if (!res.blnError && res.valorRetorno) {
+          this.creditosAprobadosCarrera = res.valorRetorno.creditosAprobados;
+          this.creditosTotalesCarrera = res.valorRetorno.totalCreditos;
+        }
+      },
+      error: () => { this.cargandoCreditos = false; },
     });
   }
 }

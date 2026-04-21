@@ -33,6 +33,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
   estudianteForm!: FormGroup;
 
   carreras: Carrera[] = [];
+  carrerasSeleccionadas: number[] = [];
   private estudiantesExistentes: Estudiante[] = [];
   private subCarreras?: Subscription;
   private subDiscapacidad?: Subscription;
@@ -54,7 +55,6 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
 
     this.estudianteService.getEstudiantes().subscribe(e => this.estudiantesExistentes = e);
 
-    // Cuando discapacidad cambia, limpiar campos dependientes
     this.subDiscapacidad = this.estudianteForm.get('discapacidad')!.valueChanges.subscribe(val => {
       if (!val) {
         this.estudianteForm.get('tipoDiscapacidad')!.setValue('');
@@ -97,7 +97,6 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
       nombreContactoEmergencia: ['', [Validators.maxLength(100)]],
 
       // ── Académico ──
-      idCarrera:               [0, [Validators.required, Validators.min(1)]],
       condicionSocioeconomica: ['', [Validators.maxLength(30)]],
       tipoBeca:                ['Ninguna'],
       trabaja:                 [false],
@@ -129,6 +128,10 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     return this.estudianteForm.get('discapacidad')!.value;
   }
 
+  get carrerasInvalid(): boolean {
+    return this.carrerasSeleccionadas.length === 0;
+  }
+
   f(name: string): AbstractControl {
     return this.estudianteForm.get(name)!;
   }
@@ -138,10 +141,24 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     return ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 
+  toggleCarrera(idCarrera: number): void {
+    const idx = this.carrerasSeleccionadas.indexOf(idCarrera);
+    if (idx === -1) {
+      this.carrerasSeleccionadas = [...this.carrerasSeleccionadas, idCarrera];
+    } else {
+      this.carrerasSeleccionadas = this.carrerasSeleccionadas.filter(id => id !== idCarrera);
+    }
+  }
+
+  estaSeleccionada(idCarrera: number): boolean {
+    return this.carrerasSeleccionadas.includes(idCarrera);
+  }
+
   cargarEstudiante(id: number): void {
     this.estudianteService.getEstudianteById(id).subscribe(est => {
       if (!est) return;
       this.estudianteOriginal = est;
+      this.carrerasSeleccionadas = est.idsCarreras ?? [];
       this.estudianteForm.patchValue({
         cedula: est.cedula,
         nombre: est.nombre,
@@ -157,7 +174,6 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         telefonoMovil: est.telefonoMovil,
         telefonoEmergencia: est.telefonoEmergencia ?? '',
         nombreContactoEmergencia: est.nombreContactoEmergencia ?? '',
-        idCarrera: est.idCarrera,
         condicionSocioeconomica: est.condicionSocioeconomica ?? '',
         tipoBeca: est.tipoBeca,
         trabaja: est.trabaja,
@@ -186,6 +202,11 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.carrerasSeleccionadas.length === 0) {
+      alert('⚠️ Debe seleccionar al menos una carrera.');
+      return;
+    }
+
     const v = this.estudianteForm.value;
     const otros = this.estudiantesExistentes.filter(e => e.idEstudiante !== this.estudianteId);
 
@@ -199,12 +220,6 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     }
     if (otros.some(e => e.telefonoMovil === v.telefonoMovil.trim())) {
       alert('❌ El número de teléfono ya está registrado en otro estudiante.');
-      return;
-    }
-
-    const carreraSeleccionada = this.carreras.find(c => c.idCarrera === v.idCarrera);
-    if (!carreraSeleccionada) {
-      alert('⚠️ Por favor seleccione una carrera válida');
       return;
     }
 
@@ -225,7 +240,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         telefonoMovil: v.telefonoMovil,
         telefonoEmergencia: v.telefonoEmergencia || undefined,
         nombreContactoEmergencia: v.nombreContactoEmergencia || undefined,
-        idCarrera: carreraSeleccionada.idCarrera,
+        idsCarreras: this.carrerasSeleccionadas,
         condicionSocioeconomica: v.condicionSocioeconomica || undefined,
         tipoBeca: v.tipoBeca,
         trabaja: v.trabaja,
@@ -266,7 +281,7 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
         telefonoMovil: v.telefonoMovil,
         telefonoEmergencia: v.telefonoEmergencia || undefined,
         nombreContactoEmergencia: v.nombreContactoEmergencia || undefined,
-        idCarrera: carreraSeleccionada.idCarrera,
+        idsCarreras: this.carrerasSeleccionadas,
         estadoEstudiante: v.estadoEstudiante,
         tipoBeca: v.tipoBeca,
         condicionSocioeconomica: v.condicionSocioeconomica || undefined,

@@ -126,10 +126,11 @@
             </td>
 
             <td data-label="Carrera">
-              <div class="career-badge">
-                <span class="career-code">{{ est.carreraCodigo }}</span>
-                <span class="career-name">{{ est.carreraNombre }}</span>
+              <div class="career-badge" *ngFor="let c of est.carreras">
+                <span class="career-code">{{ c.codigo }}</span>
+                <span class="career-name">{{ c.nombre }}</span>
               </div>
+              <span *ngIf="!est.carreras || est.carreras.length === 0" class="career-name" style="color:#94a3b8">Sin carrera</span>
             </td>
 
             <td data-label="Estado">

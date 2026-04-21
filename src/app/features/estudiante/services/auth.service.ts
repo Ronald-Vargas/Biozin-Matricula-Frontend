@@ -40,6 +40,17 @@ export class AuthService {
               emailInstitucional: data.email,
             };
             localStorage.setItem(this.PROFESOR_PERFIL_KEY, JSON.stringify(profesorPerfil));
+          } else if (data.role === 'Estudiante') {
+            const estudiantePerfil: EstudiantePerfil = {
+              idEstudiante: data.id,
+              nombre: data.nombre.split(' ')[0] ?? data.nombre,
+              apellidoPaterno: data.nombre.split(' ')[1] ?? '',
+              carnet: data.carnet ?? 0,
+              carreras: data.carreras ?? [],
+              semestreActual: data.semestreActual,
+              emailInstitucional: data.email,
+            };
+            localStorage.setItem(this.PERFIL_KEY, JSON.stringify(estudiantePerfil));
           }
         }
       })

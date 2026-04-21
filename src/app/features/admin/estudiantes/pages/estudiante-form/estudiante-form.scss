@@ -1,3 +1,63 @@
+/* ── Multi-select de carreras ── */
+.form-group--full {
+  grid-column: 1 / -1;
+}
+
+.sub-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.carreras-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  max-height: 200px;
+  overflow-y: auto;
+
+  &.invalid-border {
+    border-color: #ef4444;
+  }
+}
+
+.carrera-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #e0f2fe;
+  }
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #0891b2;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+.carrera-checkbox-label {
+  line-height: 1.3;
+}
+
+.sin-carreras {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+}
+
 /* ── Campos automáticos  ── */
 .auto-fields-info {
   margin-top: 1.5rem;

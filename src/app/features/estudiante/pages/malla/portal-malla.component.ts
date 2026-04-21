@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PortalService } from '../../services/portal.service';
-import { MallaCurricular, CursoMalla, SemestreMalla } from '../../models/portal.models';
+import { AuthService } from '../../services/auth.service';
+import { MallaCurricular, CursoMalla, SemestreMalla, CarreraResumenPortal } from '../../models/portal.models';
 
 @Component({
   selector: 'app-portal-malla',
@@ -15,11 +16,34 @@ export class PortalMallaComponent implements OnInit {
   cargando = true;
   error = '';
   malla: MallaCurricular | null = null;
+  carreras: CarreraResumenPortal[] = [];
+  carreraSeleccionada: CarreraResumenPortal | null = null;
 
-  constructor(private portalService: PortalService) {}
+  constructor(private portalService: PortalService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.portalService.getMalla().subscribe({
+    const perfil = this.authService.getPerfil();
+    this.carreras = perfil?.carreras ?? [];
+
+    if (this.carreras.length > 0) {
+      this.carreraSeleccionada = this.carreras[0];
+      this.cargarMalla(this.carreraSeleccionada.idCarrera);
+    } else {
+      this.cargarMalla();
+    }
+  }
+
+  seleccionarCarrera(carrera: CarreraResumenPortal): void {
+    if (this.carreraSeleccionada?.idCarrera === carrera.idCarrera) return;
+    this.carreraSeleccionada = carrera;
+    this.cargando = true;
+    this.error = '';
+    this.malla = null;
+    this.cargarMalla(carrera.idCarrera);
+  }
+
+  private cargarMalla(idCarrera?: number): void {
+    this.portalService.getMalla(idCarrera).subscribe({
       next: (res) => {
         this.cargando = false;
         if (res.blnError) {

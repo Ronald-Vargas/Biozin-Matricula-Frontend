@@ -14,7 +14,7 @@
         <div class="student-avatar">{{ iniciales }}</div>
         <div class="welcome-text">
           <h1 class="welcome-title">Bienvenido, {{ primerNombre }}!</h1>
-          <p class="welcome-subtitle">{{ estudiante.nombreCarrera }} &middot; Carnet {{ estudiante.carnet }}</p>
+          <p class="welcome-subtitle">{{ carreraSeleccionada?.nombre ?? estudiante.carreras?.[0]?.nombre ?? 'Sin carrera' }} &middot; Carnet {{ estudiante.carnet }}</p>
           <p class="welcome-date">{{ currentDate }}</p>
         </div>
       </div>
@@ -24,12 +24,26 @@
       </div>
     </div>
 
+    <!-- Selector de carrera (solo si tiene más de una) -->
+    <div class="carrera-selector" *ngIf="carreras.length > 1">
+      <span class="selector-label">Carrera:</span>
+      <button
+        *ngFor="let c of carreras"
+        class="carrera-tab"
+        [class.active]="carreraSeleccionada?.idCarrera === c.idCarrera"
+        (click)="seleccionarCarrera(c)"
+      >
+        {{ c.codigo }} — {{ c.nombre }}
+      </button>
+    </div>
+
     <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card" style="--accent-color: #f59e0b">
         <div class="stat-header">
           <div class="stat-info">
-            <span class="stat-value">{{ estudiante.creditosAprobados ?? 0 }} / {{ estudiante.creditosTotales }}</span>
+            <span class="stat-value" *ngIf="!cargandoCreditos">{{ creditosAprobadosCarrera }} / {{ creditosTotalesCarrera }}</span>
+            <span class="stat-value loading-dots" *ngIf="cargandoCreditos">...</span>
             <span class="stat-label">Créditos Aprobados</span>
           </div>
           <div class="stat-icon-wrapper"><span class="stat-icon">📊</span></div>
@@ -38,7 +52,8 @@
       <div class="stat-card" style="--accent-color: #06b6d4">
         <div class="stat-header">
           <div class="stat-info">
-            <span class="stat-value">{{ progresoCreditos }}%</span>
+            <span class="stat-value" *ngIf="!cargandoCreditos">{{ progresoCreditos }}%</span>
+            <span class="stat-value loading-dots" *ngIf="cargandoCreditos">...</span>
             <span class="stat-label">Progreso de Carrera</span>
           </div>
           <div class="stat-icon-wrapper"><span class="stat-icon">🎓</span></div>
@@ -51,7 +66,7 @@
       <div class="progress-header">
         <div class="progress-title">
           <span class="progress-icon">🎓</span>
-          Progreso de Carrera
+          Progreso{{ carreraSeleccionada ? ' — ' + carreraSeleccionada.nombre : '' }}
         </div>
         <span class="progress-percent">{{ progresoCreditos }}%</span>
       </div>
@@ -59,7 +74,7 @@
         <div class="progress-bar-fill" [style.width.%]="progresoCreditos"></div>
       </div>
       <p class="progress-detail">
-        {{ estudiante.creditosAprobados }} de {{ estudiante.creditosTotales }} créditos aprobados
+        {{ creditosAprobadosCarrera }} de {{ creditosTotalesCarrera }} créditos aprobados
       </p>
     </div>
 
@@ -103,8 +118,13 @@
               <span class="info-value">{{ estudiante.emailInstitucional }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">Carrera</span>
-              <span class="info-value">{{ estudiante.nombreCarrera }}</span>
+              <span class="info-label">Carrera(s)</span>
+              <span class="info-value">
+                <ng-container *ngIf="estudiante.carreras && estudiante.carreras.length > 0; else sinCarrera">
+                  <span *ngFor="let c of estudiante.carreras; let last = last">{{ c.nombre }}<span *ngIf="!last"> / </span></span>
+                </ng-container>
+                <ng-template #sinCarrera>Sin carrera asignada</ng-template>
+              </span>
             </div>
             <div class="info-row">
               <span class="info-label">Créditos en curso</span>

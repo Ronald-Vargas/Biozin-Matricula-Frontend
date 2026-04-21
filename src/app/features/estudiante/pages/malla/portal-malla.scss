@@ -27,6 +27,45 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ========== SELECTOR DE CARRERA ========== */
+.carrera-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.selector-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
+.carrera-tab {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--text-light);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: var(--info);
+    color: var(--info);
+  }
+
+  &.active {
+    background: var(--info);
+    border-color: var(--info);
+    color: #fff;
+    font-weight: 600;
+  }
+}
+
 /* ========== LOADING / ERROR ========== */
 .loading-state, .error-state {
   display: flex;

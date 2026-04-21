@@ -35,16 +35,14 @@ export class EstudianteDetailComponent implements OnInit {
 
 
 
-  getCarreraNombre(): string {
+  getCarrerasTexto(): string {
     if (!this.estudiante) return '';
-    const c = this.carreras.find(c => c.idCarrera === this.estudiante!.idCarrera);
-    return c?.nombre ?? this.estudiante.carreraNombre ?? '';
+    return (this.estudiante.carreras ?? []).map(c => `${c.codigo} — ${c.nombre}`).join('\n') || 'Sin carrera';
   }
 
-  getCarreraCodigo(): string {
-    if (!this.estudiante) return '';
-    const c = this.carreras.find(c => c.idCarrera === this.estudiante!.idCarrera);
-    return c?.codigo ?? this.estudiante.carreraCodigo ?? '';
+  getCarreraNombres(): string {
+    if (!this.estudiante) return 'Sin carrera';
+    return (this.estudiante.carreras ?? []).map(c => c.nombre).join(' / ') || 'Sin carrera';
   }
 
   getProgreso(): number {

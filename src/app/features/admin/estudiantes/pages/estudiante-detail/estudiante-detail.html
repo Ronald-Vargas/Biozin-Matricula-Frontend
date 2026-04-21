@@ -85,9 +85,12 @@
         <h4 class="section-title">🎓 Información Académica</h4>
         <div class="career-card">
           <div>
-            <span class="career-label">Carrera</span>
-            <span class="career-name">{{ getCarreraNombre() }}</span>
-            <span class="career-code">{{ getCarreraCodigo() }}</span>
+            <span class="career-label">Carrera(s)</span>
+            <ng-container *ngFor="let c of estudiante!.carreras">
+              <span class="career-name">{{ c.nombre }}</span>
+              <span class="career-code">{{ c.codigo }}</span>
+            </ng-container>
+            <span *ngIf="!estudiante!.carreras || estudiante!.carreras.length === 0" class="career-name">Sin carrera</span>
           </div>
           <div class="career-semester">
             <span class="career-label">Semestre</span>

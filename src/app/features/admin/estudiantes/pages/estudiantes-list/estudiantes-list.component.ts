@@ -44,14 +44,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
       this.carreraService.getCarreras(),
     ]).subscribe(([estudiantes, carreras]) => {
       this.carreras = carreras;
-      this.estudiantes = estudiantes.map(est => {
-        const carrera = carreras.find(c => c.idCarrera === est.idCarrera);
-        return {
-          ...est,
-          carreraNombre: carrera?.nombre ?? '',
-          carreraCodigo: carrera?.codigo ?? '',
-        };
-      });
+      this.estudiantes = estudiantes;
     });
   }
 
@@ -72,7 +65,7 @@ export class EstudiantesListComponent implements OnInit, OnDestroy {
         this.filtroEstado === 'todos' ||
         (this.filtroEstado === 'activo' && c.estadoEstudiante === true) ||
         (this.filtroEstado === 'inactivo' && c.estadoEstudiante === false);
-      const matchCarrera = !this.filtroCarrera || c.idCarrera === this.filtroCarrera;
+      const matchCarrera = !this.filtroCarrera || (c.idsCarreras ?? []).includes(this.filtroCarrera);
       return matchNombre && matchEstado && matchCarrera;
     });
   }

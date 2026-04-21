@@ -48,7 +48,8 @@ export class PortalService {
     return this.http.post<Respuesta<number>>(`${this.apiUrl}/Pagos/Pagar/${idPago}`, {});
   }
 
-  getMalla(): Observable<Respuesta<MallaCurricular>> {
-    return this.http.get<Respuesta<MallaCurricular>>(`${this.apiUrl}/MallaCurricular`);
+  getMalla(idCarrera?: number): Observable<Respuesta<MallaCurricular>> {
+    const params = idCarrera ? `?idCarrera=${idCarrera}` : '';
+    return this.http.get<Respuesta<MallaCurricular>>(`${this.apiUrl}/MallaCurricular${params}`);
   }
 }

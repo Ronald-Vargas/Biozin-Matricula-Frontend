@@ -72,7 +72,10 @@ export class DashboardService {
 
         const conteo = new Map<number, number>();
         for (const e of activos) {
-          if (e.idCarrera) conteo.set(e.idCarrera, (conteo.get(e.idCarrera) ?? 0) + 1);
+          const ids = e.idsCarreras ?? [];
+          for (const idCarrera of ids) {
+            conteo.set(idCarrera, (conteo.get(idCarrera) ?? 0) + 1);
+          }
         }
 
         const maximo = Math.max(...conteo.values(), 1);

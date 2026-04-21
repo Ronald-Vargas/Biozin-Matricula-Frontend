@@ -27,9 +27,8 @@ export interface Estudiante {
   direccionExacta?: string;
 
   // Académico
-  idCarrera: number;
-  carreraCodigo: string;
-  carreraNombre: string;
+  idsCarreras: number[];
+  carreras: CarreraResumen[];
   fechaIngreso: string;
   semestreActual: number;
   estadoEstudiante: boolean;
@@ -79,7 +78,7 @@ export interface CreateEstudianteDto {
   direccionExacta?: string;
 
   // Académico
-  idCarrera: number;
+  idsCarreras: number[];
   estadoEstudiante: boolean;
   tipoBeca: string;
   condicionSocioeconomica?: string;
@@ -98,6 +97,12 @@ export interface CreateEstudianteDto {
 
 
 
+
+export interface CarreraResumen {
+  idCarrera: number;
+  codigo: string;
+  nombre: string;
+}
 
 export interface CarreraOption {
   id: number;

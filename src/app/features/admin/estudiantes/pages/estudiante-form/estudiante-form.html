@@ -147,16 +147,23 @@
       <h3 class="form-section-title">🎓 Información Académica</h3>
       <div class="form-grid">
 
-        <div class="form-group">
-          <label>Carrera *</label>
-          <select formControlName="idCarrera" [class.invalid]="isInvalid('idCarrera')">
-            <option [ngValue]="0">Seleccionar carrera...</option>
-            <option *ngFor="let c of carreras" [ngValue]="c.idCarrera">
-              {{ c.codigo }} - {{ c.nombre }}
-            </option>
-          </select>
-          <div class="error-message" *ngIf="isInvalid('idCarrera')">
-            <span *ngIf="f('idCarrera').errors?.['required'] || f('idCarrera').errors?.['min']">Debe seleccionar una carrera.</span>
+        <div class="form-group form-group--full">
+          <label>Carreras * <span class="sub-label">(seleccione una o más)</span></label>
+          <div class="carreras-checkboxes" [class.invalid-border]="carrerasInvalid && estudianteForm.touched">
+            <label class="carrera-checkbox-item" *ngFor="let c of carreras">
+              <input
+                type="checkbox"
+                [checked]="estaSeleccionada(c.idCarrera)"
+                (change)="toggleCarrera(c.idCarrera)"
+              />
+              <span class="carrera-checkbox-label">
+                <strong>{{ c.codigo }}</strong> — {{ c.nombre }}
+              </span>
+            </label>
+            <p class="sin-carreras" *ngIf="carreras.length === 0">No hay carreras activas disponibles.</p>
+          </div>
+          <div class="error-message" *ngIf="carrerasInvalid && estudianteForm.touched">
+            Debe seleccionar al menos una carrera.
           </div>
         </div>
 
