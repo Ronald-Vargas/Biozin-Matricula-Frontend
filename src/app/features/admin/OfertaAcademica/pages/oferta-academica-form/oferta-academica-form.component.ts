@@ -133,16 +133,46 @@ export class OfertaAcademicaFormComponent implements OnInit, OnChanges {
     return ini1 < fin2 && fin1 > ini2;
   }
 
+  private normalizarFecha(fecha: string | Date | null | undefined): Date | null {
+    if (!fecha) return null;
+
+    const valor = fecha instanceof Date ? new Date(fecha.getTime()) : new Date(fecha);
+    if (Number.isNaN(valor.getTime())) return null;
+
+    valor.setHours(0, 0, 0, 0);
+    return valor;
+  }
+
+  private periodosSeTraslapan(idPeriodoA: number, idPeriodoB: number): boolean {
+    if (!idPeriodoA || !idPeriodoB) return true;
+
+    const periodoA = this.periodos.find(p => p.idPeriodo === idPeriodoA);
+    const periodoB = this.periodos.find(p => p.idPeriodo === idPeriodoB);
+    if (!periodoA || !periodoB) return true;
+
+    const inicioA = this.normalizarFecha(periodoA.fechaInicio);
+    const finA = this.normalizarFecha(periodoA.fechaFin);
+    const inicioB = this.normalizarFecha(periodoB.fechaInicio);
+    const finB = this.normalizarFecha(periodoB.fechaFin);
+
+    if (!inicioA || !finA || !inicioB || !finB) return true;
+
+    return inicioA <= finB && inicioB <= finA;
+  }
+
   private verificarConflictos(): string[] {
     const errores: string[] = [];
     const seleccionados = this.diasOptions.filter(d => d.seleccionado);
     const idAula = Number(this.oferta.idAula);
     const idProfesor = Number(this.oferta.idProfesor);
+    const idPeriodo = Number(this.oferta.idPeriodo);
     const idOfertaActual = this.ofertaEditar?.idOferta ?? 0;
     const ofertasActivas = this.todasLasOfertas.filter(o => o.estado && o.idOferta !== idOfertaActual);
 
     for (const dia of seleccionados) {
       for (const oferta of ofertasActivas) {
+        if (!this.periodosSeTraslapan(idPeriodo, oferta.idPeriodo)) continue;
+
         const diasConTraslape = oferta.diasHorarios.filter(dh =>
           dh.dia === dia.nombre &&
           this.hayTraslape(dia.horaInicio, dia.horaFin, dh.horaInicio, dh.horaFin)
