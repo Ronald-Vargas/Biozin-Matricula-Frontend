@@ -4,9 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { PortalService } from '../../services/portal.service';
 import { EstudiantePerfil, OfertaMatricula } from '../../models/portal.models';
 
-const MONTO_MATRICULA = 100000;
-const MONTO_INFRAESTRUCTURA = 15000;
-
 @Component({
   selector: 'app-portal-matricular',
   standalone: true,
@@ -29,8 +26,8 @@ export class PortalMatricularComponent implements OnInit {
   oferta: OfertaMatricula[] = [];
   perfil: EstudiantePerfil | null = null;
 
-  readonly montoMatricula = MONTO_MATRICULA;
-  readonly montoInfraestructura = MONTO_INFRAESTRUCTURA;
+  montoMatricula = 100000;
+  montoInfraestructura = 15000;
 
   constructor(private portalService: PortalService) {}
 
@@ -55,6 +52,8 @@ export class PortalMatricularComponent implements OnInit {
         }
 
         if (res.valorRetorno) {
+          this.montoMatricula = res.valorRetorno.montoMatricula ?? 100000;
+          this.montoInfraestructura = res.valorRetorno.montoInfraestructura ?? 15000;
           const ofertas = res.valorRetorno.ofertas ?? [];
           this.oferta = ofertas.map(o => ({
             idOferta: o.idOferta,
@@ -117,7 +116,7 @@ export class PortalMatricularComponent implements OnInit {
   }
 
   get totalFinal(): number {
-    return this.subtotalCursos + MONTO_MATRICULA + MONTO_INFRAESTRUCTURA;
+    return this.subtotalCursos + this.montoMatricula + this.montoInfraestructura;
   }
 
   toggleSeleccion(curso: OfertaMatricula): void {

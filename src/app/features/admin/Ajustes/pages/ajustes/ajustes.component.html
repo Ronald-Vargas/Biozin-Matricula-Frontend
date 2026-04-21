@@ -142,6 +142,43 @@
         </span>
       </div>
 
+      <!-- Separador aranceles -->
+      <div class="section-divider full">
+        <span class="divider-label">ARANCELES DE MATRÍCULA</span>
+      </div>
+
+      <!-- Monto Matrícula -->
+      <div class="form-group">
+        <label class="form-label">Monto de Matrícula (₡)</label>
+        <input
+          class="form-input"
+          type="number"
+          placeholder="Ej. 100000"
+          formControlName="montoMatricula"
+          min="0"
+          [class.input-error]="montoMatricula?.invalid && montoMatricula?.touched"
+        />
+        <span class="error-text" *ngIf="montoMatricula?.errors?.['min'] && montoMatricula?.touched">
+          El monto no puede ser negativo.
+        </span>
+      </div>
+
+      <!-- Monto Infraestructura -->
+      <div class="form-group">
+        <label class="form-label">Monto de Infraestructura (₡)</label>
+        <input
+          class="form-input"
+          type="number"
+          placeholder="Ej. 15000"
+          formControlName="montoInfraestructura"
+          min="0"
+          [class.input-error]="montoInfraestructura?.invalid && montoInfraestructura?.touched"
+        />
+        <span class="error-text" *ngIf="montoInfraestructura?.errors?.['min'] && montoInfraestructura?.touched">
+          El monto no puede ser negativo.
+        </span>
+      </div>
+
     </div>
 
     <!-- Footer -->

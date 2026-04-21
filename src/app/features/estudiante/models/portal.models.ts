@@ -75,6 +75,8 @@ export interface PeriodoOfertas {
   fechaFin: string;
   fechaMatriculaFin: string;
   ofertas: OfertaMatriculaRaw[];
+  montoMatricula: number;
+  montoInfraestructura: number;
 }
 
 export interface OfertaMatricula {

@@ -39,6 +39,8 @@ export class AjustesComponent implements OnInit {
       provincia: ['', [Validators.maxLength(10)]],
       canton: ['', [Validators.maxLength(50)]],
       distrito: ['', [Validators.maxLength(50)]],
+      montoMatricula: [null, [Validators.min(0)]],
+      montoInfraestructura: [null, [Validators.min(0)]],
     });
   }
 
@@ -89,4 +91,6 @@ export class AjustesComponent implements OnInit {
   get provincia() { return this.ajustesForm.get('provincia'); }
   get canton() { return this.ajustesForm.get('canton'); }
   get distrito() { return this.ajustesForm.get('distrito'); }
+  get montoMatricula() { return this.ajustesForm.get('montoMatricula'); }
+  get montoInfraestructura() { return this.ajustesForm.get('montoInfraestructura'); }
 }
