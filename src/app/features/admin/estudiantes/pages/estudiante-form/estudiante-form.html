@@ -1,6 +1,4 @@
-<div class="form-container">
-
-  <!-- Header -->
+<div class="form-container" (click)="cerrarCarrerasCombo()">
   <div class="form-page-header">
     <button class="btn-back" (click)="cancelar()">← Volver a la lista</button>
     <h1 class="page-title">{{ titulo }}</h1>
@@ -8,17 +6,14 @@
 
   <div class="form-panel">
     <form [formGroup]="estudianteForm" (ngSubmit)="guardar()">
-
-      <!-- ═══ Información Personal ═══ -->
-      <h3 class="form-section-title">👤 Información Personal</h3>
+      <h3 class="form-section-title">Informacion Personal</h3>
       <div class="form-grid">
-
         <div class="form-group">
-          <label>Identificación *</label>
+          <label>Identificacion *</label>
           <input type="text" formControlName="cedula" [class.invalid]="isInvalid('cedula')" placeholder="1-1234-5678" />
           <div class="error-message" *ngIf="isInvalid('cedula')">
-            <span *ngIf="f('cedula').errors?.['required']">La identificación es obligatoria.</span>
-            <span *ngIf="f('cedula').errors?.['maxlength']">Máximo 20 caracteres.</span>
+            <span *ngIf="f('cedula').errors?.['required']">La identificacion es obligatoria.</span>
+            <span *ngIf="f('cedula').errors?.['maxlength']">Maximo 20 caracteres.</span>
           </div>
         </div>
 
@@ -27,24 +22,24 @@
           <input type="text" formControlName="nombre" [class.invalid]="isInvalid('nombre')" placeholder="Juan Carlos" />
           <div class="error-message" *ngIf="isInvalid('nombre')">
             <span *ngIf="f('nombre').errors?.['required']">El nombre es obligatorio.</span>
-            <span *ngIf="f('nombre').errors?.['maxlength']">Máximo 40 caracteres.</span>
+            <span *ngIf="f('nombre').errors?.['maxlength']">Maximo 40 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
           <label>Primer Apellido *</label>
-          <input type="text" formControlName="apellidoPaterno" [class.invalid]="isInvalid('apellidoPaterno')" placeholder="Pérez" />
+          <input type="text" formControlName="apellidoPaterno" [class.invalid]="isInvalid('apellidoPaterno')" placeholder="Perez" />
           <div class="error-message" *ngIf="isInvalid('apellidoPaterno')">
             <span *ngIf="f('apellidoPaterno').errors?.['required']">El primer apellido es obligatorio.</span>
-            <span *ngIf="f('apellidoPaterno').errors?.['maxlength']">Máximo 40 caracteres.</span>
+            <span *ngIf="f('apellidoPaterno').errors?.['maxlength']">Maximo 40 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
           <label>Segundo Apellido</label>
-          <input type="text" formControlName="apellidoMaterno" [class.invalid]="isInvalid('apellidoMaterno')" placeholder="Rodríguez" />
+          <input type="text" formControlName="apellidoMaterno" [class.invalid]="isInvalid('apellidoMaterno')" placeholder="Rodriguez" />
           <div class="error-message" *ngIf="isInvalid('apellidoMaterno')">
-            <span *ngIf="f('apellidoMaterno').errors?.['maxlength']">Máximo 40 caracteres.</span>
+            <span *ngIf="f('apellidoMaterno').errors?.['maxlength']">Maximo 40 caracteres.</span>
           </div>
         </div>
 
@@ -57,7 +52,7 @@
         </div>
 
         <div class="form-group">
-          <label>Género</label>
+          <label>Genero</label>
           <select formControlName="genero" [class.invalid]="isInvalid('genero')">
             <option value="">Seleccionar...</option>
             <option value="M">Masculino</option>
@@ -65,7 +60,7 @@
             <option value="Otro">Otro</option>
           </select>
           <div class="error-message" *ngIf="isInvalid('genero')">
-            <span *ngIf="f('genero').errors?.['maxlength']">Máximo 15 caracteres.</span>
+            <span *ngIf="f('genero').errors?.['maxlength']">Maximo 15 caracteres.</span>
           </div>
         </div>
 
@@ -73,7 +68,7 @@
           <label>Nacionalidad</label>
           <input type="text" formControlName="nacionalidad" [class.invalid]="isInvalid('nacionalidad')" placeholder="Costarricense" />
           <div class="error-message" *ngIf="isInvalid('nacionalidad')">
-            <span *ngIf="f('nacionalidad').errors?.['maxlength']">Máximo 50 caracteres.</span>
+            <span *ngIf="f('nacionalidad').errors?.['maxlength']">Maximo 50 caracteres.</span>
           </div>
         </div>
 
@@ -81,7 +76,7 @@
           <label>Discapacidad</label>
           <select formControlName="discapacidad">
             <option [ngValue]="false">No</option>
-            <option [ngValue]="true">Sí</option>
+            <option [ngValue]="true">Si</option>
           </select>
         </div>
 
@@ -89,89 +84,131 @@
           <label>Tipo de Discapacidad</label>
           <input type="text" formControlName="tipoDiscapacidad" [class.invalid]="isInvalid('tipoDiscapacidad')" placeholder="Describir..." />
           <div class="error-message" *ngIf="isInvalid('tipoDiscapacidad')">
-            <span *ngIf="f('tipoDiscapacidad').errors?.['maxlength']">Máximo 100 caracteres.</span>
+            <span *ngIf="f('tipoDiscapacidad').errors?.['maxlength']">Maximo 100 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group" *ngIf="discapacidad">
-          <label>¿Necesita Asistencia?</label>
+          <label>Necesita Asistencia?</label>
           <select formControlName="necesitaAsistencia">
             <option [ngValue]="false">No</option>
-            <option [ngValue]="true">Sí</option>
+            <option [ngValue]="true">Si</option>
           </select>
         </div>
-
       </div>
 
-      <!-- ═══ Información de Contacto ═══ -->
-      <h3 class="form-section-title">📱 Información de Contacto</h3>
+      <h3 class="form-section-title">Informacion de Contacto</h3>
       <div class="form-grid">
-
         <div class="form-group">
           <label>Email Personal</label>
           <input type="email" formControlName="emailPersonal" [class.invalid]="isInvalid('emailPersonal')" placeholder="juan@gmail.com" />
           <div class="error-message" *ngIf="isInvalid('emailPersonal')">
-            <span *ngIf="f('emailPersonal').errors?.['email']">Ingrese un email válido.</span>
-            <span *ngIf="f('emailPersonal').errors?.['maxlength']">Máximo 100 caracteres.</span>
+            <span *ngIf="f('emailPersonal').errors?.['email']">Ingrese un email valido.</span>
+            <span *ngIf="f('emailPersonal').errors?.['maxlength']">Maximo 100 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Teléfono Móvil *</label>
+          <label>Telefono Movil *</label>
           <input type="tel" formControlName="telefonoMovil" [class.invalid]="isInvalid('telefonoMovil')" placeholder="8888-8888" />
           <div class="error-message" *ngIf="isInvalid('telefonoMovil')">
-            <span *ngIf="f('telefonoMovil').errors?.['required']">El teléfono móvil es obligatorio.</span>
-            <span *ngIf="f('telefonoMovil').errors?.['maxlength']">Máximo 20 caracteres.</span>
+            <span *ngIf="f('telefonoMovil').errors?.['required']">El telefono movil es obligatorio.</span>
+            <span *ngIf="f('telefonoMovil').errors?.['maxlength']">Maximo 20 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Teléfono de Emergencia</label>
+          <label>Telefono de Emergencia</label>
           <input type="tel" formControlName="telefonoEmergencia" [class.invalid]="isInvalid('telefonoEmergencia')" placeholder="7777-7777" />
           <div class="error-message" *ngIf="isInvalid('telefonoEmergencia')">
-            <span *ngIf="f('telefonoEmergencia').errors?.['maxlength']">Máximo 20 caracteres.</span>
+            <span *ngIf="f('telefonoEmergencia').errors?.['maxlength']">Maximo 20 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
           <label>Contacto de Emergencia</label>
-          <input type="text" formControlName="nombreContactoEmergencia" [class.invalid]="isInvalid('nombreContactoEmergencia')" placeholder="María Pérez (Madre)" />
+          <input type="text" formControlName="nombreContactoEmergencia" [class.invalid]="isInvalid('nombreContactoEmergencia')" placeholder="Maria Perez (Madre)" />
           <div class="error-message" *ngIf="isInvalid('nombreContactoEmergencia')">
-            <span *ngIf="f('nombreContactoEmergencia').errors?.['maxlength']">Máximo 100 caracteres.</span>
+            <span *ngIf="f('nombreContactoEmergencia').errors?.['maxlength']">Maximo 100 caracteres.</span>
           </div>
         </div>
-
       </div>
 
-      <!-- ═══ Información Académica ═══ -->
-      <h3 class="form-section-title">🎓 Información Académica</h3>
+      <h3 class="form-section-title">Informacion Academica</h3>
       <div class="form-grid">
-
         <div class="form-group form-group--full">
-          <label>Carreras * <span class="sub-label">(seleccione una o más)</span></label>
-          <div class="carreras-checkboxes" [class.invalid-border]="carrerasInvalid && estudianteForm.touched">
-            <label class="carrera-checkbox-item" *ngFor="let c of carreras">
-              <input
-                type="checkbox"
-                [checked]="estaSeleccionada(c.idCarrera)"
-                (change)="toggleCarrera(c.idCarrera)"
-              />
-              <span class="carrera-checkbox-label">
-                <strong>{{ c.codigo }}</strong> — {{ c.nombre }}
-              </span>
-            </label>
-            <p class="sin-carreras" *ngIf="carreras.length === 0">No hay carreras activas disponibles.</p>
+          <label>Carreras * <span class="sub-label">(seleccione una o mas)</span></label>
+
+          <div class="multi-select-combobox" [class.open]="carreraComboAbierto" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="combo-trigger"
+              [class.placeholder]="carrerasSeleccionadas.length === 0"
+              [class.invalid-border]="carrerasInvalid && estudianteForm.touched"
+              (click)="toggleCarreraCombo()"
+            >
+              <span>{{ carrerasSeleccionadasTexto }}</span>
+              <span class="combo-chevron"></span>
+            </button>
+
+            <div class="combo-panel" *ngIf="carreraComboAbierto">
+              <div class="combo-search-box">
+                <input
+                  class="combo-search-input"
+                  type="search"
+                  [value]="busquedaCarrera"
+                  (input)="actualizarBusquedaCarrera($event)"
+                  autocomplete="off"
+                  placeholder="Buscar carrera..."
+                />
+                <span class="combo-search-icon"></span>
+              </div>
+
+              <div class="combo-options">
+                <button
+                  type="button"
+                  class="combo-option combo-option--multiple"
+                  *ngFor="let c of carrerasFiltradas"
+                  [class.selected]="estaSeleccionada(c.idCarrera)"
+                  (click)="toggleCarrera(c.idCarrera)"
+                >
+                  <span class="combo-option-check">{{ estaSeleccionada(c.idCarrera) ? '✓' : '' }}</span>
+                  <span class="combo-option-copy">
+                    <span class="combo-option-title">{{ c.nombre }}</span>
+                    <span class="combo-option-subtitle">{{ carreraDetalleTexto(c) }}</span>
+                  </span>
+                </button>
+
+                <div class="combo-empty" *ngIf="carrerasFiltradas.length === 0">
+                  No hay resultados
+                </div>
+              </div>
+            </div>
           </div>
+
+          <div class="selected-carreras" *ngIf="carrerasSeleccionadasDetalle.length > 0">
+            <button
+              type="button"
+              class="selected-carrera-chip"
+              *ngFor="let carrera of carrerasSeleccionadasDetalle"
+              (click)="quitarCarrera(carrera.idCarrera)"
+            >
+              <span>{{ carrera.codigo }} - {{ carrera.nombre }}</span>
+              <span class="selected-carrera-chip-remove">×</span>
+            </button>
+          </div>
+
+          <p class="sin-carreras" *ngIf="carreras.length === 0">No hay carreras activas disponibles.</p>
           <div class="error-message" *ngIf="carrerasInvalid && estudianteForm.touched">
             Debe seleccionar al menos una carrera.
           </div>
         </div>
 
         <div class="form-group">
-          <label>Condición Socioeconómica</label>
+          <label>Condicion Socioeconomica</label>
           <input type="text" formControlName="condicionSocioeconomica" [class.invalid]="isInvalid('condicionSocioeconomica')" placeholder="Ej: Media" />
           <div class="error-message" *ngIf="isInvalid('condicionSocioeconomica')">
-            <span *ngIf="f('condicionSocioeconomica').errors?.['maxlength']">Máximo 30 caracteres.</span>
+            <span *ngIf="f('condicionSocioeconomica').errors?.['maxlength']">Maximo 30 caracteres.</span>
           </div>
         </div>
 
@@ -187,24 +224,21 @@
         </div>
 
         <div class="form-group">
-          <label>¿Trabaja?</label>
+          <label>Trabaja?</label>
           <select formControlName="trabaja">
             <option [ngValue]="false">No</option>
-            <option [ngValue]="true">Sí</option>
+            <option [ngValue]="true">Si</option>
           </select>
         </div>
-
       </div>
 
-      <!-- ═══ Colegio de Procedencia ═══ -->
-      <h3 class="form-section-title">🏫 Colegio de Procedencia</h3>
+      <h3 class="form-section-title">Colegio de Procedencia</h3>
       <div class="form-grid">
-
         <div class="form-group">
           <label>Nombre del Colegio</label>
           <input type="text" formControlName="colegioProcedencia" [class.invalid]="isInvalid('colegioProcedencia')" placeholder="Liceo de Costa Rica" />
           <div class="error-message" *ngIf="isInvalid('colegioProcedencia')">
-            <span *ngIf="f('colegioProcedencia').errors?.['maxlength']">Máximo 150 caracteres.</span>
+            <span *ngIf="f('colegioProcedencia').errors?.['maxlength']">Maximo 150 caracteres.</span>
           </div>
         </div>
 
@@ -212,40 +246,43 @@
           <label>Tipo de Colegio</label>
           <select formControlName="tipoColegio">
             <option value="">Seleccionar...</option>
-            <option value="Publico">Público</option>
+            <option value="Publico">Publico</option>
             <option value="Privado">Privado</option>
             <option value="Subvencionado">Subvencionado</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Año de Graduación</label>
-          <input type="number" formControlName="anioGraduacionColegio" placeholder="2025" min="1950" max="2030"
-            [class.invalid]="isInvalid('anioGraduacionColegio')" />
+          <label>Anio de Graduacion</label>
+          <input
+            type="number"
+            formControlName="anioGraduacionColegio"
+            placeholder="2025"
+            min="1950"
+            max="2030"
+            [class.invalid]="isInvalid('anioGraduacionColegio')"
+          />
           <div class="error-message" *ngIf="isInvalid('anioGraduacionColegio')">
-            <span>Ingrese un año entre 1950 y 2030.</span>
+            <span>Ingrese un anio entre 1950 y 2030.</span>
           </div>
         </div>
-
       </div>
 
-      <!-- ═══ Dirección ═══ -->
-      <h3 class="form-section-title">🏠 Dirección</h3>
+      <h3 class="form-section-title">Direccion</h3>
       <div class="form-grid">
-
         <div class="form-group">
           <label>Provincia</label>
-          <input type="text" formControlName="provincia" [class.invalid]="isInvalid('provincia')" placeholder="San José" />
+          <input type="text" formControlName="provincia" [class.invalid]="isInvalid('provincia')" placeholder="San Jose" />
           <div class="error-message" *ngIf="isInvalid('provincia')">
-            <span *ngIf="f('provincia').errors?.['maxlength']">Máximo 50 caracteres.</span>
+            <span *ngIf="f('provincia').errors?.['maxlength']">Maximo 50 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Cantón</label>
+          <label>Canton</label>
           <input type="text" formControlName="canton" [class.invalid]="isInvalid('canton')" placeholder="Central" />
           <div class="error-message" *ngIf="isInvalid('canton')">
-            <span *ngIf="f('canton').errors?.['maxlength']">Máximo 50 caracteres.</span>
+            <span *ngIf="f('canton').errors?.['maxlength']">Maximo 50 caracteres.</span>
           </div>
         </div>
 
@@ -253,28 +290,25 @@
           <label>Distrito</label>
           <input type="text" formControlName="distrito" [class.invalid]="isInvalid('distrito')" placeholder="Catedral" />
           <div class="error-message" *ngIf="isInvalid('distrito')">
-            <span *ngIf="f('distrito').errors?.['maxlength']">Máximo 50 caracteres.</span>
+            <span *ngIf="f('distrito').errors?.['maxlength']">Maximo 50 caracteres.</span>
           </div>
         </div>
 
         <div class="form-group form-group-full">
-          <label>Dirección Exacta</label>
+          <label>Direccion Exacta</label>
           <textarea formControlName="direccionExacta" rows="2" placeholder="Del parque central 200m norte..."></textarea>
         </div>
-
       </div>
 
-      <!-- ═══ Observaciones ═══ -->
-      <h3 class="form-section-title">📝 Observaciones</h3>
+      <h3 class="form-section-title">Observaciones</h3>
       <div class="form-grid">
         <div class="form-group form-group-full">
           <textarea formControlName="observaciones" rows="3" placeholder="Notas adicionales sobre el estudiante..."></textarea>
         </div>
       </div>
 
-      <!-- ═══ Campos automáticos (solo en edición) ═══ -->
       <div *ngIf="esEdicion" class="auto-fields-info">
-        <h3 class="form-section-title">⚙️ Datos del Sistema</h3>
+        <h3 class="form-section-title">Datos del Sistema</h3>
         <div class="auto-fields-grid">
           <div class="auto-field">
             <span class="auto-label">Carnet:</span>
@@ -299,14 +333,12 @@
         </div>
       </div>
 
-      <!-- ═══ Acciones ═══ -->
       <div class="form-actions">
         <button type="submit" class="btn btn-primary" [disabled]="estudianteForm.invalid">
-          💾 {{ esEdicion ? 'Actualizar' : 'Guardar' }} Estudiante
+          {{ esEdicion ? 'Actualizar' : 'Guardar' }} Estudiante
         </button>
         <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
       </div>
-
     </form>
   </div>
 </div>

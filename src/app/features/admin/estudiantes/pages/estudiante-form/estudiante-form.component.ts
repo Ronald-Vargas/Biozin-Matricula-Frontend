@@ -34,6 +34,8 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
 
   carreras: Carrera[] = [];
   carrerasSeleccionadas: number[] = [];
+  carreraComboAbierto = false;
+  busquedaCarrera = '';
   private estudiantesExistentes: Estudiante[] = [];
   private subCarreras?: Subscription;
   private subDiscapacidad?: Subscription;
@@ -132,6 +134,35 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     return this.carrerasSeleccionadas.length === 0;
   }
 
+  get carrerasSeleccionadasTexto(): string {
+    if (this.carrerasSeleccionadas.length === 0) {
+      return 'Seleccione una o varias carreras';
+    }
+
+    if (this.carrerasSeleccionadas.length === 1) {
+      const carrera = this.carreras.find(c => c.idCarrera === this.carrerasSeleccionadas[0]);
+      return carrera ? `${carrera.codigo} - ${carrera.nombre}` : '1 carrera seleccionada';
+    }
+
+    return `${this.carrerasSeleccionadas.length} carreras seleccionadas`;
+  }
+
+  get carrerasFiltradas(): Carrera[] {
+    const filtradas = this.carreras.filter(carrera =>
+      this.coincideBusqueda(`${carrera.codigo} ${carrera.nombre} ${carrera.descripcion ?? ''}`, this.busquedaCarrera)
+    );
+
+    const seleccionadas = this.carreras.filter(carrera =>
+      this.carrerasSeleccionadas.includes(carrera.idCarrera) && !filtradas.some(item => item.idCarrera === carrera.idCarrera)
+    );
+
+    return [...seleccionadas, ...filtradas];
+  }
+
+  get carrerasSeleccionadasDetalle(): Carrera[] {
+    return this.carreras.filter(carrera => this.carrerasSeleccionadas.includes(carrera.idCarrera));
+  }
+
   f(name: string): AbstractControl {
     return this.estudianteForm.get(name)!;
   }
@@ -150,8 +181,44 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleCarreraCombo(): void {
+    this.carreraComboAbierto = !this.carreraComboAbierto;
+  }
+
+  cerrarCarrerasCombo(): void {
+    this.carreraComboAbierto = false;
+  }
+
+  quitarCarrera(idCarrera: number): void {
+    this.carrerasSeleccionadas = this.carrerasSeleccionadas.filter(id => id !== idCarrera);
+  }
+
   estaSeleccionada(idCarrera: number): boolean {
     return this.carrerasSeleccionadas.includes(idCarrera);
+  }
+
+  carreraDetalleTexto(carrera: Carrera): string {
+    return `${carrera.codigo} | ${carrera.duracion} periodos`;
+  }
+
+  actualizarBusquedaCarrera(event: Event): void {
+    this.busquedaCarrera = (event.target as HTMLInputElement).value;
+  }
+
+  private coincideBusqueda(texto: string, busqueda: string): boolean {
+    const filtro = this.normalizar(busqueda);
+    if (!filtro) return true;
+
+    const textoNormalizado = this.normalizar(texto);
+    return filtro.split(/\s+/).every(parte => textoNormalizado.includes(parte));
+  }
+
+  private normalizar(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
   }
 
   cargarEstudiante(id: number): void {

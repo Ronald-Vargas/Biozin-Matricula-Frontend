@@ -8,6 +8,8 @@ export interface Ajustes {
     provincia: string,
     canton: string,
     distrito: string,
+    montoMatricula?: number | null,
+    montoInfraestructura?: number | null,
 }
 
 
@@ -20,6 +22,8 @@ export interface CreateAjustesDto {
     provincia: string,
     canton: string,
     distrito: string,
+    montoMatricula?: number | null,
+    montoInfraestructura?: number | null,
 }
 
 

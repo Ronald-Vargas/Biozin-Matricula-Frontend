@@ -1,6 +1,4 @@
-
 <div class="carreras-page">
-
   <div class="module-banner">
     <div class="module-banner-content">
       <div>
@@ -16,22 +14,21 @@
       </button>
     </div>
   </div>
-  
-  <!-- Formulario de creación / edición -->
+
+  <div #formularioCarreraAnchor class="form-scroll-anchor" *ngIf="mostrarFormulario"></div>
   <app-carreras-form
     *ngIf="mostrarFormulario"
     [carreraId]="carreraEditandoId"
     (carreraCreada)="onCarreraCreada()">
   </app-carreras-form>
 
-  <!-- Filtros -->
   <div class="section filters-section">
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input
         type="text"
         class="search-input"
-        placeholder="Buscar por nombre o código..."
+        placeholder="Buscar por nombre o codigo..."
         [(ngModel)]="filtroNombre">
     </div>
 
@@ -48,8 +45,6 @@
     </div>
   </div>
 
-
-  <!-- Lista de carreras -->
   <div class="carreras-grid">
     <div class="carrera-card" *ngFor="let carrera of carrerasFiltradas">
       <div class="card-header">
@@ -69,7 +64,7 @@
 
       <div class="card-info">
         <span class="info-item">
-          📅 {{ carrera.duracion  }} periodos
+          📆 {{ carrera.duracion }} periodos
         </span>
       </div>
 
@@ -87,11 +82,11 @@
           (click)="toggleEstado(carrera.idCarrera)">
           {{ getToggleButtonConfig(carrera.estado).icon }} {{ getToggleButtonConfig(carrera.estado).label }}
         </button>
-         <button
-           class="btn btn-warning btn-sm"
-           (click)="editarCarrera(carrera.idCarrera)"
-           title="Editar">
-           ✏️
+        <button
+          class="btn btn-warning btn-sm"
+          (click)="editarCarrera(carrera.idCarrera)"
+          title="Editar">
+          ✏️
         </button>
       </div>
     </div>
