@@ -72,7 +72,7 @@
     <div class="semestres-list">
       <div class="semestre-block" *ngFor="let sem of malla.semestres">
         <div class="semestre-header">
-          <span class="semestre-num">Semestre {{ sem.numero }}</span>
+          <span class="semestre-num">Periodo {{ sem.numero }}</span>
           <span class="semestre-meta">{{ sem.cursos.length }} curso(s) &middot; {{ cursosPorEstado(sem, 'aprobado') }} aprobado(s)</span>
         </div>
 
