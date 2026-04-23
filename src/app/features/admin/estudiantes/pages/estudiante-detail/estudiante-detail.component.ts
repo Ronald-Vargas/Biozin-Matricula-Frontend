@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Estudiante } from '../../models/estudiantes.model';
-import { EstudianteService } from '../../services/estudiantes.services';
+import { Estudiante, CarreraResumen } from '../../models/estudiantes.model';
+import { EstudianteService, MallaResumen } from '../../services/estudiantes.services';
 import { CarreraService } from '../../../carreras/services/carrera.service';
 import { Carrera } from '../../../carreras/models/carrera.model';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,10 @@ export class EstudianteDetailComponent implements OnInit {
   estudiante: Estudiante | null = null;
   carreras: Carrera[] = [];
 
+  carreraSeleccionada: CarreraResumen | null = null;
+  mallaPorCarrera: MallaResumen | null = null;
+  cargandoMalla = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -30,7 +34,31 @@ export class EstudianteDetailComponent implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.estudianteService.getEstudianteById(id).subscribe(est => {
       this.estudiante = est ?? null;
+      if (this.estudiante?.carreras?.length) {
+        this.seleccionarCarrera(this.estudiante.carreras[0]);
+      }
     });
+  }
+
+  seleccionarCarrera(carrera: CarreraResumen): void {
+    if (this.carreraSeleccionada?.idCarrera === carrera.idCarrera) return;
+    this.carreraSeleccionada = carrera;
+    this.cargandoMalla = true;
+    this.mallaPorCarrera = null;
+    this.estudianteService.getMallaEstudiante(this.estudiante!.idEstudiante, carrera.idCarrera).subscribe({
+      next: res => {
+        this.cargandoMalla = false;
+        if (!res.blnError && res.valorRetorno) {
+          this.mallaPorCarrera = res.valorRetorno;
+        }
+      },
+      error: () => { this.cargandoMalla = false; }
+    });
+  }
+
+  getProgreso(): number {
+    if (!this.mallaPorCarrera?.totalCreditos) return 0;
+    return Math.round((this.mallaPorCarrera.creditosAprobados / this.mallaPorCarrera.totalCreditos) * 100);
   }
 
 
@@ -43,11 +71,6 @@ export class EstudianteDetailComponent implements OnInit {
   getCarreraNombres(): string {
     if (!this.estudiante) return 'Sin carrera';
     return (this.estudiante.carreras ?? []).map(c => c.nombre).join(' / ') || 'Sin carrera';
-  }
-
-  getProgreso(): number {
-    if (!this.estudiante || !this.estudiante.creditosTotales) return 0;
-    return Math.round((this.estudiante.creditosAprobados / this.estudiante.creditosTotales) * 100);
   }
 
   getIniciales(): string {

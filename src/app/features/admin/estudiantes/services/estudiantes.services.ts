@@ -4,6 +4,13 @@ import { CreateEstudianteDto, Estudiante, Respuesta } from '../models/estudiante
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
+export interface MallaResumen {
+  nombreCarrera: string;
+  totalCreditos: number;
+  creditosAprobados: number;
+  creditosEnCurso: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -72,5 +79,9 @@ export class EstudianteService {
 
   getEstudiantesActivos(): Estudiante[] {
     return this.estudiantesSubject.getValue().filter(c => c.estadoEstudiante === true);
+  }
+
+  getMallaEstudiante(idEstudiante: number, idCarrera: number): Observable<Respuesta<MallaResumen>> {
+    return this.http.get<Respuesta<MallaResumen>>(`${this.apiUrl}/MallaCurricular/${idEstudiante}?idCarrera=${idCarrera}`);
   }
 }

@@ -44,30 +44,51 @@
       <div class="stats-card">
         <h4 class="card-title">📊 Rendimiento Académico</h4>
 
-        <div class="stat-row">
-          <div class="stat-label-row">
-            <span>Progreso de Carrera</span>
-            <span class="stat-value success">{{ getProgreso() }}%</span>
-          </div>
-          <div class="stat-progress">
-            <div class="stat-progress-fill success-bg" [style.width.%]="getProgreso()"></div>
-          </div>
+        <!-- Selector de carrera si tiene más de una -->
+        <div class="carrera-selector" *ngIf="est.carreras && est.carreras.length > 1">
+          <button
+            *ngFor="let c of est.carreras"
+            class="carrera-tab"
+            [class.active]="carreraSeleccionada?.idCarrera === c.idCarrera"
+            (click)="seleccionarCarrera(c)">
+            {{ c.codigo }}
+          </button>
         </div>
 
-        <div class="stat-details">
-          <div class="stat-detail-item">
-            <span class="stat-detail-label">Créditos aprobados</span>
-            <span class="stat-detail-value">{{ est.creditosAprobados }} / {{ est.creditosTotales }}</span>
+        <ng-container *ngIf="cargandoMalla">
+          <p class="stat-detail-label" style="text-align:center; padding: 0.5rem 0;">Cargando...</p>
+        </ng-container>
+
+        <ng-container *ngIf="!cargandoMalla && mallaPorCarrera">
+          <div class="stat-row">
+            <div class="stat-label-row">
+              <span>{{ carreraSeleccionada?.nombre }}</span>
+              <span class="stat-value success">{{ getProgreso() }}%</span>
+            </div>
+            <div class="stat-progress">
+              <div class="stat-progress-fill success-bg" [style.width.%]="getProgreso()"></div>
+            </div>
           </div>
-          <div class="stat-detail-item">
-            <span class="stat-detail-label">Semestre actual</span>
-            <span class="stat-detail-value">{{ est.semestreActual }}</span>
+
+          <div class="stat-details">
+            <div class="stat-detail-item">
+              <span class="stat-detail-label">Créditos aprobados</span>
+              <span class="stat-detail-value">{{ mallaPorCarrera.creditosAprobados }} / {{ mallaPorCarrera.totalCreditos }}</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="stat-detail-label">Créditos en curso</span>
+              <span class="stat-detail-value">{{ mallaPorCarrera.creditosEnCurso }}</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="stat-detail-label">Semestre actual</span>
+              <span class="stat-detail-value">{{ est.semestreActual }}</span>
+            </div>
+            <div class="stat-detail-item">
+              <span class="stat-detail-label">Tipo de beca</span>
+              <span class="stat-detail-value">{{ est.tipoBeca }}</span>
+            </div>
           </div>
-          <div class="stat-detail-item">
-            <span class="stat-detail-label">Tipo de beca</span>
-            <span class="stat-detail-value">{{ est.tipoBeca }}</span>
-          </div>
-        </div>
+        </ng-container>
       </div>
     </div>
 

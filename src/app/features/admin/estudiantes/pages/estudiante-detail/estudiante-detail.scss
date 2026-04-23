@@ -124,6 +124,36 @@
 .stat-detail-label { color: var(--text-muted); }
 .stat-detail-value { font-weight: 700; color: var(--text); }
 
+.carrera-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.carrera-tab {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  &:hover:not(.active) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
 /* ── Info sections ── */
 .info-section {
   background: var(--card); border-radius: var(--radius); padding: 1.5rem;
