@@ -67,4 +67,8 @@ export class ProfesorService {
     return this.profesores$.pipe(map(profesores => profesores.filter(c => c.estado === true)));
   }
 
+  reenviarCredenciales(idProfesor: number): Observable<Respuesta<object>> {
+    return this.http.post<Respuesta<object>>(`${this.apiUrl}/ReenviarCredenciales/${idProfesor}`, {});
+  }
+
 }

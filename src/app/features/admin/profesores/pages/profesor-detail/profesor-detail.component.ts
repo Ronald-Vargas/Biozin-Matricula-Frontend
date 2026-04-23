@@ -16,6 +16,9 @@ export class ProfesorDetailComponent implements OnInit {
     profesor?: Profesor;
     cargando = true;
     error = false;
+    reenviandoCredenciales = false;
+    mensajeReenvio = '';
+    errorReenvio = '';
   
     constructor(
       private route: ActivatedRoute,
@@ -64,6 +67,24 @@ export class ProfesorDetailComponent implements OnInit {
     return `${p.nombre} ${p.apellidoPaterno} ${p.apellidoMaterno || ''}`.trim();
   }
 
+
+  reenviarCredenciales(): void {
+    if (!this.profesor || this.reenviandoCredenciales) return;
+    this.reenviandoCredenciales = true;
+    this.mensajeReenvio = '';
+    this.errorReenvio = '';
+    this.profesorService.reenviarCredenciales(this.profesor.idProfesor).subscribe({
+      next: res => {
+        this.reenviandoCredenciales = false;
+        if (res.blnError) this.errorReenvio = res.strMensajeRespuesta;
+        else this.mensajeReenvio = 'Credenciales reenviadas correctamente.';
+      },
+      error: () => {
+        this.reenviandoCredenciales = false;
+        this.errorReenvio = 'Error de conexión al reenviar credenciales.';
+      }
+    });
+  }
 
   getEstadoClass(estado: boolean): string {
     return estado ? 'badge-active' : 'badge-inactive';

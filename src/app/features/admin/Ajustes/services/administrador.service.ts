@@ -44,6 +44,10 @@ export class AdministradorService {
       .pipe(tap(() => this.cargarAdministradores()));
   }
 
+  reenviarCredenciales(idAdministrador: number): Observable<Respuesta<object>> {
+    return this.http.post<Respuesta<object>>(`${this.apiUrl}/ReenviarCredenciales/${idAdministrador}`, {});
+  }
+
   toggleEstado(id: number): void {
     const admins = this.administradoresSubject.getValue();
     const admin = admins.find(a => a.idAdministrador === id);

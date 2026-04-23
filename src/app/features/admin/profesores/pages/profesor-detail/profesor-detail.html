@@ -5,9 +5,17 @@
     <button class="btn-back" (click)="volver()">← Volver a la lista</button>
     <div class="header-row">
       <h1 class="page-title">👨‍🏫 Detalles del Profesor</h1>
-      <button class="btn btn-primary" (click)="editarProfesor()">✏️ Editar</button>
+      <div class="header-actions">
+        <button class="btn btn-secondary" (click)="reenviarCredenciales()" [disabled]="reenviandoCredenciales">
+          {{ reenviandoCredenciales ? 'Enviando...' : '📧 Reenviar Credenciales' }}
+        </button>
+        <button class="btn btn-primary" (click)="editarProfesor()">✏️ Editar</button>
+      </div>
     </div>
   </div>
+
+  <div *ngIf="mensajeReenvio" class="alert alert-success">{{ mensajeReenvio }}</div>
+  <div *ngIf="errorReenvio" class="alert alert-error">{{ errorReenvio }}</div>
 
   <div class="detail-grid">
 

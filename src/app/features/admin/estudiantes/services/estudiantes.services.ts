@@ -103,4 +103,8 @@ export class EstudianteService {
   getHistorialEstudiante(idEstudiante: number): Observable<Respuesta<HistorialSemestre[]>> {
     return this.http.get<Respuesta<HistorialSemestre[]>>(`${this.apiUrl}/Historial/${idEstudiante}`);
   }
+
+  reenviarCredenciales(idEstudiante: number): Observable<Respuesta<object>> {
+    return this.http.post<Respuesta<object>>(`${this.apiUrl}/ReenviarCredenciales/${idEstudiante}`, {});
+  }
 }

@@ -18,6 +18,10 @@ export class EstudianteDetailComponent implements OnInit {
   estudiante: Estudiante | null = null;
   carreras: Carrera[] = [];
 
+  reenviandoCredenciales = false;
+  mensajeReenvio = '';
+  errorReenvio = '';
+
   carreraSeleccionada: CarreraResumen | null = null;
   mallaPorCarrera: MallaResumen | null = null;
   cargandoMalla = false;
@@ -149,6 +153,24 @@ export class EstudianteDetailComponent implements OnInit {
     } else {
       this.historialExpandido.add(index);
     }
+  }
+
+  reenviarCredenciales(): void {
+    if (!this.estudiante || this.reenviandoCredenciales) return;
+    this.reenviandoCredenciales = true;
+    this.mensajeReenvio = '';
+    this.errorReenvio = '';
+    this.estudianteService.reenviarCredenciales(this.estudiante.idEstudiante).subscribe({
+      next: res => {
+        this.reenviandoCredenciales = false;
+        if (res.blnError) this.errorReenvio = res.strMensajeRespuesta;
+        else this.mensajeReenvio = 'Credenciales reenviadas correctamente.';
+      },
+      error: () => {
+        this.reenviandoCredenciales = false;
+        this.errorReenvio = 'Error de conexión al reenviar credenciales.';
+      }
+    });
   }
 
   getEstadoClass(estadoEstudiante: boolean): string {
