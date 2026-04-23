@@ -60,6 +60,10 @@ export class OfertaAcademicaListComponent implements OnInit {
     this.aulaService.getAulas().subscribe(a => this.aulas = a);
     this.periodoService.getPeriodos().subscribe(p => this.periodos = p);
 
+    this.cargarOfertas();
+  }
+
+  cargarOfertas(): void {
     this.ofertaService.getAll().subscribe((ofertas) => {
       this.ofertas = ofertas;
       this.filtrar();
@@ -204,6 +208,6 @@ export class OfertaAcademicaListComponent implements OnInit {
 
   onOfertaCreada(): void {
     this.ofertaAEditar = null;
-    this.filtrar();
+    this.cargarOfertas();
   }
 }
