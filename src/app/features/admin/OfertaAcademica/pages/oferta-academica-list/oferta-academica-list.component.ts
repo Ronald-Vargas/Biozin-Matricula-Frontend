@@ -60,13 +60,13 @@ export class OfertaAcademicaListComponent implements OnInit {
     this.aulaService.getAulas().subscribe(a => this.aulas = a);
     this.periodoService.getPeriodos().subscribe(p => this.periodos = p);
 
-    this.cargarOfertas();
-  }
-
-  cargarOfertas(): void {
     this.ofertaService.getAll().subscribe((ofertas) => {
       this.ofertas = ofertas;
       this.filtrar();
+      if (this.vista === 'detail' && this.ofertaSeleccionada) {
+        const actualizada = ofertas.find(o => o.idOferta === this.ofertaSeleccionada!.idOferta);
+        if (actualizada) this.ofertaSeleccionada = actualizada;
+      }
     });
   }
 
@@ -208,6 +208,5 @@ export class OfertaAcademicaListComponent implements OnInit {
 
   onOfertaCreada(): void {
     this.ofertaAEditar = null;
-    this.cargarOfertas();
   }
 }

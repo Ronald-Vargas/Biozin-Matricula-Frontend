@@ -286,9 +286,9 @@
 
 .curso-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border);
   background: white;
@@ -337,7 +337,9 @@
 }
 
 /* ── Config periodo ── */
-.curso-config { flex-shrink: 0; }
+.curso-config {
+  padding-left: 1.9rem;
+}
 
 .config-item {
   display: flex;
@@ -405,18 +407,8 @@
 
   .section { padding: 1.25rem; }
 
-  /* Cada fila de curso: apila checkbox arriba y config abajo */
-  .curso-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-  }
-
   /* El nombre del curso puede hacer wrap en móvil */
   .curso-nombre { white-space: normal; }
-
-  /* Config (periodo) alineado con el texto del nombre */
-  .curso-config { padding-left: 1.9rem; }
 
   /* Botón pegado al fondo de la pantalla */
   .guardar-asignaciones-btn {

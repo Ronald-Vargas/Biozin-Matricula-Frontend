@@ -14,11 +14,12 @@
         <!-- Período -->
         <div class="form-group full">
           <label class="form-label">Período Académico</label>
-          <div class="searchable-combobox" [class.open]="comboAbierto === 'periodo'" (click)="$event.stopPropagation()">
+          <div class="searchable-combobox" [class.open]="comboAbierto === 'periodo'" [class.disabled]="modoEdicion" (click)="$event.stopPropagation()">
             <button
               type="button"
               class="combo-trigger"
               [class.placeholder]="!oferta.idPeriodo"
+              [disabled]="modoEdicion"
               (click)="toggleCombo('periodo')"
             >
               <span>{{ periodoSeleccionadoTexto }}</span>
@@ -51,16 +52,18 @@
               </div>
             </div>
           </div>
+          <small *ngIf="modoEdicion" class="form-hint-locked">El período no puede modificarse en una oferta existente.</small>
         </div>
 
         <!-- Curso -->
         <div class="form-group full">
           <label class="form-label">Curso</label>
-          <div class="searchable-combobox" [class.open]="comboAbierto === 'curso'" (click)="$event.stopPropagation()">
+          <div class="searchable-combobox" [class.open]="comboAbierto === 'curso'" [class.disabled]="modoEdicion" (click)="$event.stopPropagation()">
             <button
               type="button"
               class="combo-trigger"
               [class.placeholder]="!oferta.idCurso"
+              [disabled]="modoEdicion"
               (click)="toggleCombo('curso')"
             >
               <span>{{ cursoSeleccionadoTexto }}</span>
@@ -93,6 +96,7 @@
               </div>
             </div>
           </div>
+          <small *ngIf="modoEdicion" class="form-hint-locked">El curso no puede modificarse en una oferta existente.</small>
         </div>
 
         <!-- Profesor -->

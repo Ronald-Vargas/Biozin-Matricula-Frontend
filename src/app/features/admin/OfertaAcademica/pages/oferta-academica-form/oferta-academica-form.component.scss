@@ -437,6 +437,17 @@
   }
 }
 
+.form-hint-locked {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+}
+
 .virtual-notice {
   display: flex;
   flex-direction: column;

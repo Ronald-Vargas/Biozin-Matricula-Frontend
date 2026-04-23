@@ -1,9 +1,9 @@
 
 <div class="form-container">
-  <h2 class="form-title">Crear Nueva Carrera</h2>
+  <h2 class="form-title">{{ modoEdicion ? 'Editar Carrera' : 'Crear Nueva Carrera' }}</h2>
 
   <div class="success-message" *ngIf="mensajeExito">
-    ✓ Carrera creada exitosamente
+    ✓ {{ modoEdicion ? 'Carrera actualizada satisfactoriamente' : 'Carrera creada exitosamente' }}
   </div>
 
   <div class="error-message" *ngIf="mensajeError">
@@ -79,7 +79,7 @@
       type="submit" 
       class="btn btn-primary"
       [disabled]="carreraForm.invalid">
-      ➕ Crear Carrera
+      {{ modoEdicion ? '💾 Guardar Cambios' : '➕ Crear Carrera' }}
     </button>
   </form>
 </div>
