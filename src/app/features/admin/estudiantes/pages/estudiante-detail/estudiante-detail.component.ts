@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Estudiante, CarreraResumen, SemestreHistorial } from '../../models/estudiantes.model';
-import { EstudianteService, MallaResumen } from '../../services/estudiantes.services';
+import { EstudianteService, MallaResumen, HistorialSemestre } from '../../services/estudiantes.services';
 import { CarreraService } from '../../../carreras/services/carrera.service';
 import { Carrera } from '../../../carreras/models/carrera.model';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,8 @@ export class EstudianteDetailComponent implements OnInit {
   mallaPorCarrera: MallaResumen | null = null;
   cargandoMalla = false;
 
-  historial: SemestreHistorial[] = [];
+  historial: HistorialSemestre[] = [];
+  historialExpandido: Set<number> = new Set();
   cargandoHistorial = false;
 
   constructor(
@@ -39,6 +40,18 @@ export class EstudianteDetailComponent implements OnInit {
       this.estudiante = est ?? null;
       if (this.estudiante?.carreras?.length) {
         this.seleccionarCarrera(this.estudiante.carreras[0]);
+      }
+      if (this.estudiante) {
+        this.cargandoHistorial = true;
+        this.estudianteService.getHistorialEstudiante(this.estudiante.idEstudiante).subscribe({
+          next: res => {
+            this.cargandoHistorial = false;
+            if (!res.blnError && res.valorRetorno) {
+              this.historial = res.valorRetorno.slice(0, 5);
+            }
+          },
+          error: () => { this.cargandoHistorial = false; }
+        });
       }
     });
 
@@ -126,12 +139,21 @@ export class EstudianteDetailComponent implements OnInit {
 
 
 
+  getTotalCreditosSemestre(sem: HistorialSemestre): number {
+    return sem.cursos.reduce((total, c) => total + c.creditos, 0);
+  }
+
+  toggleHistorial(index: number): void {
+    if (this.historialExpandido.has(index)) {
+      this.historialExpandido.delete(index);
+    } else {
+      this.historialExpandido.add(index);
+    }
+  }
+
   getEstadoClass(estadoEstudiante: boolean): string {
     return estadoEstudiante ? 'badge-active' : 'badge-inactive';
   }
 
-  getTotalCreditosSemestre(semestre: SemestreHistorial): number {
-    return semestre.cursos.reduce((sum, c) => sum + c.creditos, 0);
-  }
 
 }

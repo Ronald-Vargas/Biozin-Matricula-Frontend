@@ -11,6 +11,21 @@ export interface MallaResumen {
   creditosEnCurso: number;
 }
 
+export interface HistorialCurso {
+  codigo: string;
+  nombre: string;
+  creditos: number;
+  nota: number | null;
+  estado: string;
+}
+
+export interface HistorialSemestre {
+  label: string;
+  periodo: string;
+  promedio: number | null;
+  cursos: HistorialCurso[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -85,7 +100,7 @@ export class EstudianteService {
     return this.http.get<Respuesta<MallaResumen>>(`${this.apiUrl}/MallaCurricular/${idEstudiante}?idCarrera=${idCarrera}`);
   }
 
-  getHistorialEstudiante(idEstudiante: number): Observable<Respuesta<SemestreHistorial[]>> {
-    return this.http.get<Respuesta<SemestreHistorial[]>>(`${this.apiUrl}/Historial/${idEstudiante}`);
+  getHistorialEstudiante(idEstudiante: number): Observable<Respuesta<HistorialSemestre[]>> {
+    return this.http.get<Respuesta<HistorialSemestre[]>>(`${this.apiUrl}/Historial/${idEstudiante}`);
   }
 }
