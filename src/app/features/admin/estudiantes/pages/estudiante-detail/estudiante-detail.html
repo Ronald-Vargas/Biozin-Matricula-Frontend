@@ -231,20 +231,24 @@
       <!-- Historial -->
       <div class="info-section">
         <h4 class="section-title">📋 Últimas Matrículas</h4>
-        <div class="history-list">
-          <div class="history-item">
-            <span>Período 2026-1</span>
-            <span class="history-value">6 cursos · 18 créditos</span>
-          </div>
-          <div class="history-item">
-            <span>Período 2025-2</span>
-            <span class="history-value">5 cursos · 16 créditos</span>
-          </div>
-          <div class="history-item">
-            <span>Período 2025-1</span>
-            <span class="history-value">6 cursos · 20 créditos</span>
+
+        <div class="history-loading" *ngIf="cargandoHistorial">
+          <span class="spinner-sm"></span>
+          <span>Cargando...</span>
+        </div>
+
+        <div class="history-list" *ngIf="!cargandoHistorial && historial.length > 0">
+          <div class="history-item" *ngFor="let sem of historial">
+            <span>{{ sem.label }}</span>
+            <span class="history-value">
+              {{ sem.cursos.length }} curso{{ sem.cursos.length !== 1 ? 's' : '' }} &middot; {{ getTotalCreditosSemestre(sem) }} créditos
+            </span>
           </div>
         </div>
+
+        <p class="history-empty" *ngIf="!cargandoHistorial && historial.length === 0">
+          Sin matrículas registradas.
+        </p>
       </div>
 
     </div>

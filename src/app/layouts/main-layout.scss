@@ -446,25 +446,12 @@
   }
 
   .sidebar {
-    display: block;
-    top: 0;
-    bottom: 0;
     left: -280px;
     transform: none;
     width: 280px;
-    height: auto;
-    min-height: 0;
-    max-height: none;
-    overflow-x: hidden !important;
-    overflow-y: scroll !important;
-    overscroll-behavior-y: contain;
-    padding-bottom: 0;
-    scroll-behavior: auto;
-    touch-action: pan-y;
+    /* Mantiene display:flex heredado del desktop — el flex layout empuja el footer */
+    overflow: hidden;
     transition: left 0.3s ease;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 
     /* En mobile, collapsed NO afecta la visibilidad — solo mobileOpen la controla */
     &.collapsed {
@@ -499,8 +486,6 @@
       left: 0;
       transform: none;
       width: 280px;
-      overflow-x: hidden !important;
-      overflow-y: scroll !important;
 
       .logo-text,
       .nav-label,
@@ -517,28 +502,27 @@
   }
 
   .sidebar-nav {
-    display: block;
-    min-height: auto;
-    overflow: visible;
-    padding: 0.65rem 0 calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.65rem 0 0.5rem;
   }
 
+  /* sidebar-body mantiene su flex layout del desktop para que el footer quede abajo */
   .sidebar-body {
-    display: block;
-    overflow: visible !important;
-    padding-bottom: 0;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
 
-  .sidebar::-webkit-scrollbar,
-  .sidebar-body::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
+  .sidebar-body::-webkit-scrollbar { display: none; }
 
+  /* footer pegado al fondo del área visible del sidebar */
   .sidebar-footer {
-    display: none;
+    position: sticky;
+    bottom: 0;
+    background: #0f172a;
+    z-index: 1;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
   }
 
   .sidebar-header {

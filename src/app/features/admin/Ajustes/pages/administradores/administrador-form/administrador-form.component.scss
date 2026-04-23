@@ -202,5 +202,8 @@
 }
 
 @media (max-width: 600px) {
-  .form-grid { grid-template-columns: 1fr; }
+  .panel-header { padding: 1rem 1.25rem 0.75rem; }
+  .form-body    { padding: 1rem 1.25rem; }
+  .panel-footer { padding: 0.75rem 1.25rem; }
+  .form-grid    { grid-template-columns: 1fr; }
 }

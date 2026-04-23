@@ -106,15 +106,20 @@
   display: flex;
   gap: 0.5rem;
   font-size: 0.88rem;
+  min-width: 0;
 }
 
 .auto-label {
   font-weight: 600;
   color: var(--accent-dark);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .auto-value {
   color: var(--text);
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 /* ── Acciones ── */
@@ -144,4 +149,5 @@
   .form-panel { padding: 1.25rem; }
   .form-grid { grid-template-columns: 1fr; }
   .form-actions { flex-direction: column; }
+  .auto-fields-grid { grid-template-columns: 1fr; }
 }

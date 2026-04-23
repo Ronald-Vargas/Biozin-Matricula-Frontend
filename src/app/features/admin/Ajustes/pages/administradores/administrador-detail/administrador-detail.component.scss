@@ -189,6 +189,11 @@
 .badge-inactive { background: #fee2e2; color: #dc2626; }
 
 @media (max-width: 650px) {
-  .detail-grid { grid-template-columns: 1fr; }
+  .detail-header { padding: 1rem 1.25rem; }
+  .detail-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+  }
   .info-grid { grid-template-columns: 1fr; }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Estudiante, CarreraResumen } from '../../models/estudiantes.model';
+import { Estudiante, CarreraResumen, SemestreHistorial } from '../../models/estudiantes.model';
 import { EstudianteService, MallaResumen } from '../../services/estudiantes.services';
 import { CarreraService } from '../../../carreras/services/carrera.service';
 import { Carrera } from '../../../carreras/models/carrera.model';
@@ -22,6 +22,9 @@ export class EstudianteDetailComponent implements OnInit {
   mallaPorCarrera: MallaResumen | null = null;
   cargandoMalla = false;
 
+  historial: SemestreHistorial[] = [];
+  cargandoHistorial = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -36,6 +39,22 @@ export class EstudianteDetailComponent implements OnInit {
       this.estudiante = est ?? null;
       if (this.estudiante?.carreras?.length) {
         this.seleccionarCarrera(this.estudiante.carreras[0]);
+      }
+    });
+
+    this.cargandoHistorial = true;
+    this.estudianteService.getHistorialEstudiante(id).subscribe({
+      next: res => {
+        this.cargandoHistorial = false;
+        if (!res.blnError && res.valorRetorno) {
+          this.historial = res.valorRetorno.slice(-3).reverse();
+        } else {
+          console.warn('[Historial] API respondió con error:', res.strMensajeRespuesta);
+        }
+      },
+      error: (err) => {
+        this.cargandoHistorial = false;
+        console.error('[Historial] Error HTTP:', err.status, err.url, err.error);
       }
     });
   }
@@ -109,6 +128,10 @@ export class EstudianteDetailComponent implements OnInit {
 
   getEstadoClass(estadoEstudiante: boolean): string {
     return estadoEstudiante ? 'badge-active' : 'badge-inactive';
+  }
+
+  getTotalCreditosSemestre(semestre: SemestreHistorial): number {
+    return semestre.cursos.reduce((sum, c) => sum + c.creditos, 0);
   }
 
 }

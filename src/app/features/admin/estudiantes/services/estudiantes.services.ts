@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { CreateEstudianteDto, Estudiante, Respuesta } from '../models/estudiantes.model';
+import { CreateEstudianteDto, Estudiante, Respuesta, SemestreHistorial } from '../models/estudiantes.model';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -83,5 +83,9 @@ export class EstudianteService {
 
   getMallaEstudiante(idEstudiante: number, idCarrera: number): Observable<Respuesta<MallaResumen>> {
     return this.http.get<Respuesta<MallaResumen>>(`${this.apiUrl}/MallaCurricular/${idEstudiante}?idCarrera=${idCarrera}`);
+  }
+
+  getHistorialEstudiante(idEstudiante: number): Observable<Respuesta<SemestreHistorial[]>> {
+    return this.http.get<Respuesta<SemestreHistorial[]>>(`${this.apiUrl}/Historial/${idEstudiante}`);
   }
 }

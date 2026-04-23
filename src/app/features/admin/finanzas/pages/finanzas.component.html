@@ -201,22 +201,22 @@
             </tr>
             <tr *ngFor="let pago of detallesFiltrados; let i = index"
                 class="table-row" [style.animation-delay]="(i * 0.04) + 's'">
-              <td>
+              <td data-label="Estudiante">
                 <div class="student-info">
                   <div class="student-avatar">{{ getIniciales(pago.nombreEstudiante) }}</div>
                   <span class="student-name">{{ pago.nombreEstudiante }}</span>
                 </div>
               </td>
-              <td><strong class="student-carnet">{{ pago.carnetEstudiante }}</strong></td>
-              <td class="concepto-cell">{{ pago.concepto }}</td>
-              <td><strong class="monto-value">₡{{ pago.monto | number:'1.2-2' }}</strong></td>
-              <td>
+              <td data-label="Carnet"><strong class="student-carnet">{{ pago.carnetEstudiante }}</strong></td>
+              <td data-label="Concepto" class="concepto-cell">{{ pago.concepto }}</td>
+              <td data-label="Monto"><strong class="monto-value">₡{{ pago.monto | number:'1.2-2' }}</strong></td>
+              <td data-label="Estado">
                 <span class="status-badge" [ngClass]="getEstadoClass(pago.estado)">
                   {{ getEstadoLabel(pago.estado) }}
                 </span>
               </td>
-              <td class="date-cell">{{ pago.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
-              <td class="date-cell">{{ pago.fechaPago ? (pago.fechaPago | date:'dd/MM/yyyy') : '—' }}</td>
+              <td data-label="Vencimiento" class="date-cell">{{ pago.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+              <td data-label="Fecha Pago" class="date-cell">{{ pago.fechaPago ? (pago.fechaPago | date:'dd/MM/yyyy') : '—' }}</td>
             </tr>
           </tbody>
         </table>

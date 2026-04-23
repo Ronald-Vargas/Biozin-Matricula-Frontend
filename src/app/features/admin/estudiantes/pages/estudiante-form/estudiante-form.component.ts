@@ -172,6 +172,13 @@ export class EstudianteFormComponent implements OnInit, OnDestroy {
     return ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 
+  trimField(fieldName: string): void {
+    const ctrl = this.f(fieldName);
+    if (typeof ctrl.value === 'string') {
+      ctrl.setValue(ctrl.value.trim(), { emitEvent: false });
+    }
+  }
+
   toggleCarrera(idCarrera: number): void {
     const idx = this.carrerasSeleccionadas.indexOf(idCarrera);
     if (idx === -1) {

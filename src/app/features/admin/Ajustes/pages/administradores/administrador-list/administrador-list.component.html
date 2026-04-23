@@ -46,9 +46,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let admin of adminsFiltrados">
-          <td class="td-nombre">{{ admin.nombreCompleto }}</td>
-          <td class="td-correo">{{ admin.correo }}</td>
-          <td>
+          <td data-label="Nombre" class="td-nombre">{{ admin.nombreCompleto }}</td>
+          <td data-label="Correo" class="td-correo">{{ admin.correo }}</td>
+          <td data-label="Estado">
             <span class="status-badge" [ngClass]="getEstadoClass(admin.activo)">
               {{ admin.activo ? 'Activo' : 'Inactivo' }}
             </span>

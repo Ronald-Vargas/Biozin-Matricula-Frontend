@@ -121,3 +121,18 @@ export interface Respuesta<T> {
   blnError: boolean;
   strTituloRespuesta: string;
 }
+
+export interface CursoHistorial {
+  codigo: string;
+  nombre: string;
+  creditos: number;
+  nota?: number | null;
+  estado: 'aprobado' | 'reprobado' | 'en_curso';
+}
+
+export interface SemestreHistorial {
+  label: string;
+  periodo: string;
+  cursos: CursoHistorial[];
+  promedio: number | null;
+}

@@ -5,7 +5,8 @@
       "Bash(npx ng *)",
       "Bash(find /c/Biozin/BiozinMatricula/Biozin-Matricula-Backend -name \"*.sql\" -exec cat {} \\\\;)",
       "Bash(xargs grep *)",
-      "Bash(grep -i \"\\\\.cs$\")"
+      "Bash(grep -i \"\\\\.cs$\")",
+      "Read(//d//**)"
     ]
   }
 }

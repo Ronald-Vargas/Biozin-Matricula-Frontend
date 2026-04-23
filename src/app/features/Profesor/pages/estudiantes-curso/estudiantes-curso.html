@@ -47,7 +47,7 @@
       <tbody>
         <tr *ngFor="let est of estudiantes" [class.row-editing]="est.notaEditando">
 
-          <td class="carnet-cell">{{ est.carnet }}</td>
+          <td data-label="Carnet" class="carnet-cell">{{ est.carnet }}</td>
 
           <td class="nombre-cell">
             <div class="nombre-completo">{{ est.apellidoPaterno }} {{ est.apellidoMaterno }} {{ est.nombre }}</div>
@@ -56,7 +56,7 @@
           <td class="email-cell">{{ est.emailInstitucional }}</td>
 
           <!-- Nota -->
-          <td class="nota-cell">
+          <td data-label="Nota" class="nota-cell">
             <ng-container *ngIf="!est.notaEditando">
               <span class="nota-valor" [class.nota-vacia]="est.nota == null">
                 {{ est.nota != null ? est.nota : '—' }}
@@ -76,7 +76,7 @@
           </td>
 
           <!-- Estado -->
-          <td class="estado-cell">
+          <td data-label="Estado" class="estado-cell">
             <span class="estado-badge" [class]="estadoClass(est.estado)">
               {{ estadoLabel(est.estado) }}
             </span>

@@ -19,7 +19,7 @@
 
         <div class="form-group">
           <label>Nombres *</label>
-          <input type="text" formControlName="nombre" [class.invalid]="isInvalid('nombre')" placeholder="Juan Carlos" />
+          <input type="text" formControlName="nombre" [class.invalid]="isInvalid('nombre')" placeholder="Juan Carlos" (blur)="trimField('nombre')" />
           <div class="error-message" *ngIf="isInvalid('nombre')">
             <span *ngIf="f('nombre').errors?.['required']">El nombre es obligatorio.</span>
             <span *ngIf="f('nombre').errors?.['maxlength']">Maximo 40 caracteres.</span>
@@ -28,7 +28,7 @@
 
         <div class="form-group">
           <label>Primer Apellido *</label>
-          <input type="text" formControlName="apellidoPaterno" [class.invalid]="isInvalid('apellidoPaterno')" placeholder="Perez" />
+          <input type="text" formControlName="apellidoPaterno" [class.invalid]="isInvalid('apellidoPaterno')" placeholder="Perez" (blur)="trimField('apellidoPaterno')" />
           <div class="error-message" *ngIf="isInvalid('apellidoPaterno')">
             <span *ngIf="f('apellidoPaterno').errors?.['required']">El primer apellido es obligatorio.</span>
             <span *ngIf="f('apellidoPaterno').errors?.['maxlength']">Maximo 40 caracteres.</span>
@@ -37,7 +37,7 @@
 
         <div class="form-group">
           <label>Segundo Apellido</label>
-          <input type="text" formControlName="apellidoMaterno" [class.invalid]="isInvalid('apellidoMaterno')" placeholder="Rodriguez" />
+          <input type="text" formControlName="apellidoMaterno" [class.invalid]="isInvalid('apellidoMaterno')" placeholder="Rodriguez" (blur)="trimField('apellidoMaterno')" />
           <div class="error-message" *ngIf="isInvalid('apellidoMaterno')">
             <span *ngIf="f('apellidoMaterno').errors?.['maxlength']">Maximo 40 caracteres.</span>
           </div>

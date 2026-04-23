@@ -1,31 +1,126 @@
+:host {
+  display: block;
+  --primary: #0f172a; --secondary: #1e293b;
+  --accent: #06b6d4; --accent-dark: #0891b2;
+  --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+  --bg: #f1f5f9; --card: #ffffff;
+  --text: #0f172a; --text-light: #64748b; --text-muted: #94a3b8;
+  --border: #e2e8f0; --radius: 14px; --radius-sm: 8px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-container { animation: fadeInUp 0.4s ease-out; }
+
+/* ── Header ── */
+.form-page-header { margin-bottom: 1.5rem; }
+
 .btn-back {
-  background: none;
-  border: none;
-  color: var(--accent, #06b6d4);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: inherit;
-  padding: 0;
-  margin-bottom: 0.75rem;
-  display: inline-block;
+  background: none; border: none; color: var(--accent); cursor: pointer;
+  font-size: 0.9rem; font-weight: 600; font-family: inherit;
+  padding: 0; margin-bottom: 0.75rem; display: inline-block;
   transition: color 0.2s;
 }
+.btn-back:hover { color: var(--accent-dark); }
 
-.btn-back:hover {
-  color: var(--accent-dark, #0891b2);
+.page-title { font-size: 1.75rem; font-weight: 800; color: var(--text); }
+
+/* ── Panel ── */
+.form-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
 }
 
-.form-group--full {
-  grid-column: 1 / -1;
+.form-section-title {
+  font-size: 1rem; font-weight: 700; color: var(--text);
+  margin-bottom: 1rem; margin-top: 1.75rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+
+.form-section-title:first-of-type { margin-top: 0; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-group { display: flex; flex-direction: column; }
+
+/* ambas variantes de full-width usadas en el HTML */
+.form-group-full,
+.form-group--full { grid-column: 1 / -1; }
+
+.form-group label {
+  font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem;
 }
 
 .sub-label {
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--text-light);
   font-weight: 400;
 }
 
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.7rem 0.85rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-family: inherit;
+  transition: all 0.25s ease; background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
+}
+
+.form-group input.invalid,
+.form-group select.invalid,
+.form-group textarea.invalid {
+  border-color: var(--danger);
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
+
+/* ── Acciones ── */
+.form-actions {
+  display: flex; gap: 1rem;
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 2px solid var(--border);
+}
+
+/* ── Botones ── */
+.btn {
+  padding: 0.75rem 1.5rem; border: none; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 600; font-family: inherit; cursor: pointer;
+  transition: all 0.25s ease; display: inline-flex; align-items: center;
+  gap: 0.5rem; white-space: nowrap;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-dark); transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6,182,212,0.35);
+}
+.btn-secondary { background: var(--secondary); color: white; }
+.btn-secondary:hover { background: var(--primary); }
+
+/* ── Multi-select carrera ── */
 .multi-select-combobox {
   position: relative;
   width: 100%;
@@ -56,18 +151,9 @@
     white-space: nowrap;
   }
 
-  &:hover {
-    border-color: #aab4c2;
-  }
-
-  &.placeholder {
-    color: #6b7280;
-    font-weight: 500;
-  }
-
-  &.invalid-border {
-    border-color: #ef4444;
-  }
+  &:hover { border-color: #aab4c2; }
+  &.placeholder { color: #6b7280; font-weight: 500; }
+  &.invalid-border { border-color: #ef4444; }
 }
 
 .multi-select-combobox.open .combo-trigger {
@@ -146,10 +232,7 @@
   }
 }
 
-.combo-options {
-  max-height: 16rem;
-  overflow-y: auto;
-}
+.combo-options { max-height: 16rem; overflow-y: auto; }
 
 .combo-option {
   width: 100%;
@@ -162,10 +245,7 @@
   cursor: pointer;
   transition: background 0.15s;
 
-  &:hover,
-  &.selected {
-    background: #e5e7eb;
-  }
+  &:hover, &.selected { background: #e5e7eb; }
 }
 
 .combo-option--multiple {
@@ -244,10 +324,7 @@
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 
-  &:hover {
-    background: #e0f2fe;
-    border-color: #7dd3fc;
-  }
+  &:hover { background: #e0f2fe; border-color: #7dd3fc; }
 }
 
 .selected-carrera-chip-remove {
@@ -262,16 +339,19 @@
   padding: 0.5rem 0;
 }
 
+/* ── Campos automáticos ── */
 .auto-fields-info {
   margin-top: 1.5rem;
   background: #f0f9ff;
   border: 1px solid #bae6fd;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 1.25rem 1.5rem;
 }
 
 .auto-fields-info .form-section-title {
   margin-top: 0;
+  color: var(--accent-dark);
+  border-bottom-color: #bae6fd;
 }
 
 .auto-fields-grid {
@@ -289,18 +369,25 @@
 
 .auto-label {
   font-weight: 600;
-  color: #0891b2;
+  color: var(--accent-dark);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .auto-value {
-  color: #0f172a;
+  color: var(--text);
   overflow-wrap: anywhere;
   min-width: 0;
 }
 
+/* ── Responsive ── */
 @media (max-width: 768px) {
+  .form-panel { padding: 1.25rem; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-actions { flex-direction: column; }
+  .auto-fields-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 1.4rem; }
+
   .combo-trigger {
     min-height: 3rem;
     font-size: 0.95rem;
@@ -311,9 +398,7 @@
     margin-top: 0.5rem;
   }
 
-  .selected-carreras {
-    gap: 0.4rem;
-  }
+  .selected-carreras { gap: 0.4rem; }
 
   .selected-carrera-chip {
     width: 100%;

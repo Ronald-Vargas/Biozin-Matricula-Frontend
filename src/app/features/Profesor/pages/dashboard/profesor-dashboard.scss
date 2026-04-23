@@ -97,4 +97,32 @@
 .info-value { font-size: 0.82rem; font-weight: 600; color: var(--text); text-align: right; max-width: 60%; }
 
 @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .welcome-content { flex-direction: column; align-items: flex-start; } }
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .welcome-content { flex-direction: column; align-items: flex-start; }
+  .welcome-title { font-size: 1.35rem; }
+  .welcome-subtitle { font-size: 0.85rem; }
+}
+
+@media (max-width: 640px) {
+  .welcome-banner { padding: 1.25rem 1.25rem; }
+  .welcome-title { font-size: 1.2rem; }
+  .student-avatar { width: 52px; height: 52px; font-size: 1.2rem; }
+
+  .stat-card { padding: 1rem 1.1rem; }
+  .stat-value { font-size: 1.1rem; }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  .info-value {
+    text-align: left;
+    max-width: 100%;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+}

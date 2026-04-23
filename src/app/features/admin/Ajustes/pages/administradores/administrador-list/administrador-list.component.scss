@@ -259,6 +259,77 @@
   color: var(--text-muted);
 }
 
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .panel-header { padding: 1rem 1.25rem 0.75rem; }
+  .toolbar      { padding: 0 1.25rem 0.75rem; }
+  .panel-footer { padding: 0.75rem 1.25rem; }
+
+  .table-wrapper {
+    padding: 0 1.25rem;
+    overflow-x: visible;
+  }
+
+  /* Tabla → tarjetas */
+  .tabla {
+    display: block;
+
+    thead { display: none; }
+
+    tbody {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.15rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      background: white;
+
+      &:hover { background: #f8fafc; }
+      &:last-child { border-bottom: 1px solid var(--border); }
+    }
+
+    td {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      padding: 0.2rem 0;
+      border-bottom: none;
+      font-size: 0.88rem;
+
+      &::before {
+        content: attr(data-label);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: var(--text-muted);
+      }
+    }
+
+    /* Nombre ocupa la columna izquierda, Estado la derecha en la misma fila */
+    .td-nombre { grid-column: 1; }
+    .td-correo { grid-column: 1 / -1; }
+
+    /* Acciones: ancho completo, botones a la derecha */
+    .td-acciones {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.4rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
 /* ── Confirm delete ── */
 .confirm-panel {
   display: flex;
